@@ -7,14 +7,10 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
-<<<<<<< HEAD
 var mongoose = require('mongoose');
 var Models = require('./app/models');
-=======
-var dbHelpers = require('./dbHelpers');
-var loginHelpers = require('./loginHelpers');
+var io = require('socket.io');
 
->>>>>>> Server skeleton
 
 var app = express();
 
@@ -34,15 +30,13 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-console.log(Models);
-
 app.get('/', function() {
    res.sendfile(__dirname + '/public/index.html'); 
 });
 
 
 //a specific game room
-ap.get('/game/:gameId', function() {
+app.get('/game/:gameId', function() {
 
   //if this game room exists
   if (games[gameId]) {
