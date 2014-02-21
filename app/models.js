@@ -1,3 +1,6 @@
+var mongoose = require('mongoose');
+
+
 var gameSchema = mongoose.Schema({
   gameId: String,
   player1Socket: String,
@@ -9,12 +12,12 @@ var gameSchema = mongoose.Schema({
 var challengeSchema = mongoose.Schema({
   name: String,
   inputs: [],
-  outputs [],
+  outputs: [],
   solution: String
 });
 
 
 module.exports = {
-  Game: mongoose.Model('Game', gameSchema),
-  Challenge: mongoose.Model('Challenge', challengeSchema)
+  Game: mongoose.model('Game', gameSchema),
+  Challenge: mongoose.model('Challenge', challengeSchema)
 };

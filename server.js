@@ -8,6 +8,7 @@ var routes = require('./routes');
 var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
+var Models = require('./app/models');
 
 var app = express();
 
@@ -28,6 +29,8 @@ app.use(app.router);
 if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
+
+console.log(Models);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Magic happens on port ' + app.get('port'));
