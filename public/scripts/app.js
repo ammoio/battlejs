@@ -9,7 +9,7 @@ angular.module('app', ['ngRoute'])
         controller: 'MainController'
       })
       .when('/newGame', {
-        templateUrl: '/views/main.html',
-        controller: 'MainController'
+        templateUrl: '/views/game.html',
+        controller: 'GameController'
       });
   });

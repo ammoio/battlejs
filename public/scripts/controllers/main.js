@@ -5,7 +5,7 @@ angular.module('app')
 
       $scope.welcome = "Battle.js";
 
-      $scope.startGame = function(){
+      $scope.newGame = function(){
         $location.path('/newGame');
       };
   });
