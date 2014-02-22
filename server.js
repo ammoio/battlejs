@@ -9,6 +9,7 @@ var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
 var Models = require('./app/models');
+var Routes = require('./app/routes');
 var io = require('socket.io');
 
 
@@ -30,22 +31,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', function() {
-   res.sendfile(__dirname + '/public/index.html'); 
-});
+// connect to MongoDB
+mongoose.connect('mongodb://localhost/battlejs');
 
-
-//a specific game room
-app.get('/game/:gameId', function() {
-
-  //if this game room exists
-  if (games[gameId]) {
-    //games[gameId].players.push(socket);
-  } else {
-    res.send(404);
-  }
-
-});
+//load all routes from the routes.js
+Routes(app);
 
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
