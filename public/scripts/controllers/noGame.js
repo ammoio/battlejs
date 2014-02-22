@@ -5,5 +5,7 @@ angular.module('app')
 
       $scope.welcome = "Your game does not exist";
 
-      
+      $scope.mainPage = function(){
+        $location.path('/');
+      };
   });

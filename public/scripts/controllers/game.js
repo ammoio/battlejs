@@ -5,6 +5,28 @@ angular.module('app')
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
 
+      
+      if (!$rootScope.playerOne){
+        $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
+      }
+
+      $rootScope.socket.on('gameReady', function(data){
+        $rootScope.playerTwo = true;
+        console.log('hello', data);
+      });
+      
+      $rootScope.socket.on('gameFull', function(data){
+        $location.path('/watch/' + $scope.gameID);
+      });
+
+      $rootScope.socket.on('updated', function(data){
+        console.log(data);
+        opponent.setValue(data.data, 1);
+      });
+
+      socket.on('gameDoesNotExist', function(data){
+        $location.path('/gameDoesNotExist')
+      });
 
       $scope.game = "Battle.js Game";
 
@@ -60,26 +82,9 @@ angular.module('app')
       var opponentElement = document.getElementById('opponent');
 
 
-      if (!$rootScope.playerOne){
-        $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
-      }
-
-      $rootScope.socket.on('gameReady', function(data){
-        $rootScope.playerTwo = true;
-        console.log('hello', data);
-      });
+<<<<<<< HEAD
       
-      $rootScope.socket.on('gameFull', function(data){
-        $location.path('/watch/' + $scope.gameID);
-      });
-
-      $rootScope.socket.on('updated', function(data){
-        console.log(data);
-        opponent.setValue(data.data, 1);
-      });
-
-      socket.on('gameDoesNotExist', function(data){
-        //no game
-      });
+=======
+>>>>>>> Added return button and fixed gameID origin
 
   });
