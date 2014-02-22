@@ -21,7 +21,7 @@ angular.module('app')
 
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
-        $location.path('/gameDoesNotExist')
+        $location.path('/gameDoesNotExist');
       });
 
       $scope.game = "Battle.js Game";
@@ -39,6 +39,7 @@ angular.module('app')
       };
 
       $scope.runCode = function() {
+        $rootScope.socket.emit('test', { data: player.getValue(), gameID: gameID });
       };
 
       $scope.increaseFont = function() {
@@ -77,9 +78,26 @@ angular.module('app')
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
 
+      if (!$rootScope.playerOne){
+        $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
+        var gameID = $location.path();
+        gameID = gameID.slice(gameID.lastIndexOf('/') + 1);
+        $rootScope.socket.emit('joinGame', { 'gameID': gameID });
+      }
+
+      $rootScope.socket.on('gameReady', function(data){
+        console.log('hello', data);
+      });
+      
+      $rootScope.socket.on('gameFull', function(data){
+        $location.path('/watch/' + $scope.gameID);
+      });
+
       $rootScope.socket.on('updated', function(data){
-        console.log(data);
         opponent.setValue(data.data, 1);
       });
 
+      $rootScope.socket.on('testResults', function(obj) {
+        console.log(obj.console);
+      });
   });
