@@ -60,10 +60,10 @@ io.sockets.on('connection', function (socket) {
     //store it into games
     games[gameID] = {
       'player1': {
-        socketID: socket.id
-        socket: socket
-      };
-    }
+        'socketID': socket.id,
+        'socket': socket
+      }
+    };
     socket.emit('gameID', {'gameID': gameID});
   });
   
