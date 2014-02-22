@@ -1,7 +1,7 @@
 angular.module('app')
   
   .controller('GameController',
-    function($scope, $rootScope, $location) {
+    function($scope, $rootScope, $location, $timeout) {
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
 
@@ -16,18 +16,18 @@ angular.module('app')
       });
       
       $rootScope.socket.on('gameFull', function(data){
-        $location.path('/watch/' + $scope.gameID);
+        $timeout(function(){$location.path('/watch/' + $scope.gameID);},0);
       });
 
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
-        $location.path('/gameDoesNotExist')
+        $timeout(function(){$location.path('/gameDoesNotExist');},0);
       });
 
       $scope.game = "Battle.js Game";
 
       $scope.startGame = function(){
-        // Initiate game
+        $rootScope.socket.emit('ready', {'gameID': $scope.gameID});
       };
 
       $scope.setMode = function(mode){
