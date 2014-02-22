@@ -65,6 +65,7 @@ angular.module('app')
       }
 
       $rootScope.socket.on('gameReady', function(data){
+        $rootScope.playerTwo = true;
         console.log('hello', data);
       });
       
