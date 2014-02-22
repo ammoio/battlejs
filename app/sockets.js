@@ -1,4 +1,5 @@
 var crypto = require('crypto');
+var Sandbox = require('sandbox');
 
 //socket io logic
 
@@ -32,7 +33,11 @@ module.exports.listen = function(server){
      });
 
     socket.on('submit', function(data) {
-
+      var s = new Sandbox();
+      s.run(data, function(output){
+        socket.emit('output');
+      });
     });
+    
   });
 };
