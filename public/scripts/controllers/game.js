@@ -78,4 +78,8 @@ angular.module('app')
         opponent.setValue(data.data, 1);
       });
 
+      socket.on('gameDoesNotExist', function(data){
+        //no game
+      });
+
   });

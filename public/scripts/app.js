@@ -15,6 +15,10 @@ angular.module('app', ['ngRoute'])
       .when('/watch/:id', {
         templateUrl: '/views/watch.html',
         controller: 'WatchController'
+      })
+      .when('/gameDoesNotExist', {
+        templateUrl: '/views/noGame.html',
+        controller: 'NoGameController'
       });
   })
 
