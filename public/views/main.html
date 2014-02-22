@@ -1,14 +1,21 @@
-<h1>Welcome to the {{ welcome }}</h1>
+<h1>Welcome to {{ welcome }}</h1>
 
 <div class="new-game">
-  <a class="btn btn-lg btn-primary" ng-click='newGame()'>Do Battle!</a>
+  <a class="btn btn-hg btn-primary" ng-click='newGame()'>Do Battle!</a>
 </div>
 
-<div class="explanation">
-  <div class='master'>
-    <p>Are you a JS master? Then prove it by beating your friend in an EPIC JS battle!</p>
+<div class="row">
+
+  <div class='col-md-6'>
+    <div class='master clearfix'>
+      <p>Are you a JS master? Then prove it by beating your friend in an EPIC JS battle!</p>
+    </div>
   </div>
-  <div class='novice'>
-    <p>Or just a novice programmer? There's no better way to learn than on the stomping ground!</p>
+
+  <div class='col-md-6'>
+    <div class='novice clearfix'>
+      <p>Or just a novice programmer? There's no better way to learn than on the stomping ground!</p>
+    </div>
   </div>
+
 </div>
