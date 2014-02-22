@@ -32,7 +32,7 @@ module.exports.listen = function(server){
     //other players trying to join
     socket.on('joinGame', function(data) {
       var gameID = data.gameID;
-      if (games[gameID].players.length === 1) {
+      if (games[gameID] && games[gameID].players.length === 1) {
         games[gameID].players.push({
           'socketID': socket.id,
           'socket': socket,
@@ -41,8 +41,10 @@ module.exports.listen = function(server){
 
         //start the game
         socket.emit('gameReady', 'problem');
-      } else if (games[gameID].players.length > 1) {
+      } else if (games[gameID] && games[gameID].players.length > 1) {
         socket.emit('gameFull');
+      } else {
+        socket.emit('gameDoesNotExist');
       }
     });
 
@@ -56,9 +58,10 @@ module.exports.listen = function(server){
 
     socket.on('update', function(data) {
       var gameID = data.gameID;
-      if (socket.id === games[gameID].players[0].socketID) {
+      if (games[gameID] && socket.id === (games[gameID]).players[0].socketID) {
+        console.log(games[gameID].players[1].socket);
         games[gameID].players[1].socket.emit('updated', {data: data.data});
-      } else {
+      } else if (games[gameID]) {
         games[gameID].players[0].socket.emit('updated', {data: data.data}); 
       }
     }); 

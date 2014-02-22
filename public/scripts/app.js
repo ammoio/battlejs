@@ -16,5 +16,9 @@ angular.module('app', ['ngRoute'])
         templateUrl: '/views/game.html',
         controller: 'GameController'
       });
-    window.socket = io.connect('http://localhost');
+  })
+
+  .run(function($location, $rootScope) {
+    $rootScope.socket = io.connect('http://' + $location.host());
   });
+
