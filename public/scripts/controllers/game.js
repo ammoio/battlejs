@@ -19,10 +19,6 @@ angular.module('app')
         $location.path('/watch/' + $scope.gameID);
       });
 
-      $rootScope.socket.on('updated', function(data){
-        console.log(data);
-        opponent.setValue(data.data, 1);
-      });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
         $location.path('/gameDoesNotExist')
@@ -81,5 +77,9 @@ angular.module('app')
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
 
+      $rootScope.socket.on('updated', function(data){
+        console.log(data);
+        opponent.setValue(data.data, 1);
+      });
 
   });
