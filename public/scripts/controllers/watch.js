@@ -8,17 +8,8 @@ angular.module('app')
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
 
-      
-      $scope.setMode = function(mode){
-        if(mode === "normal") {
-          player.setKeyboardHandler("");
-        } else {          
-          player.setKeyboardHandler('ace/keyboard/' + mode);
-        }
-      };
-
       var player1 = ace.edit("player1");
-      // player1.setReadOnly(true);
+      player1.setReadOnly(true);
       player1.setTheme("ace/theme/twilight");
       player1.getSession().setMode("ace/mode/javascript");
       player1.setShowPrintMargin(false);
@@ -30,7 +21,7 @@ angular.module('app')
       });
 
       var player2 = ace.edit("player2");
-      // player2.setReadOnly(true); 
+      player2.setReadOnly(true); 
       player2.setTheme("ace/theme/twilight");
       player2.getSession().setMode("ace/mode/javascript");
       player2.setShowPrintMargin(false);
