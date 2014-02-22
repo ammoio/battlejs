@@ -59,12 +59,17 @@ angular.module('app')
 
       if (!$rootScope.playerOne){
         var gameID = $location.path();
-        gameID = gameID.slice(gameID.indexOf('/') + 1);
+        gameID = gameID.slice(gameID.indexOf('/game/') + 1);
         socket.emit('joinGame', {'gameID': gameID});
       };
 
-      socket.on('startGame', function(data){
-        console.log(data);
+      socket.on('gameReady', function(data){
+        console.log('hello', data);
       });
+      
+      socket.on('gameFull', function(data){
+        $location.path('/watch/' + gameID);
+      });
+
 
   });
