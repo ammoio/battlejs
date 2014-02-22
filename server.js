@@ -10,6 +10,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var Models = require('./app/models');
 var Routes = require('./app/routes');
+var Sockets = require('./app/sockets');
 var io = require('socket.io');
 var crypto = require('crypto');
 
@@ -45,36 +46,4 @@ server.listen(app.get('port'), function(){
   console.log('What happens on port ' + app.get('port') + " stays on port " + app.get('port'));
 });
 
-
-//socket io logic
-var io = require('socket.io').listen(server);
-var clients = [];
-var games = {};
-io.sockets.on('connection', function (socket) {
-  //save the session id
-  clients.push(socket.id, socket);
-
-  //when newGame is clicked
-  socket.on('newGame', function() {
-    
-    //generate new game id
-    var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
-
-    //store it into games
-    games[gameID] = {
-      'player1': {
-        'socketID': socket.id,
-        'socket': socket
-      }
-    };
-    socket.emit('gameID', {'gameID': gameID});
-  });
-  
-  socket.on('ready', function(data) {
-    
-   });
-
-  socket.on('submit', function(data) {
-
-  });
-});
+Sockets.listen(server);
