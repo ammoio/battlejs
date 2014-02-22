@@ -10,6 +10,7 @@ module.exports.listen = function(server){
   var io = require('socket.io').listen(server);
   var clients = [];
   var games = {};
+  var activeSockets = {};
 
   io.sockets.on('connection', function (socket) {
     //save the session id
@@ -31,9 +32,14 @@ module.exports.listen = function(server){
           'isReady': false
         }],
         'watchers': [],
+        'activeSockets': 1,
         'started': false
       };
       console.log("First Player Joined");
+
+      //add to active sockets
+      activeSockets[socket.id] = gameID;
+
       socket.emit('gameID', {'gameID': gameID});
     });
 
@@ -47,6 +53,12 @@ module.exports.listen = function(server){
           'socket': socket,
           'playerNumber': 2
         });
+
+        //adds to active sockets
+        activeSockets[socket.id] = data.gameID;
+        thisGame['activeSockets'] += 1;
+
+
         socket.emit('updated', thisGame.players[0].latestContent);
         socket.emit('gameReady');
 
@@ -64,6 +76,11 @@ module.exports.listen = function(server){
           'socketID': socket.id,
           'socket': socket
         });
+
+        //adds to active sockets
+        activeSockets[socket.id] = data.gameID;
+        thisGame['activeSockets'] += 1;
+
         //update view for player 1
         socket.emit('viewerUpdate', {
           player: 1,
@@ -151,6 +168,16 @@ module.exports.listen = function(server){
       .fail(function(output){
         socket.emit('submitResults', output);
       });
+    });
+
+    socket.on('disconnect', function () {
+    
+      //removes from to active sockets
+      if (games[activeSockets[socket.id]]){
+        games[activeSockets[socket.id]]['activeSockets'] -= 1;
+        delete activeSockets[socket.id];
+      }
+
     });
 
   });

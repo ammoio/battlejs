@@ -61,6 +61,7 @@ angular.module('app')
 
       $scope.startGame = function(){
         $rootScope.socket.emit('ready', {'gameID': $scope.gameID});
+        $scope.gameStarted = true;
       };
 
       $scope.setMode = function(mode){

@@ -91,8 +91,46 @@ a {
   border-radius: 0;
 }
 
+
 .timer {
   text-align: center;
   font-size: 3em;
   margin-bottom: 0.5em;
+}
+
+.view{
+  top: 55px ;
+  position: absolute;
+  bottom:10px;
+}
+
+.full-row{
+  height: 100%;
+  width: 100%;
+}
+
+.topRow{
+  top: 20px;
+  position: absolute;
+  bottom: 0;
+}
+
+.full{
+  top: 20px;
+  bottom: 0;
+}
+
+#messagesDiv{
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  width:300px;
+  height:93.4%;
+  background-color: white;
+  border-right:1px solid black;  
+}
+
+#watch-container{
+  left: 300px;
+  width: 75%;
 }

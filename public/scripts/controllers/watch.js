@@ -1,7 +1,7 @@
 angular.module('app')
   
   .controller('WatchController',
-    function($scope, $location, $rootScope, $timeout) {
+    function($scope, $location, $rootScope, $timeout, $sanitize) {
 
       $scope.welcome = "Battle.js Viewer";
       
@@ -55,23 +55,19 @@ angular.module('app')
 
 
 
+      $scope.messages = [];
 
-      // $scope.chatRef = new Firebase('https://battlejs.firebaseio.com/chat/' + $scope.gameID);
+      $scope.chatRef = new Firebase('https://battlejs.firebaseio.com/chat/' + $scope.gameID);
 
-      // $scope.sendMessage = function(){
-      //   if ($scope.name){
-      //     $scope.messages.push({name: $scope.name, text: $scope.text});
-      //     $scope.text = '';
-      //   };
-      // };
+      $scope.sendMessage = function(){
+        if ($scope.name && $scope.text){
+          $scope.chatRef.push({name: $sanitize($scope.name), text: $sanitize($scope.text)});
+          $scope.text = '';
+        };
+      };
 
-      // $scope.messages = [];
-     
-      // $scope.chatRef.on('child_added', function(snapshot) {
-      //   $scope.messages.push(snapshot.val());
-      // });
+      $scope.chatRef.on('child_added', function(snapshot) {
+        $timeout(function(){$scope.messages.unshift(snapshot.val());},0);
+      });
       
-
-
-
   });
