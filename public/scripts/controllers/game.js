@@ -11,21 +11,29 @@ angular.module('app')
       }
 
       $rootScope.socket.on('gameReady', function(data){
-        $rootScope.playerTwo = true;
-        console.log('hello', data);
+        $rootScope.playerTwo = true;        
+        // console.log('hello', data);
       });
       
       $rootScope.socket.on('gameFull', function(data){
         $timeout(function(){$location.path('/watch/' + $scope.gameID);},0);
       });
 
+      $rootScope.socket.on('updated', function(data){
+        opponent.setValue(data.data, 1);
+      });
+
+      $rootScope.socket.on('testResults', function(obj) {
+        console.log(obj);
+      });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
         $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
 
       $rootScope.socket.on('startGame', function(data) {
-        console.log('starting: ', data);
+        console.log('starting: ', data);        
+        player.setValue(data.boilerplate, 1);
       });
 
       $scope.game = "Battle.js Game";
@@ -43,7 +51,7 @@ angular.module('app')
       };
 
       $scope.runCode = function() {
-        $rootScope.socket.emit('test', { data: player.getValue(), gameID: gameID });
+        $rootScope.socket.emit('test', { data: player.getValue(), gameID: $scope.gameID });
       };
 
       $scope.increaseFont = function() {
@@ -81,23 +89,4 @@ angular.module('app')
 
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
-
-      $rootScope.socket.on('gameReady', function(response){
-        console.log("GameReady");
-        //response.name = name of the problem
-        player.setValue(response.biolerplate, 1);
-      });
-      
-      $rootScope.socket.on('gameFull', function(data){
-        console.log("GameFull");
-        $location.path('/watch/' + $scope.gameID);
-      });
-
-      $rootScope.socket.on('updated', function(data){
-        opponent.setValue(data.data, 1);
-      });
-
-      $rootScope.socket.on('testResults', function(obj) {
-        console.log(obj);
-      });
   });
