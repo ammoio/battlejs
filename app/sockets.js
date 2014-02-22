@@ -1,6 +1,7 @@
 var crypto = require('crypto');
 var Sandbox = require('sandbox');
 var Models = require('../app/models');
+var testHelpers = require('./testHelpers');
 
 //socket io logic
 
@@ -98,16 +99,22 @@ module.exports.listen = function(server){
     }); 
 
     socket.on('test', function(data) {
-      var s = new Sandbox();
-      s.run(data.data, function(output){
+      testHelpers.run(data.data)
+      .then(function(output){
         socket.emit('testResults', output);
+      })
+      .fail(function(err){
+        socket.emit('testResults', err);
       });
     });
 
     socket.on('submit', function(data) {
-      var s = new Sandbox();
-      s.run(data.data, function(output){
-        socket.emit('output', output);
+      testHelpers.validate(data.data)
+      .then(function(output){
+        socket.emit('submitResults', {success: true, result: output});
+      })
+      .fail(function(output){
+        socket.emit('submitResults', {success: false, result: output});
       });
     });
 
