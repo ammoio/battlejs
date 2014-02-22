@@ -27,37 +27,41 @@ module.exports = {
 
     Models.Challenge.findOneQ({functionName: functionName})
     .then(function(challenge){
-      console.log("challenge", challenge);
-      var success = true;
       var count = 0;
       var start = +(new Date);
+      var returnObject = {success: true};
     
-      console.log("Inputs: ", challenge.inputs);
       challenge.inputs.forEach(function(input, index){
         var s = new Sandbox();
         
         s.run(js + "\n" + functionName + "(" + JSON.stringify(input) + ");", function(output){
+          returnObject.console = output.console;
           if(output.result.indexOf('Error') !== -1){
             // console.log("error in output");
-            d.reject(output);
-            success = false;
+            returnObject.success = false;
+            returnObject.result = "Failed on input: " + input + ". " + "Expected " + output.result + " to equal " + challenge.outputs[index];
+            d.resolve(returnObject);
             count += 1;
             return;
           }
 
           if(output.result !== challenge.outputs[index]){
-            d.reject("Failed on input: " + input + ". " + "Expected " + output.result + " to equal " + challenge.outputs[index]);
-            success = false;
+            returnObject.result = "Failed on input: " + input + ". " + "Expected " + output.result + " to equal " + challenge.outputs[index];
+            returnObject.success = false;
+            d.resolve(returnObject);
             count += 1;
             return;
           }
 
           if(count === challenge.inputs.length){
-            if(success){
+            if(returnObject.success){
               var timed = +(new Date) - start;
-              d.resolve("Passed " + challenge.inputs.length + " tests!");
+              returnObject.result = "Passed " + challenge.inputs.length + " tests!";
+              returnObject.timed = timed;
+              d.resolve(returnObject);
             } else {
-              d.reject("something went wrong");
+              returnObject.result = "something went wrong"
+              d.resolve(returnObject);
             }
           }
 
