@@ -1,5 +1,6 @@
 var crypto = require('crypto');
 var Sandbox = require('sandbox');
+var Models = require('../app/models');
 
 //socket io logic
 
@@ -8,6 +9,7 @@ module.exports.listen = function(server){
   var io = require('socket.io').listen(server);
   var clients = [];
   var games = {};
+
   io.sockets.on('connection', function (socket) {
     //save the session id
     clients.push(socket.id, socket);
@@ -53,7 +55,15 @@ module.exports.listen = function(server){
       var gameID = data.gameID;
       games[gameID].numOfReady++;
       if (games[gameID].numOfReady === 2) {
-        socket.emit('startGame');
+        Models.Challenge.findQ()
+        .then( function(problem) {
+          var data = {
+            name: problem[0].name,
+            boilerplate: problem[0].boilerplate
+          };
+          games[gameID].players[0].socket.emit('startGame', data);
+          games[gameID].players[1].socket.emit('startGame', data);
+        });
       }
     });
 

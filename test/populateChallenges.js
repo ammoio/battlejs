@@ -16,8 +16,3 @@ reverseString.saveQ()
 .then(function(){
   console.log("saved Successfully");
 });
-
-Models.Challenge.findQ().then(function(model){
-  console.log(model + "HERE");
-});
-
