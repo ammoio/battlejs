@@ -30,7 +30,8 @@ module.exports.listen = function(server){
           'latestContent': "",
           'isReady': false
         }],
-        'watchers': []
+        'watchers': [],
+        'started': false
       };
       console.log("First Player Joined");
       socket.emit('gameID', {'gameID': gameID});
@@ -39,10 +40,7 @@ module.exports.listen = function(server){
     //other players trying to join
     socket.on('joinGame', function(data) {
       var thisGame = games[data.gameID];
-      if (thisGame && thisGame.players.length === 0) { //empty chat room, should redirect
-        socket.emit('gameDoesNotExist');
-
-      } else if (thisGame && thisGame.players.length === 1) { //second play joining
+      if (thisGame && thisGame.players.length === 1) { //second play joining
         console.log("Second Player Joined, gameready");
         thisGame.players.push({
           'socketID': socket.id,
@@ -54,6 +52,8 @@ module.exports.listen = function(server){
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
+      } else {
+        socket.emit('gameDoesNotExist'); //if game does not exist
       }
     });
 
@@ -76,18 +76,22 @@ module.exports.listen = function(server){
             data: thisGame.players[1].latestContent
           })
         }
+      } else {
+        console.log('not exist', data);
+        socket.emit('gameDoesNotExist');
       }
     });
 
     socket.on('ready', function(data) {
       var thisGame = games[data.gameID];
+      console.log(thisGame);
       //player 1 sending ready signal
       if (thisGame.players[0].socket === socket) {
         thisGame.players[0].isReady = true;
       } else if (thisGame.players[1] && thisGame.players[1].socket === socket) {
         thisGame.players[1].isReady = true;
       }
-      if (thisGame.players.length === 2 && thisGame.players[0].isReady && thisGame.players[1].isReady) {
+      if (thisGame.started === false && thisGame.players.length === 2 && thisGame.players[0].isReady && thisGame.players[1].isReady) {
         Models.Challenge.findQ()
         .then( function(problem) {
           var data = {
@@ -97,6 +101,7 @@ module.exports.listen = function(server){
           };
           thisGame.players[0].socket.emit('startGame', data);
           thisGame.players[1].socket.emit('startGame', data);
+          thisGame.started = true;
         });
       }
     });
