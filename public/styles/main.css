@@ -87,3 +87,11 @@ a {
 .navbar{
   border-radius: 0;
 }
+
+.white{
+  color: #ECF0F1;
+}
+
+.foot{
+  height: 75px;
+}
