@@ -116,9 +116,9 @@ module.exports.listen = function(server){
             functionName: problem[0].functionName,
             boilerplate: problem[0].boilerplate
           };
+          thisGame.started = true;
           thisGame.players[0].socket.emit('startGame', data);
           thisGame.players[1].socket.emit('startGame', data);
-          thisGame.started = true;
         });
       }
     });
