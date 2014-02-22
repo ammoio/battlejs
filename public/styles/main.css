@@ -85,3 +85,9 @@ a {
 .navbar{
   border-radius: 0;
 }
+
+.timer {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 0.5em;
+}

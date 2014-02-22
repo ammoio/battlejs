@@ -38,6 +38,8 @@ angular.module('app')
 
       $rootScope.socket.on('startGame', function(data) {
         console.log('starting: ', data);        
+        $scope.$broadcast('timer-start');
+        $scope.timerRunning = true;
         player.setValue(data.boilerplate, 1);
         $scope.functionName = data.functionName;
       });
