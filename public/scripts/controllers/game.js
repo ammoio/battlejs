@@ -24,6 +24,10 @@ angular.module('app')
         $timeout(function(){$location.path('/gameDoesNotExist');},0);
       });
 
+      $rootScope.socket.on('startGame', function(data) {
+        console.log('starting: ', data);
+      });
+
       $scope.game = "Battle.js Game";
 
       $scope.startGame = function(){

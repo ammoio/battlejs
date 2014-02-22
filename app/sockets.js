@@ -58,10 +58,9 @@ module.exports.listen = function(server){
         Models.Challenge.findQ()
         .then( function(problem) {
           var data = {
-            name: problem.name,
-            boilerplate: problem.boilerplate
+            name: problem[0].name,
+            boilerplate: problem[0].boilerplate
           };
-
           games[gameID].players[0].socket.emit('startGame', data);
           games[gameID].players[1].socket.emit('startGame', data);
         });
