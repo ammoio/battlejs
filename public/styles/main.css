@@ -9,7 +9,7 @@ body {
   height: 100%;
   position: relative;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  overflow: hidden;
+/*  overflow: hidden;*/
   background-color: #ECF0F1;
 /*  background-image: -webkit-gradient(
   linear,
@@ -56,9 +56,9 @@ a {
 
 .new-game a {
   font-size: 3em;
-  margin: 10% auto;
+  margin: 5% auto;
   border-radius: 18px;
-  font-family: 'Audiowide', cursive;
+  font-family: 'Press Start 2P', sans-serif;
 }
 
 .new-game a:hover {
@@ -77,9 +77,6 @@ a {
   text-align: center;
 }
 
-.novice {
-  float: right;
-}
 
 .container-fluid{
   height: 100%;
