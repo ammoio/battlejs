@@ -26,9 +26,10 @@ module.exports.listen = function(server){
         'players': [{
           'socketID': socket.id,
           'socket': socket,
-          'playerNumber': 1
+          'playerNumber': 1,
+          'latestContent': "",
+          'isReady': false
         }],
-        'numOfReady': 0,
         'watchers': []
       };
       console.log("First Player Joined");
@@ -48,22 +49,45 @@ module.exports.listen = function(server){
           'socket': socket,
           'playerNumber': 2
         });
+        socket.emit('updated', thisGame.players[0].latestContent);
         socket.emit('gameReady');
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
-        console.log("gameFull");
+        socket.emit('gameFull');
+      }
+    });
+
+    socket.on('addMeAsWatcher', function(data) {
+      var thisGame = games[data.gameID];
+      if (thisGame && thisGame.players[0]) {
         thisGame.watchers.push({
           'socketID': socket.id,
-          'socket': socket        
+          'socket': socket
         });
-        socket.emit('gameFull');
+        //update view for player 1
+        socket.emit('viewerUpdate', {
+          player: 1,
+          data: thisGame.players[0].latestContent
+        });
+        //update view for player 2
+        if (thisGame.players[1]) {
+          socket.emit('viewerUpdate', {
+            player: 2,
+            data: thisGame.players[1].latestContent
+          })
+        }
       }
     });
 
     socket.on('ready', function(data) {
       var thisGame = games[data.gameID];
-      thisGame.numOfReady++;
-      if (thisGame.numOfReady === 2) {
+      //player 1 sending ready signal
+      if (thisGame.players[0].socket === socket) {
+        thisGame.players[0].isReady = true;
+      } else if (thisGame.players[1] && thisGame.players[1].socket === socket) {
+        thisGame.players[1].isReady = true;
+      }
+      if (thisGame.players.length === 2 && thisGame.players[0].isReady && thisGame.players[1].isReady) {
         Models.Challenge.findQ()
         .then( function(problem) {
           var data = {
@@ -80,6 +104,7 @@ module.exports.listen = function(server){
     socket.on('update', function(data) {
       var thisGame = games[data.gameID];
       if (thisGame && socket.id === thisGame.players[0].socketID) {
+        thisGame.players[0].latestContent = data.data;
         thisGame.players[1] && thisGame.players[1].socket.emit('updated', {data: data.data});
         
         //show the watchers
@@ -90,6 +115,7 @@ module.exports.listen = function(server){
           });
         });
       } else if (thisGame && socket.id === thisGame.players[1].socketID) {
+        thisGame.players[1].latestContent = data.data;
         thisGame.players[0].socket.emit('updated', {data: data.data}); 
 
         //show the watchers
