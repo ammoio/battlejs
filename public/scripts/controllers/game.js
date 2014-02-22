@@ -1,7 +1,7 @@
 angular.module('app')
   
   .controller('GameController',
-    function($scope) {
+    function($scope, $rootScope, $location) {
 
       $scope.game = "Battle.js Game";
 
@@ -55,5 +55,16 @@ angular.module('app')
 
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
+
+
+      if (!$rootScope.playerOne){
+        var gameID = $location.path();
+        gameID = gameID.slice(gameID.indexOf('/') + 1);
+        socket.emit('joinGame', {'gameID': gameID});
+      };
+
+      socket.on('startGame', function(data){
+        console.log(data);
+      });
 
   });
