@@ -6,6 +6,8 @@ h1 {
   margin-top: 5%;
 }
 body {
+  height: 100%;
+  position: relative;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   overflow: hidden;
   background-color: #ECF0F1;
@@ -29,20 +31,20 @@ a {
 
 #player, #player1{ 
   margin: 0;
-  position: absolute;
+  /*position: absolute;*/
   top: 20px;
   bottom: 20px;
-  left: 20px;
-  right: 55%;
+/*  left: 20px;
+  right: 55%;*/
 }
 
 #opponent, #player2 { 
   margin: 0;
-  position: absolute;
+  /*position: absolute;*/
   top: 20px;
-  bottom: 20px;
-  left: 55%;
-  right: 20px;
+  bottom: 20px; 
+/*  left: 55%;
+  right: 20px;*/
 }
 
 .new-game {
@@ -78,10 +80,33 @@ a {
 }
 
 .container-fluid{
-  position: relative;
-  height: 73%;
+  height: 100%;
+  /*position: relative;*/
+  /*height: 73%;*/
 }
 
 .navbar{
   border-radius: 0;
+}
+
+.view{
+  top: 55px ;
+  position: absolute;
+  bottom:10px;
+}
+
+.full-row{
+  height: 100%;
+  width: 100%;
+}
+
+.topRow{
+  top: 20px;
+  position: absolute;
+  bottom: 0;
+}
+
+.full{
+  top: 20px;
+  bottom: 0;
 }
