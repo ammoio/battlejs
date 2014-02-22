@@ -2,6 +2,9 @@ angular.module('app')
   
   .controller('GameController',
     function($scope, $rootScope, $location) {
+      $scope.gameID = $location.path();
+      $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
+
 
       $scope.game = "Battle.js Game";
 
@@ -42,7 +45,7 @@ angular.module('app')
       player.getSession().setUseSoftTabs(true);
       player.getSession().on('change', function(e) {
         // opponent.setValue(player.getValue(), 1); 
-        socket.emit('update', { data: player.getValue(), gameID: gameID });
+        $rootScope.socket.emit('update', { data: player.getValue(), gameID: $scope.gameID });
       });
 
       var opponent = ace.edit("opponent");
@@ -58,20 +61,18 @@ angular.module('app')
 
 
       if (!$rootScope.playerOne){
-        var gameID = $location.path();
-        gameID = gameID.slice(gameID.lastIndexOf('/') + 1);
-        socket.emit('joinGame', {'gameID': gameID});
+        $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
       }
 
-      socket.on('gameReady', function(data){
+      $rootScope.socket.on('gameReady', function(data){
         console.log('hello', data);
       });
       
-      socket.on('gameFull', function(data){
-        $location.path('/watch/' + gameID);
+      $rootScope.socket.on('gameFull', function(data){
+        $location.path('/watch/' + $scope.gameID);
       });
 
-      socket.on('updated', function(data){
+      $rootScope.socket.on('updated', function(data){
         console.log(data);
         opponent.setValue(data.data, 1);
       });

@@ -6,9 +6,9 @@ angular.module('app')
       $scope.welcome = "Battle.js";
 
       $scope.newGame = function(){
-        socket.emit('newGame', {});
+        $rootScope.socket.emit('newGame', {});
       };
-      socket.on('gameID', function(data){
+      $rootScope.socket.on('gameID', function(data){
 
         var gameID = data.gameID;
 

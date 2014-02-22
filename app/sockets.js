@@ -43,7 +43,9 @@ module.exports.listen = function(server){
         socket.emit('gameReady', 'problem');
       } else if (games[gameID] && games[gameID].players.length > 1) {
         socket.emit('gameFull');
-      } 
+      } else {
+        socket.emit('gameDoesNotExist');
+      }
     });
 
     socket.on('ready', function(data) {
@@ -56,7 +58,8 @@ module.exports.listen = function(server){
 
     socket.on('update', function(data) {
       var gameID = data.gameID;
-      if (games[gameID] && socket.id === games[gameID].players[0].socketID) {
+      if (games[gameID] && socket.id === (games[gameID]).players[0].socketID) {
+        console.log(games[gameID].players[1].socket);
         games[gameID].players[1].socket.emit('updated', {data: data.data});
       } else if (games[gameID]) {
         games[gameID].players[0].socket.emit('updated', {data: data.data}); 
