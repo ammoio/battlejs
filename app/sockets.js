@@ -27,9 +27,9 @@ module.exports.listen = function(server){
           'socketID': socket.id,
           'socket': socket,
           'playerNumber': 1,
-          'latestContent': ""
+          'latestContent': "",
+          'isReady': false
         }],
-        'numOfReady': 0,
         'watchers': []
       };
       console.log("First Player Joined");
@@ -81,8 +81,13 @@ module.exports.listen = function(server){
 
     socket.on('ready', function(data) {
       var thisGame = games[data.gameID];
-      thisGame.numOfReady++;
-      if (thisGame.numOfReady === 2) {
+      //player 1 sending ready signal
+      if (thisGame.players[0].socket === socket) {
+        thisGame.players[0].isReady = true;
+      } else if (thisGame.players[1] && thisGame.players[1].socket === socket) {
+        thisGame.players[1].isReady = true;
+      }
+      if (thisGame.players.length === 2 && thisGame.players[0].isReady && thisGame.players[1].isReady) {
         Models.Challenge.findQ()
         .then( function(problem) {
           var data = {
