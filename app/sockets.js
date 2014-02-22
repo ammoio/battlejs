@@ -32,7 +32,6 @@ module.exports.listen = function(server){
     //other players trying to join
     socket.on('joinGame', function(data) {
       var gameID = data.gameID;
-      console.log(gameID);
       if (games[gameID].players.length === 1) {
         games[gameID].players.push({
           'socketID': socket.id,
@@ -41,7 +40,6 @@ module.exports.listen = function(server){
         });
 
         //start the game
-        console.log('player 2 joined', games[gameID].players);
         socket.emit('gameReady', 'problem');
       } else if (games[gameID].players.length > 1) {
         socket.emit('gameFull');

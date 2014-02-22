@@ -60,7 +60,6 @@ angular.module('app')
       if (!$rootScope.playerOne){
         var gameID = $location.path();
         gameID = gameID.slice(gameID.lastIndexOf('/') + 1);
-        console.log(gameID);
         socket.emit('joinGame', {'gameID': gameID});
       };
 
