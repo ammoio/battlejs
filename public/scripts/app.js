@@ -11,6 +11,10 @@ angular.module('app', ['ngRoute'])
       .when('/game/:id', {
         templateUrl: '/views/game.html',
         controller: 'GameController'
+      })
+      .when('/watch/:id', {
+        templateUrl: '/views/game.html',
+        controller: 'GameController'
       });
     window.socket = io.connect('http://localhost');
   });
