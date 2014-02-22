@@ -120,7 +120,7 @@ a {
   bottom: 0;
 }
 
-#messagesDiv{
+/*#messagesDiv{
   position:fixed;
   left:0px;
   bottom:0px;
@@ -129,9 +129,9 @@ a {
   background-color: white;
   border-right:1px solid black;  
 }
-
-#watch-container{
-  position: relative;
+*/
+/*#watch-container{
   left: 300px;
   width: 75%;
 }
+*/
