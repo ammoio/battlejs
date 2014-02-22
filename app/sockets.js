@@ -32,6 +32,13 @@ module.exports.listen = function(server){
       
      });
 
+    socket.on('test', function(data) {
+      var s = new Sandbox();
+      s.run(data.data, function(output){
+        socket.emit('testResults', output);
+      });
+    });
+
     socket.on('submit', function(data) {
       var s = new Sandbox();
       s.run(data.data, function(output){
