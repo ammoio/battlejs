@@ -15,10 +15,6 @@ angular.module('app')
       player1.setShowPrintMargin(false);
       player1.getSession().setTabSize(2);
       player1.getSession().setUseSoftTabs(true);
-      player1.getSession().on('change', function(e) {
-        // opponent.setValue(player.getValue(), 1); 
-        $rootScope.socket.emit('update', { data: player1.getValue(), gameID: $scope.gameID });
-      });
 
       var player2 = ace.edit("player2");
       player2.setReadOnly(true); 
@@ -32,6 +28,7 @@ angular.module('app')
       var player2Element = document.getElementById('player2');
 
       $rootScope.socket.on('viewerUpdate', function(response){
+        console.log("View Update: ", response);
         if(response.player === 1) {
           player1.setValue(response.data, 1);
         } else {
