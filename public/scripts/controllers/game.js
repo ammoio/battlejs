@@ -4,6 +4,8 @@ angular.module('app')
     function($scope, $rootScope, $location, $timeout) {
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
+      $scope.status = 0; //0 is waiting, 1 is countdown, 2 is game in progress
+      $scope.countDown = 5;
 
       
       if (!$rootScope.playerOne){
@@ -37,8 +39,21 @@ angular.module('app')
       });
 
       $rootScope.socket.on('startGame', function(data) {
-        console.log('starting: ', data);        
-        player.setValue(data.boilerplate, 1);
+        console.log('starting: ', data);
+        $scope.status = 1; //countdown starts
+        $scope.countDown = 6;
+        var countDown = function() {
+          $scope.countDown--;
+          if ($scope.countDown > 0) {
+            $timeout(countDown, 1000);
+          } else {
+            $scope.status = 2;
+            $scope.$broadcast('timer-start');
+            $scope.timerRunning = true; 
+          }
+        };
+        $timeout(countDown, 1000);
+
         $scope.functionName = data.functionName;
       });
 
