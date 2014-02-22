@@ -1,7 +1,7 @@
 <!-- <h1>Welcome to the {{ game }}</h1>
  -->
+
 <div class="text-center">
-  <button class="btn btn-primary" ng-click='startGame()'>Ready!</button>
 
 <div class='timer clearfix'>
   <timer interval="1000" autostart='false' ng-show="status===2">{{minutes}} : {{seconds}}</timer>
@@ -9,8 +9,11 @@
   <p ng-show="status===0">Waiting for Player 2</p>
 </div>
 
-  <button class="btn btn-primary" ng-click='runCode()' ng-disabled='started'>Test your Code</button>
-  <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='started'>Submit Code</button>
+
+  <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
+  <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
+  <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
+
   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
   <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
   <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button>
