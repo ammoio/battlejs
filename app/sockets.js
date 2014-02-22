@@ -27,53 +27,73 @@ module.exports.listen = function(server){
           'socket': socket,
           'playerNumber': 1
         }],
-        'numOfReady': 0
+        'numOfReady': 0,
+        'watchers': []
       };
       socket.emit('gameID', {'gameID': gameID});
     });
 
     //other players trying to join
     socket.on('joinGame', function(data) {
-      var gameID = data.gameID;
-      if (games[gameID] && games[gameID].players.length === 1) {
-        games[gameID].players.push({
+      var thisGame = games[data.gameID];
+      if (thisGame && thisGame.players.length === 0) { //empty chat room, should redirect
+        socket.emit('gameDoesNotExist');
+
+      } else if (thisGame && thisGame.players.length === 1) { //second play joining
+        thisGame.players.push({
           'socketID': socket.id,
           'socket': socket,
           'playerNumber': 2
         });
+        socket.emit('gameReady');
 
-        //start the game
-        socket.emit('gameReady', 'problem');
-      } else if (games[gameID] && games[gameID].players.length > 1) {
+      } else if (thisGame && thisGame.players.length > 1) { //watchers
+        thisGame.watchers.push({
+          'socketID': socket.id,
+          'socket': socket        
+        });
         socket.emit('gameFull');
-      } else {
-        socket.emit('gameDoesNotExist');
       }
     });
 
     socket.on('ready', function(data) {
-      var gameID = data.gameID;
-      games[gameID].numOfReady++;
-      if (games[gameID].numOfReady === 2) {
+      var thisGame = games[data.gameID];
+      thisGame.numOfReady++;
+      if (thisGame.numOfReady === 2) {
         Models.Challenge.findQ()
         .then( function(problem) {
           var data = {
             name: problem[0].name,
             boilerplate: problem[0].boilerplate
           };
-          games[gameID].players[0].socket.emit('startGame', data);
-          games[gameID].players[1].socket.emit('startGame', data);
+          thisGame.players[0].socket.emit('startGame', data);
+          thisGame.players[1].socket.emit('startGame', data);
         });
       }
     });
 
     socket.on('update', function(data) {
-      var gameID = data.gameID;
-      if (games[gameID] && socket.id === (games[gameID]).players[0].socketID) {
-        console.log(games[gameID].players[1].socket);
-        games[gameID].players[1].socket.emit('updated', {data: data.data});
-      } else if (games[gameID]) {
-        games[gameID].players[0].socket.emit('updated', {data: data.data}); 
+      var thisGame = games[data.gameID];
+      if (thisGame && socket.id === thisGame.players[0].socketID) {
+        thisGame.players[1].socket.emit('updated', {data: data.data});
+        
+        //show the watchers
+        thisGame.watchers.forEach(function(watcher) {
+          watcher.socket.emit('viewerUpdate', {
+            player: 1,
+            data: data.data
+          });
+        });
+      } else if (thisGame && socket.id === thisGame.players[1].socketID) {
+        thisGame.players[0].socket.emit('updated', {data: data.data}); 
+
+        //show the watchers
+        thisGame.watchers.forEach(function(watcher) {
+          watcher.socket.emit('viewerUpdate', {
+            player: 2,
+            data: data.data
+          });
+        });
       }
     }); 
 
