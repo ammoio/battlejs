@@ -78,19 +78,14 @@ angular.module('app')
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
 
-      if (!$rootScope.playerOne){
-        $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
-        var gameID = $location.path();
-        gameID = gameID.slice(gameID.lastIndexOf('/') + 1);
-        $rootScope.socket.emit('joinGame', { 'gameID': gameID });
-      }
-
       $rootScope.socket.on('gameReady', function(response){
+        console.log("GameReady");
         //response.name = name of the problem
         player.setValue(response.biolerplate, 1);
       });
       
       $rootScope.socket.on('gameFull', function(data){
+        console.log("GameFull");
         $location.path('/watch/' + $scope.gameID);
       });
 
