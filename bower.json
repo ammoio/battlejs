@@ -18,6 +18,8 @@
     "angular": "~1.2.12",
     "angular-route": "~1.2.12",
     "bootstrap": "~3.1.1",
-    "socket.io-client": "~0.9.16"
+    "socket.io-client": "~0.9.16",
+    "firebase": "~1.0.6",
+    "jquery": "~2.1.0"
   }
 }
