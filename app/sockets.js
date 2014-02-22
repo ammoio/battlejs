@@ -34,10 +34,10 @@ module.exports.listen = function(server){
 
     socket.on('submit', function(data) {
       var s = new Sandbox();
-      s.run(data, function(output){
-        socket.emit('output');
+      s.run(data.data, function(output){
+        socket.emit('output', output);
       });
     });
-    
+
   });
 };
