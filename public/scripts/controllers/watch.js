@@ -1,7 +1,7 @@
 angular.module('app')
   
   .controller('WatchController',
-    function($scope, $location, $rootScope, $timeout) {
+    function($scope, $location, $rootScope, $timeout, $sanitize) {
 
       $scope.welcome = "Battle.js Viewer";
       
@@ -61,7 +61,7 @@ angular.module('app')
 
       $scope.sendMessage = function(){
         if ($scope.name && $scope.text){
-          $scope.chatRef.push({name: $scope.name, text: $scope.text});
+          $scope.chatRef.push({name: $sanitize($scope.name), text: $sanitize($scope.text)});
           $scope.text = '';
         };
       };
