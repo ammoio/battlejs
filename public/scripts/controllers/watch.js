@@ -7,7 +7,9 @@ angular.module('app')
       
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
-
+      $rootScope.socket.emit('addMeAsWatcher', {
+        gameID: $scope.gameID        
+      });
       
       $scope.setMode = function(mode){
         if(mode === "normal") {

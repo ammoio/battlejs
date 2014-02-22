@@ -68,7 +68,10 @@ a {
 .master, .novice {
   float: left;
   width: 40%;
-  margin: 4%;
+  margin: 3%;
+  height: 20%;
+  border-radius: 2em;
+  background-color: yellow;
 }
 
 .novice {

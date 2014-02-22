@@ -25,7 +25,8 @@ module.exports.listen = function(server){
         'players': [{
           'socketID': socket.id,
           'socket': socket,
-          'playerNumber': 1
+          'playerNumber': 1,
+          'latestContent': ""
         }],
         'numOfReady': 0,
         'watchers': []
@@ -48,11 +49,29 @@ module.exports.listen = function(server){
         socket.emit('gameReady');
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
+        socket.emit('gameFull');
+      }
+    });
+
+    socket.on('addMeAsWatcher', function(data) {
+      var thisGame = games[data.gameID];
+      if (thisGame && thisGame.players[0]) {
         thisGame.watchers.push({
           'socketID': socket.id,
-          'socket': socket        
+          'socket': socket
         });
-        socket.emit('gameFull');
+        //update view for player 1
+        socket.emit('viewerUpdate', {
+          player: 1,
+          data: thisGame.players[0].latestContent
+        });
+        //update view for player 2
+        if (thisGame.players[1]) {
+          socket.emit('viewerUpdate', {
+            player: 2,
+            data: thisGame.players[1].latestContent
+          })
+        }
       }
     });
 
@@ -75,6 +94,7 @@ module.exports.listen = function(server){
     socket.on('update', function(data) {
       var thisGame = games[data.gameID];
       if (thisGame && socket.id === thisGame.players[0].socketID) {
+        thisGame.players[0].latestContent = data.data;
         thisGame.players[1].socket.emit('updated', {data: data.data});
         
         //show the watchers
@@ -85,6 +105,7 @@ module.exports.listen = function(server){
           });
         });
       } else if (thisGame && socket.id === thisGame.players[1].socketID) {
+        thisGame.players[1].latestContent = data.data;
         thisGame.players[0].socket.emit('updated', {data: data.data}); 
 
         //show the watchers
