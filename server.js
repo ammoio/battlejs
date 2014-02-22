@@ -11,6 +11,8 @@ var mongoose = require('mongoose');
 var Models = require('./app/models');
 var Routes = require('./app/routes');
 var io = require('socket.io');
+var crypto = require('crypto');
+
 
 
 var app = express();
@@ -37,6 +39,7 @@ mongoose.connect('mongodb://localhost/battlejs');
 //load all routes from the routes.js
 Routes(app);
 
+
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
   console.log('What happens on port ' + app.get('port') + " stays on port " + app.get('port'));
@@ -53,11 +56,18 @@ io.sockets.on('connection', function (socket) {
 
   //when newGame is clicked
   socket.on('newGame', function() {
+    
     //generate new game id
-    var gameId = "";
+    var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
 
-
-    return gameId;
+    //store it into games
+    games[gameID] = {
+      'player1': {
+        'socketID': socket.id,
+        'socket': socket
+      }
+    };
+    socket.emit('gameID', {'gameID': gameID});
   });
   
   socket.on('ready', function(data) {

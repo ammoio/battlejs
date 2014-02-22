@@ -12,4 +12,5 @@ angular.module('app', ['ngRoute'])
         templateUrl: '/views/game.html',
         controller: 'GameController'
       });
+    window.socket = io.connect('http://localhost');
   });
