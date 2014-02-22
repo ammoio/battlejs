@@ -21,6 +21,7 @@ angular.module('app')
       };
 
       $scope.runCode = function() {
+        $rootScope.socket.emit('test', { data: player.getValue(), gameID: gameID });
       };
 
       $scope.increaseFont = function() {
@@ -62,6 +63,9 @@ angular.module('app')
 
       if (!$rootScope.playerOne){
         $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
+        var gameID = $location.path();
+        gameID = gameID.slice(gameID.lastIndexOf('/') + 1);
+        $rootScope.socket.emit('joinGame', { 'gameID': gameID });
       }
 
       $rootScope.socket.on('gameReady', function(data){
@@ -73,8 +77,10 @@ angular.module('app')
       });
 
       $rootScope.socket.on('updated', function(data){
-        console.log(data);
         opponent.setValue(data.data, 1);
       });
 
+      $rootScope.socket.on('testResults', function(obj) {
+        console.log(obj.console);
+      });
   });
