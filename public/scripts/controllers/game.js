@@ -41,7 +41,8 @@ angular.module('app')
       player.getSession().setTabSize(2);
       player.getSession().setUseSoftTabs(true);
       player.getSession().on('change', function(e) {
-        opponent.setValue(player.getValue(), 1); 
+        // opponent.setValue(player.getValue(), 1); 
+        socket.emit('update', { data: player.getValue(), gameID: gameID });
       });
 
       var opponent = ace.edit("opponent");
@@ -52,7 +53,6 @@ angular.module('app')
       opponent.getSession().setTabSize(2);
       opponent.getSession().setUseSoftTabs(true);
 
-
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
 
@@ -61,7 +61,7 @@ angular.module('app')
         var gameID = $location.path();
         gameID = gameID.slice(gameID.lastIndexOf('/') + 1);
         socket.emit('joinGame', {'gameID': gameID});
-      };
+      }
 
       socket.on('gameReady', function(data){
         console.log('hello', data);
@@ -71,5 +71,9 @@ angular.module('app')
         $location.path('/watch/' + gameID);
       });
 
+      socket.on('updated', function(data){
+        console.log(data);
+        opponent.setValue(data.data, 1);
+      });
 
   });

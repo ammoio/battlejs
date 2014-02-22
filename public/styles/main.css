@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   overflow: hidden;
 }
@@ -11,7 +10,7 @@ a {
 #player { 
   margin: 0;
   position: absolute;
-  top: 25%;
+  top: 15%;
   bottom: 20px;
   left: 20px;
   right: 55%;
@@ -20,7 +19,7 @@ a {
 #opponent { 
   margin: 0;
   position: absolute;
-  top: 25%;
+  top: 15%;
   bottom: 20px;
   left: 55%;
   right: 20px;
