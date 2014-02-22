@@ -27,27 +27,32 @@ module.exports.listen = function(server){
           'socket': socket,
           'playerNumber': 1
         }],
-        'numOfReady': 0
+        'numOfReady': 0,
+        'watchers': []
       };
       socket.emit('gameID', {'gameID': gameID});
     });
 
     //other players trying to join
     socket.on('joinGame', function(data) {
-      var gameID = data.gameID;
-      if (games[gameID] && games[gameID].players.length === 1) {
-        games[gameID].players.push({
+      var thisGame = games[data.gameID];
+      if (thisGame && thisGame.players.length === 0) { //empty chat room, should redirect
+        socket.emit('gameDoesNotExist');
+
+      } else if (thisGame && thisGame.players.length === 1) { //second play joining
+        thisGame.players.push({
           'socketID': socket.id,
           'socket': socket,
           'playerNumber': 2
         });
+        socket.emit('gameReady');
 
-        //start the game
-        socket.emit('gameReady', 'problem');
-      } else if (games[gameID] && games[gameID].players.length > 1) {
+      } else if (thisGame && thisGame.players.length > 1) { //watchers
+        thisGame.watchers.push({
+          'socketID': socket.id,
+          'socket': socket        
+        });
         socket.emit('gameFull');
-      } else {
-        socket.emit('gameDoesNotExist');
       }
     });
 
