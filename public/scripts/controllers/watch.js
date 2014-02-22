@@ -11,6 +11,11 @@ angular.module('app')
       $rootScope.socket.emit('addMeAsWatcher', {
         gameID: $scope.gameID        
       });
+
+      //need this here to redirect to not exist page because game.js is not controller
+      $rootScope.socket.on('gameDoesNotExist', function(data){
+        $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
+      });
       
       $scope.setMode = function(mode){
         if(mode === "normal") {
