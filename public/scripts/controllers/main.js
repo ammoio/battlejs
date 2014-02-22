@@ -13,7 +13,9 @@ angular.module('app')
         var gameID = data.gameID;
 
         $rootScope.gameID = gameID;
-        console.log('changing route', gameID);
+        //Flag for first player
+        $rootScope.playerOne = true;
+        //Handles angular digest cycle
         $timeout(function(){$location.path('/game/' + gameID);}, 0);
 
       });
