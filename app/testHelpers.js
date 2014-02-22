@@ -30,6 +30,7 @@ module.exports = {
       console.log("challenge", challenge);
       var success = true;
       var count = 0;
+      var start = +(new Date);
     
       console.log("Inputs: ", challenge.inputs);
       challenge.inputs.forEach(function(input, index){
@@ -53,6 +54,7 @@ module.exports = {
 
           if(count === challenge.inputs.length){
             if(success){
+              var timed = +(new Date) - start;
               d.resolve("Passed " + challenge.inputs.length + " tests!");
             } else {
               d.reject("something went wrong");
