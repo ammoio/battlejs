@@ -27,6 +27,11 @@ angular.module('app')
         console.log(obj);
       });
 
+      $rootScope.socket.on('submitResults', function(obj) {
+        console.log(obj);
+        // Results from the server running the code 
+      });
+
       $rootScope.socket.on('gameDoesNotExist', function(data){
         $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
@@ -43,15 +48,15 @@ angular.module('app')
       };
 
       $scope.setMode = function(mode){
-        if(mode === "normal") {
-          player.setKeyboardHandler("");
-        } else {          
           player.setKeyboardHandler('ace/keyboard/' + mode);
-        }
       };
 
       $scope.runCode = function() {
         $rootScope.socket.emit('test', { data: player.getValue(), gameID: $scope.gameID });
+      };
+
+      $scope.submitCode = function() {
+        $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID });
       };
 
       $scope.increaseFont = function() {
@@ -75,7 +80,6 @@ angular.module('app')
       player.getSession().setTabSize(2);
       player.getSession().setUseSoftTabs(true);
       player.getSession().on('change', function(e) {
-        // opponent.setValue(player.getValue(), 1); 
         $rootScope.socket.emit('update', { data: player.getValue(), gameID: $scope.gameID });
       });
 

@@ -1,6 +1,7 @@
 var crypto = require('crypto');
 var Sandbox = require('sandbox');
 var Models = require('../app/models');
+var testHelpers = require('./testHelpers');
 
 //socket io logic
 
@@ -31,6 +32,7 @@ module.exports.listen = function(server){
         'numOfReady': 0,
         'watchers': []
       };
+      console.log("First Player Joined");
       socket.emit('gameID', {'gameID': gameID});
     });
 
@@ -41,11 +43,13 @@ module.exports.listen = function(server){
         socket.emit('gameDoesNotExist');
 
       } else if (thisGame && thisGame.players.length === 1) { //second play joining
+        console.log("Second Player Joined, gameready");
         thisGame.players.push({
           'socketID': socket.id,
           'socket': socket,
           'playerNumber': 2
         });
+        socket.emit('updated', thisGame.players[0].latestContent);
         socket.emit('gameReady');
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
@@ -83,6 +87,7 @@ module.exports.listen = function(server){
         .then( function(problem) {
           var data = {
             name: problem[0].name,
+            functionName: problem[0].functionName,
             boilerplate: problem[0].boilerplate
           };
           thisGame.players[0].socket.emit('startGame', data);
@@ -95,7 +100,7 @@ module.exports.listen = function(server){
       var thisGame = games[data.gameID];
       if (thisGame && socket.id === thisGame.players[0].socketID) {
         thisGame.players[0].latestContent = data.data;
-        thisGame.players[1].socket.emit('updated', {data: data.data});
+        thisGame.players[1] && thisGame.players[1].socket.emit('updated', {data: data.data});
         
         //show the watchers
         thisGame.watchers.forEach(function(watcher) {
@@ -119,16 +124,22 @@ module.exports.listen = function(server){
     }); 
 
     socket.on('test', function(data) {
-      var s = new Sandbox();
-      s.run(data.data, function(output){
+      testHelpers.run(data.data)
+      .then(function(output){
         socket.emit('testResults', output);
+      })
+      .fail(function(err){
+        socket.emit('testResults', err);
       });
     });
 
     socket.on('submit', function(data) {
-      var s = new Sandbox();
-      s.run(data.data, function(output){
-        socket.emit('output', output);
+      testHelpers.validate(data.functionName, data.data)
+      .then(function(output){
+        socket.emit('submitResults', {success: true, result: output.result, console: output.console});
+      })
+      .fail(function(output){
+        socket.emit('submitResults', {success: false, result: output.result, console: output.console});
       });
     });
 
