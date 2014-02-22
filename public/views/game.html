@@ -1,7 +1,11 @@
 <!-- <h1>Welcome to the {{ game }}</h1>
  -->
 
-<div class='timer clearfix'><timer interval="1000" autostart='false'>{{minutes}} : {{seconds}}</timer></div>
+<div class='timer clearfix'>
+  <timer interval="1000" autostart='false' ng-show="status===2">{{minutes}} : {{seconds}}</timer>
+  <p ng-show="status===1">{{ countDown }}</p>
+  <p ng-show="status===0">Waiting for Player 2</p>
+</div>
 <a class="btn btn-primary" ng-click='startGame()'>Begin Code Battle!</a>
 
 <button class="btn btn-primary" ng-click='runCode()'>Test your Code</button>
