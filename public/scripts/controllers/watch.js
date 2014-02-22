@@ -55,23 +55,19 @@ angular.module('app')
 
 
 
+      $scope.messages = [];
 
       $scope.chatRef = new Firebase('https://battlejs.firebaseio.com/chat/' + $scope.gameID);
 
       $scope.sendMessage = function(){
-        if ($scope.name){
-          $scope.messages.unshift({name: $scope.name, text: $scope.text});
+        if ($scope.name && $scope.text){
+          $scope.chatRef.push({name: $scope.name, text: $scope.text});
           $scope.text = '';
         };
       };
 
-      $scope.messages = [];
-     
       $scope.chatRef.on('child_added', function(snapshot) {
-        $scope.messages.push(snapshot.val());
+        $timeout(function(){$scope.messages.unshift(snapshot.val());},0);
       });
       
-
-
-
   });
