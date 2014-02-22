@@ -8,7 +8,7 @@ angular.module('app', ['ngRoute'])
         templateUrl: '/views/main.html',
         controller: 'MainController'
       })
-      .when('/newGame', {
+      .when('/game/:id', {
         templateUrl: '/views/game.html',
         controller: 'GameController'
       });
