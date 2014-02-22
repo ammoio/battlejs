@@ -16,4 +16,3 @@ reverseString.saveQ()
 .then(function(){
   console.log("saved Successfully");
 });
-
