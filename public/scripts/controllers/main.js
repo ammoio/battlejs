@@ -14,7 +14,7 @@ angular.module('app')
 
         $rootScope.gameID = gameID;
         console.log('changing route', gameID);
-        $timeout(function(){$location.path('/game/' + '2345');}, 0);
+        $timeout(function(){$location.path('/game/' + gameID);}, 0);
 
       });
   });
