@@ -8,6 +8,18 @@ angular.module('app')
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
 
+      $rootScope.socket.emit('addMeAsWatcher', {
+        gameID: $scope.gameID        
+      });
+      
+      $scope.setMode = function(mode){
+        if(mode === "normal") {
+          player.setKeyboardHandler("");
+        } else {          
+          player.setKeyboardHandler('ace/keyboard/' + mode);
+        }
+      };
+
       var player1 = ace.edit("player1");
       player1.setReadOnly(true);
       player1.setTheme("ace/theme/twilight");
