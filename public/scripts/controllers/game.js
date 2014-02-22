@@ -21,7 +21,7 @@ angular.module('app')
 
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
-        $timeout(function(){$location.path('/gameDoesNotExist');},0);
+        $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
 
       $scope.game = "Battle.js Game";
@@ -39,7 +39,7 @@ angular.module('app')
       };
 
       $scope.runCode = function() {
-        $rootScope.socket.emit('test', { data: player.getValue(), gameID: gameID, player: $rootScope.playerOne });
+        $rootScope.socket.emit('test', { data: player.getValue(), gameID: gameID });
       };
 
       $scope.increaseFont = function() {
