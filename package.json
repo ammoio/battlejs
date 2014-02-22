@@ -12,6 +12,7 @@
     "socket.io": "~0.9.16",
     "bower": "~1.2.8",
     "crypto": "0.0.3",
-    "sandbox": "~0.8.3"
+    "sandbox": "~0.8.3",
+    "mongoose-q": "0.0.9"
   }
 }
