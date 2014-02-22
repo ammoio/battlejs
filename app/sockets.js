@@ -173,8 +173,10 @@ module.exports.listen = function(server){
     socket.on('disconnect', function () {
     
       //removes from to active sockets
-      games[activeSockets[socket.id]]['activeSockets'] -= 1;
-      delete activeSockets[socket.id];
+      if (games[activeSockets[socket.id]]){
+        games[activeSockets[socket.id]]['activeSockets'] -= 1;
+        delete activeSockets[socket.id];
+      }
 
     });
 

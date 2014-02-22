@@ -21,6 +21,7 @@
     "socket.io-client": "~0.9.16",
     "firebase": "~1.0.6",
     "jquery": "~2.1.0",
-    "angular-sanitize": "~1.2.13"
+    "angular-sanitize": "~1.2.13",
+    "angular-timer": "~1.0.12"
   }
 }
