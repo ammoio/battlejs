@@ -31,6 +31,7 @@ module.exports.listen = function(server){
         'numOfReady': 0,
         'watchers': []
       };
+      console.log("First Player Joined");
       socket.emit('gameID', {'gameID': gameID});
     });
 
@@ -41,6 +42,7 @@ module.exports.listen = function(server){
         socket.emit('gameDoesNotExist');
 
       } else if (thisGame && thisGame.players.length === 1) { //second play joining
+        console.log("Second Player Joined, gameready");
         thisGame.players.push({
           'socketID': socket.id,
           'socket': socket,
@@ -49,6 +51,7 @@ module.exports.listen = function(server){
         socket.emit('gameReady');
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
+        console.log("gameFull");
         thisGame.watchers.push({
           'socketID': socket.id,
           'socket': socket        
