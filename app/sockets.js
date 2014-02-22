@@ -68,6 +68,7 @@ module.exports.listen = function(server){
         .then( function(problem) {
           var data = {
             name: problem[0].name,
+            functionName: problem[0].functionName,
             boilerplate: problem[0].boilerplate
           };
           thisGame.players[0].socket.emit('startGame', data);
@@ -79,7 +80,7 @@ module.exports.listen = function(server){
     socket.on('update', function(data) {
       var thisGame = games[data.gameID];
       if (thisGame && socket.id === thisGame.players[0].socketID) {
-        thisGame.players[1].socket.emit('updated', {data: data.data});
+        thisGame.players[1] && thisGame.players[1].socket.emit('updated', {data: data.data});
         
         //show the watchers
         thisGame.watchers.forEach(function(watcher) {
@@ -112,12 +113,12 @@ module.exports.listen = function(server){
     });
 
     socket.on('submit', function(data) {
-      testHelpers.validate(data.data)
+      testHelpers.validate(data.functionName, data.data)
       .then(function(output){
-        socket.emit('submitResults', {success: true, result: output});
+        socket.emit('submitResults', {success: true, result: output.result, console: output.console});
       })
       .fail(function(output){
-        socket.emit('submitResults', {success: false, result: output});
+        socket.emit('submitResults', {success: false, result: output.result, console: output.console});
       });
     });
 
