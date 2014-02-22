@@ -9,18 +9,31 @@
   <p ng-show="status===0">Waiting for Player 2</p>
 </div>
 
-  <button class="btn btn-primary" ng-click='runCode()'>Test your Code</button>
-  <button class="btn btn-primary" ng-click='submitCode()'>Submit Code</button>
+  <button class="btn btn-primary" ng-click='runCode()' ng-disabled='started'>Test your Code</button>
+  <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='started'>Submit Code</button>
   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
   <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
   <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button>
   <button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
   <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
 </div>
+
 <!-- <input type="radio" name="group1" value="Normal" onclick="editor.setKeyboardHandler('')" checked>Normal
 <input type="radio" name="group1" value="Vim" onclick="editor.setKeyboardHandler('ace/keyboard/vim')">Vim
 <input type="radio" name="group1" value="Emacs" onclick="editor.setKeyboardHandler('ace/keyboard/emacs')">Emacs
  -->
 
-<pre id="player" class="full-row">// Write your Code here!</pre> 
-<pre id="opponent" class="full-row">// Write your Code here!</pre>
+
+ <div class="row topRow">
+
+  <div class='col-sm-6 full'>
+    <pre id="player" class="full-row">// Write your Code here!</pre>
+  </div>
+
+  <div class='col-sm-6 full'>
+    <pre id="opponent" class="full-row">// Write your Code here!</pre>
+  </div>
+
+</div>
+
+
