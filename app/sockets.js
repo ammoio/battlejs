@@ -23,7 +23,8 @@ module.exports.listen = function(server){
           'socketID': socket.id,
           'socket': socket,
           'playerNumber': 1
-        }]
+        }],
+        'numOfReady': 0
       };
       socket.emit('gameID', {'gameID': gameID});
     });
@@ -41,15 +42,28 @@ module.exports.listen = function(server){
 
         //start the game
         console.log('player 2 joined', games[gameID].players);
-        socket.emit('startGame', 'problem');
+        socket.emit('gameReady', 'problem');
       } else if (games[gameID].players.length > 1) {
         socket.emit('gameFull');
       }
     });
-    
+
     socket.on('ready', function(data) {
-      
+      var gameID = data.gameID;
+      games[gameID].numOfReady++;
+      if (games[gameID].numOfReady === 2) {
+        socket.emit('startGame');
+      }
     });
+
+    socket.on('update', function(data) {
+      var gameID = data.gameID;
+      if (socket.id === games[gameID].players[0].socketID) {
+        games[gameID].players[1].socket.emit('updated', {data: data.data});
+      } else {
+        games[gameID].players[0].socket.emit('updated', {data: data.data}); 
+      }
+    }); 
 
     socket.on('submit', function(data) {
 
