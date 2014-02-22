@@ -39,7 +39,7 @@ angular.module('app')
       };
 
       $scope.runCode = function() {
-        $rootScope.socket.emit('test', { data: player.getValue(), gameID: gameID, player: $rootScope.playerOne });
+        $rootScope.socket.emit('test', { data: player.getValue(), gameID: gameID });
       };
 
       $scope.increaseFont = function() {

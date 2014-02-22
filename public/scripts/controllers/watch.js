@@ -18,7 +18,7 @@ angular.module('app')
       };
 
       var player1 = ace.edit("player1");
-      player2.setReadOnly(true);
+      // player1.setReadOnly(true);
       player1.setTheme("ace/theme/twilight");
       player1.getSession().setMode("ace/mode/javascript");
       player1.setShowPrintMargin(false);
@@ -29,8 +29,8 @@ angular.module('app')
         $rootScope.socket.emit('update', { data: player1.getValue(), gameID: $scope.gameID });
       });
 
-      var player2 = ace.edit("palyer2");
-      player2.setReadOnly(true); 
+      var player2 = ace.edit("player2");
+      // player2.setReadOnly(true); 
       player2.setTheme("ace/theme/twilight");
       player2.getSession().setMode("ace/mode/javascript");
       player2.setShowPrintMargin(false);
@@ -40,9 +40,11 @@ angular.module('app')
       var player1Element = document.getElementById('player1');
       var player2Element = document.getElementById('player2');
 
-      $rootScope.socket.on('updated', function(data){
-        console.log(data);
-        player2.setValue(data.data, 1);
+      $rootScope.socket.on('viewerUpdate', function(reponse){
+        if(response.player === 1) {
+          player1.setValue(response.data, 1);
+        } else {
+          player2.setValue(response.data, 1);
+        }
       });
-      
   });
