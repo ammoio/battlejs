@@ -36,8 +36,9 @@ module.exports = {
         
         s.run(js + "\n" + functionName + "(" + JSON.stringify(input) + ");", function(output){
           returnObject.console = output.console;
+          console.log(count, challenge.inputs.length)
           if(output.result.indexOf('Error') !== -1){
-            // console.log("error in output");
+            console.log("error in output");
             returnObject.success = false;
             returnObject.result = "Failed on input: " + input + ". " + "Expected " + output.result + " to equal " + challenge.outputs[index];
             d.resolve(returnObject);
@@ -45,13 +46,15 @@ module.exports = {
             return;
           }
 
-          if(output.result !== challenge.outputs[index]){
+          if(output.result.slice(1, output.result.length - 1) !== challenge.outputs[index]){
+            console.log('error in comparison', output.result, JSON.stringify(challenge.outputs[index]))
             returnObject.result = "Failed on input: " + input + ". " + "Expected " + output.result + " to equal " + challenge.outputs[index];
             returnObject.success = false;
             d.resolve(returnObject);
             count += 1;
             return;
           }
+          count += 1;
 
           if(count === challenge.inputs.length){
             if(returnObject.success){
