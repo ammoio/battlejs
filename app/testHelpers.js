@@ -21,7 +21,7 @@ module.exports = {
     return d.promise;
   },
 
-  validate: function(functionName, input){
+  validate: function(functionName, js){
     var d = Q.defer();
     console.log(functionName);
 
@@ -31,11 +31,13 @@ module.exports = {
       var success = true;
       var count = 0;
     
+      console.log("Inputs: ", challenge.inputs);
       challenge.inputs.forEach(function(input, index){
         var s = new Sandbox();
-        s.run(input + "\n" + functionName + "(" + input + ");", function(output){
+        
+        s.run(js + "\n" + functionName + "(" + JSON.stringify(input) + ");", function(output){
           if(output.result.indexOf('Error') !== -1){
-            console.log("error in output");
+            // console.log("error in output");
             d.reject(output);
             success = false;
             count += 1;
