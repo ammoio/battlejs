@@ -85,8 +85,8 @@ angular.module('app')
         $rootScope.socket.emit('joinGame', { 'gameID': gameID });
       }
 
-      $rootScope.socket.on('gameReady', function(data){
-        console.log('hello', data);
+      $rootScope.socket.on('gameReady', function(response){
+        player.setValue(response.data, 1);
       });
       
       $rootScope.socket.on('gameFull', function(data){
