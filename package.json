@@ -9,6 +9,7 @@
     "express": "3.4.8",
     "jade": "*",
     "mongoose": "~3.8.7",
-    "socket.io": "~0.9.16"
+    "socket.io": "~0.9.16",
+    "crypto": "0.0.3"
   }
 }

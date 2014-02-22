@@ -10,6 +10,8 @@ var path = require('path');
 var mongoose = require('mongoose');
 var Models = require('./app/models');
 var io = require('socket.io');
+var crypto = require('crypto');
+
 
 
 var app = express();
@@ -35,18 +37,6 @@ app.get('/', function() {
 });
 
 
-//a specific game room
-app.get('/game/:gameId', function() {
-
-  //if this game room exists
-  if (games[gameId]) {
-    //games[gameId].players.push(socket);
-  } else {
-    res.send(404);
-  }
-
-});
-
 var server = http.createServer(app);
 server.listen(app.get('port'), function(){
   console.log('What happens on port ' + app.get('port') + " stays on port " + app.get('port'));
@@ -63,11 +53,18 @@ io.sockets.on('connection', function (socket) {
 
   //when newGame is clicked
   socket.on('newGame', function() {
+    
     //generate new game id
-    var gameId = "";
+    var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
 
-
-    return gameId;
+    //store it into games
+    games[gameID] = {
+      'player1': {
+        socketID: socket.id
+        socket: socket
+      };
+    }
+    socket.emit('gameID', {'gameID': gameID});
   });
   
   socket.on('ready', function(data) {
