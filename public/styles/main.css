@@ -8,7 +8,8 @@ h1 {
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   overflow: hidden;
-  background-image: -webkit-gradient(
+  background-color: #ECF0F1;
+/*  background-image: -webkit-gradient(
   linear,
   left top,
   left bottom,
@@ -19,7 +20,7 @@ background-image: -o-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
 background-image: -moz-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
 background-image: -webkit-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
 background-image: -ms-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
-background-image: linear-gradient(to bottom, #3B4AD4 0%, #ABB6ED 100%);
+background-image: linear-gradient(to bottom, #3B4AD4 0%, #ABB6ED 100%);*/
 }
 
 a {
@@ -29,7 +30,7 @@ a {
 #player, #player1{ 
   margin: 0;
   position: absolute;
-  top: 15%;
+  top: 20px;
   bottom: 20px;
   left: 20px;
   right: 55%;
@@ -38,7 +39,7 @@ a {
 #opponent, #player2 { 
   margin: 0;
   position: absolute;
-  top: 15%;
+  top: 20px;
   bottom: 20px;
   left: 55%;
   right: 20px;
@@ -60,20 +61,27 @@ a {
   background-color: #e74c3c;
 }
 
-.explanation {
-  font-size: 2em;
-  text-align: center;
-}
-
 .master, .novice {
-  float: left;
-  width: 40%;
-  margin: 3%;
-  height: 20%;
-  border-radius: 2em;
-  background-color: yellow;
+  margin-bottom: 5%;
+  margin-left: 5%;
+  margin-right: 5%;
+  color: white;
+  background-color: #34495E;
+  border-radius: 8px;
+  padding: 14px;
+  position: relative;
+  text-align: center;
 }
 
 .novice {
   float: right;
+}
+
+.container-fluid{
+  position: relative;
+  height: 73%;
+}
+
+.navbar{
+  border-radius: 0;
 }
