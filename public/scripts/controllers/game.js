@@ -63,8 +63,13 @@ angular.module('app')
         socket.emit('joinGame', {'gameID': gameID});
       };
 
-      socket.on('startGame', function(data){
+      socket.on('gameReady', function(data){
         console.log('hello', data);
       });
+      
+      socket.on('gameFull', function(data){
+        $location.path('/watch/' + gameID);
+      });
+
 
   });
