@@ -141,10 +141,10 @@ module.exports.listen = function(server){
     socket.on('submit', function(data) {
       testHelpers.validate(data.functionName, data.data)
       .then(function(output){
-        socket.emit('submitResults', {success: true, result: output.result, console: output.console});
+        socket.emit('submitResults', output);
       })
       .fail(function(output){
-        socket.emit('submitResults', {success: false, result: output.result, console: output.console});
+        socket.emit('submitResults', output);
       });
     });
 
