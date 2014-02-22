@@ -39,6 +39,7 @@ angular.module('app')
       $rootScope.socket.on('startGame', function(data) {
         console.log('starting: ', data);        
         player.setValue(data.boilerplate, 1);
+        $scope.functionName = data.functionName;
       });
 
       $scope.game = "Battle.js Game";
@@ -56,7 +57,7 @@ angular.module('app')
       };
 
       $scope.submitCode = function() {
-        $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID });
+        $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID, functionName: $scope.functionName });
       };
 
       $scope.increaseFont = function() {
