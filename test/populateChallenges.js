@@ -20,4 +20,3 @@ reverseString.saveQ()
 Models.Challenge.findQ().then(function(model){
   console.log(model + "HERE");
 });
-
