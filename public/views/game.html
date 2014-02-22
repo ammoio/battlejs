@@ -3,3 +3,17 @@
 <a class="btn btn-primary" ng-click='startGame()'>Begin Code Battle!</a>
 
 <a class="btn btn-primary" ng-click='submitCode()'>Test Your Code</a>
+
+<!-- <button class="btn btn-primary" ng-click='runCode()'>Run in Console</button> -->
+<button class="btn btn-primary" ng-click='setMode("normal")'>Normal Mode</button>
+<button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
+<button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button>
+<button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
+<button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
+<!-- <input type="radio" name="group1" value="Normal" onclick="editor.setKeyboardHandler('')" checked>Normal
+<input type="radio" name="group1" value="Vim" onclick="editor.setKeyboardHandler('ace/keyboard/vim')">Vim
+<input type="radio" name="group1" value="Emacs" onclick="editor.setKeyboardHandler('ace/keyboard/emacs')">Emacs
+ -->
+<pre id="player">// Write your Code here!</pre>
+    
+<pre id="opponent">// Write your Code here!</pre>

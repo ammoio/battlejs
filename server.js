@@ -9,6 +9,8 @@ var http = require('http');
 var path = require('path');
 var mongoose = require('mongoose');
 var Models = require('./app/models');
+var Routes = require('./app/routes');
+var Sockets = require('./app/sockets');
 var io = require('socket.io');
 var crypto = require('crypto');
 
@@ -32,9 +34,11 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-app.get('/', function() {
-   res.sendfile(__dirname + '/public/index.html'); 
-});
+// connect to MongoDB
+mongoose.connect('mongodb://localhost/battlejs');
+
+//load all routes from the routes.js
+Routes(app);
 
 
 var server = http.createServer(app);
@@ -42,52 +46,4 @@ server.listen(app.get('port'), function(){
   console.log('What happens on port ' + app.get('port') + " stays on port " + app.get('port'));
 });
 
-
-//socket io logic
-var io = require('socket.io').listen(server);
-var clients = [];
-var games = {};
-io.sockets.on('connection', function (socket) {
-  //save the session id
-  clients.push(socket.id, socket);
-
-  //when newGame is clicked
-  socket.on('newGame', function() {
-    
-    //generate new game id
-    var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
-
-    //store it into games
-    games[gameID] = {
-      'players': [{
-        'socketID': socket.id,
-        'socket': socket,
-        'playerNumber': 1
-      }]
-    };
-    socket.emit('gameID', {'gameID': gameID});
-  });
-
-  //other players trying to join
-  socket.on('joinGame', function(data) {
-    var gameID = data.gameID;
-    if (games[gameID].players.length === 1) {
-      games[gameID].players.push({
-        'socketID': socket.id,
-        'socket': socket,
-        'playerNumber': 2
-      });
-
-      //start the game
-      socket.emit('startGame');
-    }
-  });
-  
-  socket.on('ready', function(data) {
-    
-  });
-
-  socket.on('submit', function(data) {
-
-  });
-});
+Sockets.listen(server);
