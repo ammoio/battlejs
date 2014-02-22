@@ -23,5 +23,8 @@
     "jquery": "~2.1.0",
     "angular-sanitize": "~1.2.13",
     "angular-timer": "~1.0.12"
+  },
+  "resolutions": {
+    "angular": "1.2.14-build.2315+sha.832be41"
   }
 }

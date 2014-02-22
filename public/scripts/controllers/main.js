@@ -3,7 +3,9 @@ angular.module('app')
   .controller('MainController',
     function($scope, $location, $rootScope, $timeout) {
 
-      $scope.welcome = "Battle.js"; 
+
+      $scope.welcome = "BattleJS";
+
 
       $scope.newGame = function(){
         $rootScope.socket.emit('newGame', {});
