@@ -24,7 +24,7 @@ angular.module('app')
         opponent.setValue(data.data, 1);
       });
 
-      socket.on('gameDoesNotExist', function(data){
+      $rootScope.socket.on('gameDoesNotExist', function(data){
         $location.path('/gameDoesNotExist')
       });
 
@@ -81,10 +81,5 @@ angular.module('app')
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
 
-
-<<<<<<< HEAD
-      
-=======
->>>>>>> Added return button and fixed gameID origin
 
   });
