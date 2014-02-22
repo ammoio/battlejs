@@ -40,7 +40,7 @@ angular.module('app')
       var player1Element = document.getElementById('player1');
       var player2Element = document.getElementById('player2');
 
-      $rootScope.socket.on('viewerUpdate', function(reponse){
+      $rootScope.socket.on('viewerUpdate', function(response){
         if(response.player === 1) {
           player1.setValue(response.data, 1);
         } else {
