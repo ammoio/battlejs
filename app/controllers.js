@@ -1,0 +1,9 @@
+var Models = require('./models');
+var path = require('path');
+
+module.exports = {
+    renderAngular: function(req, res){
+      console.log(__dirname);
+      res.sendfile(path.resolve() + '/public/index.html');
+    }
+};

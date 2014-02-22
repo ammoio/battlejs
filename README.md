@@ -1,2 +1,2 @@
-battlejs
-========
+MEAN-basic-boilerplate
+======================

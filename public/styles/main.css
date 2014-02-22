@@ -1,0 +1,26 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+a {
+  color: #00B7FF;
+}
+
+#player { 
+  margin: 0;
+  position: absolute;
+  top: 15%;
+  bottom: 20px;
+  left: 20px;
+  right: 55%;
+}
+
+#opponent { 
+  margin: 0;
+  position: absolute;
+  top: 15%;
+  bottom: 20px;
+  left: 55%;
+  right: 20px;
+}
