@@ -14,7 +14,7 @@ var challengeSchema = mongoose.Schema({
   inputs: [],
   outputs: [],
   solution: String,
-  functionName: String,
+  functionName: {type: String, unique: true},
   boilerplate: String
 });
 
