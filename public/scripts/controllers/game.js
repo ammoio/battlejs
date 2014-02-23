@@ -48,6 +48,8 @@ angular.module('app')
           player.setTheme("ace/theme/dreamweaver");
           player.setValue(player.getValue() + "\n\n" + youWin, 1);
           player.setReadOnly(true); 
+        } else {
+          $('.console').text('ERROR: ' + obj.result);
         } 
       });
 
@@ -70,7 +72,7 @@ angular.module('app')
             longBeep.play();
             $scope.status = 3;
             $timeout(countUp, 1000);
-            player.setValue(data.boilerplate);
+            player.setValue(data.boilerplate, 1);
           }
         };
 
