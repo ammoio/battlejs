@@ -122,6 +122,8 @@ module.exports.listen = function(server){
           thisGame.started = true;
           thisGame.players[0].socket.emit('startGame', data);
           thisGame.players[1].socket.emit('startGame', data);
+          thisGame.players[0].isReady = false;
+          thisGame.players[1].isReady = false;
         });
       }
     });
@@ -186,6 +188,12 @@ module.exports.listen = function(server){
         delete activeSockets[socket.id];
       }
 
+    });
+
+    socket.on('startNewGame', function(data) {
+      var thisGame = games[data.gameID];
+      thisGame.started = false;
+      socket.emit('doOver');
     });
 
   });

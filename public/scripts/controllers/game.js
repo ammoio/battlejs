@@ -155,6 +155,23 @@ angular.module('app')
       "//   \\   /| |  | | |  | |   \\ \\/  \\/ /   | | |     |\n" +
       "//    | | | |__| | |__| |    \\  /\\  /   _| |_| |\\  |\n" +
       "//    |_|  \\____/ \\____/      \\/  \\/   |_____|_| \\_|\n" ;
+
       $scope.increaseFont();
+
+
+
+
+     $scope.startNewGame = function(){
+       $rootScope.socket.emit('startNewGame', { data: player.getValue(), gameID: $scope.gameID });
+       $scope.gameStarted = false;
+       player.setValue('// Write your Code here!', 0);
+     };
+
+     $rootScope.socket.on('doOver', function(){
+       
+     });
+
+
+
 
   });
