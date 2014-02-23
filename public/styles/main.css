@@ -202,3 +202,16 @@ audio {
 .vs {
   color: red;
 }
+
+.attackedAlert {
+  position: fixed;
+  z-index: 1000;
+  top:50%;
+  left: 20%;
+  display: none;
+  width: 20%;
+  font: 1em 'Press Start 2P';
+  transition: all .5s ease-in-out;
+  -moz-transition: all .5s ease-in-out;
+  -webkit-transition: all .5s ease-in-out;
+}

@@ -17,7 +17,10 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF'];
+      $scope.possibleWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF'];
+      $scope.availableWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF']; //copy of possibleWeapons that changes
+      $scope.showOpponent = true;
+
       $scope.weapons = [];
 
       var promptName = $timeout(function() {
@@ -62,7 +65,9 @@ angular.module('app')
       });
 
       $rootScope.socket.on('updated', function(data){
-        opponent.setValue(data.data, 1);
+        if ($scope.showOpponent) {
+          opponent.setValue(data.data, 1);
+        }
       });
 
       $rootScope.socket.on('testResults', function(obj) {
@@ -110,13 +115,16 @@ angular.module('app')
       });
 
       $rootScope.socket.on('attacked', function(data) {
-        console.log('attacked', data);
         if (data.weapon === 'VIM') {
+          $('.VIMed').css('display', 'block');
+          $timeout(function(){$('.VIMed').css('display', 'none')}, 3000);
           player.setKeyboardHandler('ace/keyboard/vim'); 
           $timeout(function() {
              player.setKeyboardHandler(''); 
           }, 30000);
         } else if (data.weapon === 'EMACS') {
+          $('.EMACSed').css('display', 'block');
+          $timeout(function(){$('.EMACSed').css('display', 'none')}, 3000);
           player.setKeyboardHandler('ace/keyboard/emacs'); 
           $timeout(function() {
              player.setKeyboardHandler(''); 
@@ -124,8 +132,25 @@ angular.module('app')
         } else if (data.weapon === 'DELETE_LINE') {
           console.log('delete a line');
           //Daniel DELETE LINE
-        } else if ('something') {
-          
+        } else if (data.weapon === 'FREEZE') {
+          $('.FREEZEed').css('display', 'block');
+          $timeout(function(){$('.FREEZEed').css('display', 'none')}, 3000);
+          var stopClicks = function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+          };
+          player.setReadOnly(true);
+   
+          $timeout(function(){
+            player.setReadOnly(false);
+          }, 10000);
+        } else if (data.weapon === 'HIDE_SELF') {
+          $('.HIDE_SELFed').css('display', 'block');
+          $timeout(function(){$('.HIDE_SELFed').css('display', 'none')}, 3000);
+          $scope.showOpponent = false;
+          $timeout(function(){
+            $scope.showOpponent = true;
+          }, 30000);
         } else {
           console.log('unknown weapon', data.weapon);
         }
@@ -164,7 +189,7 @@ angular.module('app')
           $scope.minutesString = "0" + $scope.minutesString;
         }
         //give random weapon
-        if ($scope.timing && $scope.timer % 45 === 0) {
+        if ($scope.timing && $scope.timer % 10 === 0) {
           console.log('giving in countUp', $scope.timer);
           $scope.giveRandomWeapon();
         }
@@ -202,8 +227,14 @@ angular.module('app')
       };
 
       $scope.giveRandomWeapon = function() {
-        var weapon = $scope.availableWeapons[~~(Math.random() * $scope.availableWeapons.length)];
-        $scope.weapons.push(weapon);
+        var generateRandomWeapon = function() {
+          if ($scope.availableWeapons.length === 0) { //repopulate when all weapons used
+            $scope.availableWeapons = $scope.possibleWeapons;
+          }
+          var index = ~~(Math.random() * $scope.availableWeapons.length);
+          return $scope.availableWeapons.splice(index, 1)[0];
+        };
+        $scope.weapons.push(generateRandomWeapon());  
       };
 
       $scope.increaseFont = function() {
