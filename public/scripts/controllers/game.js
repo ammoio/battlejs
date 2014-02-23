@@ -202,7 +202,11 @@ angular.module('app')
       };
 
       $scope.giveRandomWeapon = function() {
-        var weapon = $scope.availableWeapons[~~(Math.random() * $scope.availableWeapons.length)];
+        var generateRandomWeapon = function() {
+          if ($scope.weapon.length < $scope.availableWeapons) {
+            var weapon = $scope.availableWeapons[~~(Math.random() * $scope.availableWeapons.length)];
+          }
+        }
         $scope.weapons.push(weapon);
       };
 
