@@ -19,6 +19,7 @@ angular.module('app')
       SpinService.spin();
       $scope.possibleWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF'];
       $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF']; //copy of possibleWeapons that changes
+      $scope.showOpponent = true;
 
       $scope.weapons = [];
 
@@ -64,7 +65,9 @@ angular.module('app')
       });
 
       $rootScope.socket.on('updated', function(data){
-        opponent.setValue(data.data, 1);
+        if ($scope.showOpponent) {
+          opponent.setValue(data.data, 1);
+        }
       });
 
       $rootScope.socket.on('testResults', function(obj) {
@@ -126,8 +129,21 @@ angular.module('app')
         } else if (data.weapon === 'DELETE_LINE') {
           console.log('delete a line');
           //Daniel DELETE LINE
-        } else if ('something') {
-          
+        } else if (data.weapon === 'FREEZE') {
+          var stopClicks = function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+          };
+          player.setReadOnly(true);
+   
+          $timeout(function(){
+            player.setReadOnly(false);
+          }, 10000);
+        } else if (data.weapon === 'HIDE_SELF') {
+          $scope.showOpponent = false;
+          $timeout(function(){
+            $scope.showOpponent = true;
+          }, 30000);
         } else {
           console.log('unknown weapon', data.weapon);
         }
@@ -166,7 +182,7 @@ angular.module('app')
           $scope.minutesString = "0" + $scope.minutesString;
         }
         //give random weapon
-        if ($scope.timing && $scope.timer % 45 === 0) {
+        if ($scope.timing && $scope.timer % 10 === 0) {
           console.log('giving in countUp', $scope.timer);
           $scope.giveRandomWeapon();
         }
