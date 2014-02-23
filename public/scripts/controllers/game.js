@@ -17,7 +17,9 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF'];
+      $scope.possibleWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF'];
+      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF']; //copy of possibleWeapons that changes
+
       $scope.weapons = [];
 
       var promptName = $timeout(function() {
@@ -203,6 +205,9 @@ angular.module('app')
 
       $scope.giveRandomWeapon = function() {
         var generateRandomWeapon = function() {
+          if ($scope.availableWeapons.length === 0) { //repopulate when all weapons used
+            $scope.availableWeapons = $scope.possibleWeapons;
+          }
           var index = ~~(Math.random() * $scope.availableWeapons.length);
           return $scope.availableWeapons.splice(index, 1)[0];
         };
