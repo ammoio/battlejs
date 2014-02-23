@@ -62,6 +62,7 @@ module.exports.listen = function(server){
 
         socket.emit('updated', thisGame.players[0].latestContent);
         socket.emit('gameReady');
+        thisGame.players[0].socket.emit('gameReady');
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');

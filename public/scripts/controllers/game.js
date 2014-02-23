@@ -8,8 +8,11 @@ angular.module('app')
       $scope.gameLocation = 'http://' + $location.host() + $location.path();
       $('#link').text( 'Share this link:  ' + $scope.gameLocation );
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
-      $scope.status = 0; //0 is waiting, 1 is countdown, 2 is game in progress
+      $scope.status = 0; //0 is waiting for player 2, 1 is waiting for ready, 2 is countdown, 3 is game in progress
       $scope.countDown = 5;
+      $scope.timer = 0;
+      $scope.minutesString = "00";
+      $scope.secondsString = "00";
 
       
       if (!$rootScope.playerOne){
@@ -17,7 +20,10 @@ angular.module('app')
       }
 
       $rootScope.socket.on('gameReady', function(data){
-        $rootScope.playerTwo = true;        
+        $rootScope.playerTwo = true;
+        $timeout(function(){
+          $scope.status = 1;
+        }, 0);
       });
       
       $rootScope.socket.on('gameFull', function(data){
@@ -48,7 +54,7 @@ angular.module('app')
 
       $rootScope.socket.on('startGame', function(data) {
         console.log('starting: ', data);
-        $scope.status = 1; //countdown starts
+        $scope.status = 2; //countdown starts
         $scope.countDown = 6;
         var shortBeep = document.getElementById('shortBeep');
         var longBeep = document.getElementById('longBeep');
@@ -59,14 +65,26 @@ angular.module('app')
             shortBeep.play();
           } else {
             longBeep.play();
-            $scope.status = 2;
-            $scope.$broadcast('timer-start');
-            $scope.timerRunning = true; 
-            player.setValue(data.boilerplate, 1);
+            $scope.status = 3;
+            $timeout(countUp, 1000);
+            player.setValue(data.boilerplate);
           }
         };
-        $timeout(countDown, 1000);
 
+        var countUp = function() {
+          $scope.timer++;
+          $scope.minutesString = ~~($scope.timer / 60);
+          $scope.secondsString = $scope.timer % 60;
+          if ($scope.secondsString < 10) { //format seconds
+            $scope.secondsString = "0" + $scope.secondsString;
+          }
+          if ($scope.minutesString < 10) {
+            $scope.minutesString = "0" + $scope.minutesString;
+          }
+          $timeout(countUp, 1000);
+        };
+
+        $timeout(countDown, 1000);
         $scope.functionName = data.functionName;
       });
 

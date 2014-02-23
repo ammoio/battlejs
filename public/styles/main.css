@@ -85,23 +85,30 @@ audio {
 
 .timer {
   text-align: center;
-  font-size: 3em;
+  font-size: 2em;
   margin-bottom: 0.5em;
+  width: 20%;
+  float: right;
+  margin-right: 3%;
 }
 
-#messagesDiv{
-  position:fixed;
-  left:0px;
-  bottom:0px;
-  width:300px;
-  height:93.4%;
-  background-color: white;
-  border-right:1px solid black;  
+#chat {
+  width:23%;
+  height: 80%;
+  margin-top: 0;
+  border:1px solid black;
+  margin-left: 2%
+}
+
+.messageInput {
+  width: 100%;
+  height: 8%;
 }
 
 #watch-container{
-  left: 300px;
+  float: right;
   width: 75%;
+  margin: auto;
 }
 
 .white{
@@ -130,10 +137,19 @@ audio {
 }
 
 .game-buttons {
+<<<<<<< HEAD
   text-align: center;
 }
 
 #link{
   text-align: center;
   color:white;
+  width: 40%;
+  float: left;
+  margin-left: 3%
+}
+
+.watchMessage {
+  text-align: center;
+  font-size: 2em;
 }

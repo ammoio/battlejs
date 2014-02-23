@@ -1,6 +1,7 @@
 <div id="watch-container">
-
-  <h1>Welcome to the {{ welcome }}</h1>
+  <div class='topBar clearfix'>
+    <div class="watchMessage">Welcome to Watch View</div>
+  </div>
 
   <div class="container-fluid">
   <div class="row"> 
@@ -13,10 +14,16 @@
 </div>
 
 
-<div id='messagesDiv'>
-  <input type='text' ng-model='name' placeholder='Name'>
-  <form ng-submit='sendMessage()'>
-    <input type='text' ng-model='text' placeholder='Message'>
-  </form>
-  <ul><li ng-repeat="message in messages">{{message.name}}:  {{message.text}}</li></ul>
+<div id='chat'>
+  <div class='message-input-div'>
+    <form ng-submit='sendMessage()'>
+      <input type='text' ng-model='text' placeholder='Message' class='messageInput'>
+    </form>
+  </div>
+
+  <div class='messagesDisplay'>
+    <ul>
+      <li ng-repeat="message in messages">Ray:  {{message.text}}</li>
+    </ul>
+  </div>
 </div>
