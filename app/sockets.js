@@ -173,6 +173,15 @@ module.exports.listen = function(server){
       });
     });
 
+    socket.on('VIM', function(data){
+      var thisGame = games[data.gameID];
+      if (thisGame.players[0] && thisGame.players[0].socketID === socket.id) {
+        thisGame.players[1].socket.emit('VIMed');
+      } else if (thisGame.players[1] && thisGame.players[1].socketID === socket.id) {
+        thisGame.players[0].socket.emit('VIMed');
+      }
+    });
+
     socket.on('disconnect', function () {
     
       //removes from to active sockets

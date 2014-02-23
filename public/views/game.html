@@ -4,6 +4,24 @@
 <audio id="longBeep" src="/audio/long_beep.mp3" preload="auto" controls></audio>
 
 <div class='topBar clearfix'>
+
+  <div class='game-buttons clearfix'>
+    <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
+    <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
+    <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
+  <!--   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
+    <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
+    <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button> -->
+    <button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
+    <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
+  </div>
+
+  <div class='weapons'>
+    <span>Weapons: </span>
+    <span class='weapon btn btn-danger' ng-repeat="weapon in weapons" ng-click="attack($index)">{{ weapon }}</span>
+    <span ng-show="weapons.length === 0">None</span>
+  </div>
+
   <div class='timer clearfix'>
     <span ng-show="status===0">Waiting for Player 2</span>
     <span ng-show="status===1">Press Ready</span>
@@ -11,17 +29,6 @@
     <span ng-show="status===3">{{minutesString}} : {{secondsString}}</span>
   </div>
 
-  <div class='game-buttons clearfix'>
-    <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
-    <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
-    <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
-
-  <!--   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
-    <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
-    <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button> -->
-    <button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
-    <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
-  </div>
 </div>
 <!-- <input type="radio" name="group1" value="Normal" onclick="editor.setKeyboardHandler('')" checked>Normal
 <input type="radio" name="group1" value="Vim" onclick="editor.setKeyboardHandler('ace/keyboard/vim')">Vim

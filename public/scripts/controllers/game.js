@@ -13,6 +13,7 @@ angular.module('app')
       $scope.timer = 0;
       $scope.minutesString = "00";
       $scope.secondsString = "00";
+      $scope.weapons = ['VIM'];
 
       
       if (!$rootScope.playerOne){
@@ -91,6 +92,10 @@ angular.module('app')
         $scope.functionName = data.functionName;
       });
 
+      $rootScope.socket.on('VIMed', function() {
+        console.log('vimed');
+       player.setKeyboardHandler('ace/keyboard/vim') 
+      });
       $scope.game = "Battle.js Game";
 
       $scope.startGame = function(){
@@ -108,6 +113,16 @@ angular.module('app')
 
       $scope.submitCode = function() {
         $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID, functionName: $scope.functionName });
+      };
+
+      $scope.attack = function(index) {
+        var weapon = $scope.weapons.splice(index, 1);
+        $scope[weapon]();
+      };
+
+      $scope.VIM = function() {
+        $rootScope.socket.emit('VIM', {gameID: $scope.gameID});
+        console.log('emitting vim');
       };
 
       $scope.increaseFont = function() {
