@@ -197,7 +197,7 @@ module.exports.listen = function(server){
       socket.emit('doOver');
     });
 
-    socket.on('win', function(data){
+    socket.on('winner', function(data){
       var thisGame = games[data.gameID];
       if (thisGame.players[0].socketID === socket.id){
         thisGame.winner = 0;
@@ -206,7 +206,13 @@ module.exports.listen = function(server){
         thisGame.winner = 1;
         thisGame.players[0].socket.emit('loser');
       }
-    })
+    });
+
+    socket.on('gameOver', function(data){
+      var thisGame = games[data.gameID];
+      thisGame.players[1].socket.emit('show');
+      thisGame.players[0].socket.emit('show');
+    });
 
   });
 };

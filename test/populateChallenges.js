@@ -33,11 +33,11 @@ balancedParens.saveQ()
   console.log("saved Successfully");
 });
 
-var evenOccurance = new Models.Challenge({
+var evenOccurence = new Models.Challenge({
   name: "Even Occurances",
   inputs: ['[1,2,3,4,5,6,7,8,9,1]', '[1,1,2,3,4,3,2,1]', '[5,5,5,4,4,5]', '[]', '[1,1,3,4,1]'],
   outputs: [1,2,5,null,null],
-  solution: 'var evenOccurance = function(arr) { \
+  solution: 'var evenOccurence = function(arr) { \
   var resultArray = []; \
   var intArray = []; \
   var objCounter = {}; \
@@ -59,13 +59,13 @@ var evenOccurance = new Models.Challenge({
   } \
   return null; \
 };', 
-  functionName: "evenOccurance",
+  functionName: "evenOccurence",
   boilerplate: "// Find the first item that occurs an even number of times in an array.\n" +
   "// Remember to handle multiple even-occurance items and return the first one.\n" +
-  "Return null if there are no even-occurance items.\n\n" +
-  "var evenOccurance = function (array) {\n  return number;\n};"
+  "//Return null if there are no even-occurance items.\n\n" +
+  "var evenOccurence = function (array) {\n  return number;\n};"
 });
-evenOccurance.saveQ()
+evenOccurence.saveQ()
 .then(function(){
   console.log("saved Successfully");
 });

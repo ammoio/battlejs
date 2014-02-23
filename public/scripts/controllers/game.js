@@ -51,8 +51,9 @@ angular.module('app')
           player.setTheme("ace/theme/dreamweaver");
           player.setValue(player.getValue() + "\n\n" + youWin, 1);
           player.setReadOnly(true); 
-        } else if (obj.success){
           $rootScope.socket.emit('winner', { data: player.getValue(), gameID: $scope.gameID });
+        } else if (obj.success){
+          $rootScope.socket.emit('gameOver', { data: player.getValue(), gameID: $scope.gameID });
         }
       });
 
@@ -172,7 +173,21 @@ angular.module('app')
        $scope.loser = true;
      });
 
+     $scope.showWinner = function(){
+       $('#winnerModal').modal('toggle')
+     }
 
+     $scope.showLoser = function(){
+       $('#loserModal').modal('toggle')
+     }
+
+     $rootScope.socket.on('show', function(){
+       if ($scope.loser){
+        $scope.showLoser();
+       } else {
+        $scope.showWinner();
+       }
+     });
 
 
   });
