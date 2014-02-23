@@ -6,7 +6,7 @@ var mongoose = require('mongoose-q')();
 // connect to MongoDB
 mongoose.connect('mongodb://localhost/battlejs');
 
-var js = 'var reverseString = function (n) { console.log(n); return n;}; test(3);';
+var js = 'var reverseString = function (n) { console.log(n); return n;}; reverseString(["hi", 4, true, {test: 12}]);';
 
 // var s = new Sandbox();
 // s.run(js, function(output){
@@ -14,7 +14,7 @@ var js = 'var reverseString = function (n) { console.log(n); return n;}; test(3)
 // });
 
 testHelpers.run(js).then(function(output){
-  console.log("run output: " + output);
+  console.log("run output: " + output.result);
 })
 .fail(function(output){
   console.log("run failure: ", + output);

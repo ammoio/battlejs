@@ -40,7 +40,7 @@ module.exports = {
           if(output.result.indexOf('Error') !== -1){
             console.log("error in output");
             returnObject.success = false;
-            returnObject.result = "Failed on input: " + input + ". " + "Expected " + JSON.parse(output.result) + " to equal " + challenge.outputs[index];
+            returnObject.result = "Failed on input: " + input + ". " + "Expected " + output.result + " to equal " + challenge.outputs[index];
             d.resolve(returnObject);
             count += 1;
             return;
