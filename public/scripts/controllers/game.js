@@ -189,5 +189,9 @@ angular.module('app')
        }
      });
 
+     $scope.mainPage = function(){
+        $location.path('/');
+     };
+
 
   });
