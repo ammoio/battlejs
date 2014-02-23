@@ -82,11 +82,14 @@ audio {
 .navbar{
   border-radius: 0;
 }
+.navbar.top{
+  margin-bottom: 10px;
+}
 
 .timer {
   text-align: center;
-  font-size: 2em;
-  margin-bottom: 0.5em;
+  font-size: 1.5em;
+  margin-bottom: 0em;
   width: 20%;
   float: right;
   margin-right: 3%;
@@ -137,19 +140,21 @@ audio {
 }
 
 .game-buttons {
-<<<<<<< HEAD
   text-align: center;
 }
 
 #link{
   text-align: center;
   color:white;
-  width: 40%;
-  float: left;
-  margin-left: 3%
 }
 
 .watchMessage {
   text-align: center;
   font-size: 2em;
+
+}
+
+.no-padding{
+  padding: 6px;
+
 }

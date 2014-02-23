@@ -6,7 +6,7 @@ angular.module('app')
       $scope.opponentComplete = false;
       $scope.gameID = $location.path();
       $scope.gameLocation = 'http://' + $location.host() + $location.path();
-      $('#link').text( 'Share this link:  ' + $scope.gameLocation );
+      $('#link').html( '<p class="navbar-text no-padding">Share this link:  </p>' + '<input type="text" value="' +  $scope.gameLocation + '" class="form-control">');
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
       $scope.status = 0; //0 is waiting for player 2, 1 is waiting for ready, 2 is countdown, 3 is game in progress
       $scope.countDown = 5;
