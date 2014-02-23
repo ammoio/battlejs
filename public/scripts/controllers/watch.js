@@ -17,7 +17,8 @@ angular.module('app')
       $rootScope.socket.on('gameDoesNotExist', function(data){
         $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
-      
+      $scope.name = window.prompt("Hi spectator, what's your name?");
+
       $scope.setMode = function(mode){
         if(mode === "normal") {
           player.setKeyboardHandler("");
