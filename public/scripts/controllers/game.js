@@ -52,7 +52,7 @@ angular.module('app')
       });
 
       $rootScope.socket.on('submitResults', function(obj) {
-        // console.log(obj);
+        console.log(obj);
         if(obj.success && !$scope.loser){
           $scope.timing = false;
           $scope.timer = 0;
@@ -63,6 +63,8 @@ angular.module('app')
           $rootScope.socket.emit('winner', { data: player.getValue(), gameID: $scope.gameID });
         } else if (obj.success){
           $rootScope.socket.emit('gameOver', { data: player.getValue(), gameID: $scope.gameID });
+        } else {
+          $('.console').text('<div>' + obj.result + '</div>');
         }
       });
 
