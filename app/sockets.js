@@ -12,13 +12,20 @@ module.exports.listen = function(server){
   var clients = [];
   var games = {};
   var activeSockets = {};
+  var gameWaiting = null;
 
   io.sockets.on('connection', function (socket) {
     //save the session id
     clients.push(socket.id, socket);
 
     //when newGame is clicked
-    socket.on('newGame', function() {
+    socket.on('newGame', function(data) {
+
+      if (!data.newGame && gameWaiting){
+        socket.emit('gameID', {'gameID': gameWaiting, 'second': true});
+        gameWaiting = null;
+        return;
+      }
       
       //generate new game id
       var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
@@ -30,7 +37,8 @@ module.exports.listen = function(server){
           'socket': socket,
           'playerNumber': 1,
           'latestContent': "",
-          'isReady': false
+          'isReady': false,
+          'playerName': 'JS Warrior'
         }],
         'watchers': [],
         'activeSockets': 1,
@@ -42,18 +50,34 @@ module.exports.listen = function(server){
       //add to active sockets
       activeSockets[socket.id] = gameID;
 
-      socket.emit('gameID', {'gameID': gameID});
+
+      if (!data.newGame){
+        gameWaiting = gameID;
+        console.log(gameWaiting)
+      }
+
+      socket.emit('gameID', {'gameID': gameID, 'name': 'JS Warrior'});
     });
 
+    socket.on('playerName', function(data) {
+      var thisGame = games[data.gameID];
+      if (thisGame && thisGame.players[0].socketID === socket.id && data.playerName && data.playerName.length > 0) {
+        thisGame.players[0].playerName = data.playerName;
+      } else if (thisGame && thisGame.players[1] && thisGame.players[1].socketID === socket.id && data.playerName && data.playerName.length > 0) {
+        thisGame.players[1].playerName = data.playerName;
+      }
+    });
     //other players trying to join
     socket.on('joinGame', function(data) {
       var thisGame = games[data.gameID];
+      console.log(thisGame)
       if (thisGame && thisGame.players.length === 1) { //second play joining
         console.log("Second Player Joined, gameready");
         thisGame.players.push({
           'socketID': socket.id,
           'socket': socket,
-          'playerNumber': 2
+          'playerNumber': 2,
+          'playerName': 'JS Ninja'
         });
 
         //adds to active sockets
@@ -62,14 +86,23 @@ module.exports.listen = function(server){
 
 
         socket.emit('updated', thisGame.players[0].latestContent);
-        socket.emit('gameReady');
-        thisGame.players[0].socket.emit('gameReady');
+        setTimeout(function() {
+          socket.emit('gameReady', {
+            playerName: thisGame.players[1].playerName,
+            opponentName: thisGame.players[0].playerName
+          });
+          thisGame.players[0].socket.emit('gameReady', {
+            playerName: thisGame.players[0].playerName,
+            opponentName: thisGame.players[1].playerName
+          });
+        }, 5000);
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
       } else {
         socket.emit('gameDoesNotExist'); //if game does not exist
       }
+      console.log(thisGame)
     });
 
     socket.on('addMeAsWatcher', function(data) {
@@ -176,8 +209,18 @@ module.exports.listen = function(server){
       });
     });
 
-    socket.on('disconnect', function () {
-    
+    /********** attacks ************/
+    socket.on('attack', function(data){
+      var thisGame = games[data.gameID];
+      console.log(data.weapon);
+      if (thisGame.players[0] && thisGame.players[0].socketID === socket.id) {
+        thisGame.players[1].socket.emit('attacked', {weapon: data.weapon});
+      } else if (thisGame.players[1] && thisGame.players[1].socketID === socket.id) {
+        thisGame.players[0].socket.emit('attacked', {weapon: data.weapon});
+      }
+    });
+
+    socket.on('disconnect', function () {    
       //removes from to active sockets
       if (games[activeSockets[socket.id]]){
         games[activeSockets[socket.id]]['activeSockets'] -= 1;
@@ -194,7 +237,6 @@ module.exports.listen = function(server){
     socket.on('startNewGame', function(data) {
       var thisGame = games[data.gameID];
       thisGame.started = false;
-      socket.emit('doOver');
     });
 
     socket.on('winner', function(data){

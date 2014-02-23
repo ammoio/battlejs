@@ -2,6 +2,8 @@ angular.module('app')
   
   .controller('GameController',
     function($scope, $rootScope, $location, $timeout, SpinService) {
+      $scope.game = "Battle.js Game";
+      $scope.timing = false;
       $scope.complete = false;
       $scope.loser = false;
       $scope.opponentComplete = false;
@@ -15,6 +17,19 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
+      $scope.possibleWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF'];
+      $scope.availableWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF']; //copy of possibleWeapons that changes
+      $scope.showOpponent = true;
+
+      $scope.weapons = [];
+
+      var promptName = $timeout(function() {
+        $rootScope.playerName = window.prompt("State your name!");
+        $rootScope.socket.emit('playerName', {
+          playerName: $scope.playerName,
+          gameID: $scope.gameID
+        });
+      }, 1000);
 
       
       if (!$rootScope.playerOne){
@@ -25,16 +40,34 @@ angular.module('app')
         $rootScope.playerTwo = true;
         $timeout(function(){
           $scope.status = 1;
+          $rootScope.playerName = data.playerName;
+          $scope.opponentName = data.opponentName;
+          $('#vsModal').modal();
         }, 0);
         SpinService.stop();
       });
+
+      $rootScope.socket.on('playerName', function(data) {
+        $timeout(function(){
+          $scope.playerName = data.name;
+        }, 0);        
+      });
+
+      $rootScope.socket.on('opponentName', function(data){
+        $timeout(function(){
+          $scope.opponentName = data.name;
+        }, 0);
+      });
       
       $rootScope.socket.on('gameFull', function(data){
+        $timeout.cancel(promptName);
         $timeout(function(){$location.path('/watch/' + $scope.gameID);},0);
       });
 
       $rootScope.socket.on('updated', function(data){
-        opponent.setValue(data.data, 1);
+        if ($scope.showOpponent) {
+          opponent.setValue(data.data, 1);
+        }
       });
 
       $rootScope.socket.on('testResults', function(obj) {
@@ -42,22 +75,29 @@ angular.module('app')
         obj.console.forEach(function(result) {
           $('.console').append('<div>' + result + '</div>');
         });
+        if(obj.result.indexOf("Error") !== -1) {
+          $('.console').append('<div>' + obj.result + '</div>');
+        }
       });
 
       $rootScope.socket.on('submitResults', function(obj) {
-        console.log(obj);
         if(obj.success && !$scope.loser){
+          $scope.timing = false;
+          // $scope.timer = 0;
           $scope.complete = true;
           player.setTheme("ace/theme/dreamweaver");
-          player.setValue(player.getValue() + "\n\n" + youWin, 1);
+          player.setValue(player.getValue() + "\n\n" + youWin + "\n\n// Performance: " + obj.timed + "ms", 1);
           player.setReadOnly(true); 
           $rootScope.socket.emit('winner', { data: player.getValue(), gameID: $scope.gameID });
         } else if (obj.success){
           $rootScope.socket.emit('gameOver', { data: player.getValue(), gameID: $scope.gameID });
+        } else {
+          $('.console').text(obj.result);
         }
       });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
+        $timeout.cancel(promptName);
         $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
 
@@ -67,35 +107,94 @@ angular.module('app')
         $scope.countDown = 6;
         var shortBeep = document.getElementById('shortBeep');
         var longBeep = document.getElementById('longBeep');
-        var countDown = function() {
-          $scope.countDown--;
-          if ($scope.countDown > 0) {
-            $timeout(countDown, 1000);
-            shortBeep.play();
-          } else {
-            longBeep.play();
-            $scope.status = 3;
-            $timeout(countUp, 1000);
-            player.setValue(data.boilerplate, 1);
-          }
-        };
 
-        var countUp = function() {
-          $scope.timer++;
-          $scope.minutesString = ~~($scope.timer / 60);
-          $scope.secondsString = $scope.timer % 60;
-          if ($scope.secondsString < 10) { //format seconds
-            $scope.secondsString = "0" + $scope.secondsString;
-          }
-          if ($scope.minutesString < 10) {
-            $scope.minutesString = "0" + $scope.minutesString;
-          }
-          $timeout(countUp, 1000);
-        };
-
-        $timeout(countDown, 1000);
+        $timeout((function(){
+            countDown(data);
+        }), 1000);
         $scope.functionName = data.functionName;
       });
+
+      $rootScope.socket.on('attacked', function(data) {
+        if (data.weapon === 'VIM') {
+          $('.VIMed').css('display', 'block');
+          $timeout(function(){$('.VIMed').css('display', 'none')}, 3000);
+          player.setKeyboardHandler('ace/keyboard/vim'); 
+          $timeout(function() {
+             player.setKeyboardHandler(''); 
+          }, 30000);
+        } else if (data.weapon === 'EMACS') {
+          $('.EMACSed').css('display', 'block');
+          $timeout(function(){$('.EMACSed').css('display', 'none')}, 3000);
+          player.setKeyboardHandler('ace/keyboard/emacs'); 
+          $timeout(function() {
+             player.setKeyboardHandler(''); 
+          }, 30000);
+        } else if (data.weapon === 'DELETE_LINE') {
+          console.log('delete a line');
+          //Daniel DELETE LINE
+        } else if (data.weapon === 'FREEZE') {
+          $('.FREEZEed').css('display', 'block');
+          $timeout(function(){$('.FREEZEed').css('display', 'none')}, 3000);
+          var stopClicks = function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+          };
+          player.setReadOnly(true);
+   
+          $timeout(function(){
+            player.setReadOnly(false);
+          }, 10000);
+        } else if (data.weapon === 'HIDE_SELF') {
+          $('.HIDE_SELFed').css('display', 'block');
+          $timeout(function(){$('.HIDE_SELFed').css('display', 'none')}, 3000);
+          $scope.showOpponent = false;
+          $timeout(function(){
+            $scope.showOpponent = true;
+          }, 30000);
+        } else {
+          console.log('unknown weapon', data.weapon);
+        }
+      });
+
+      var countDown = function(data) {
+        console.log("TIME: ", data)
+        $scope.countDown--;
+        if ($scope.countDown > 0) {
+          $timeout((function(){
+            countDown(data);
+        }), 1000);
+          shortBeep.play();
+        } else {
+          ////start of the game!//////
+          $('#vsModal').modal('hide');
+          $scope.timing = true;
+          longBeep.play();
+          $scope.status = 3;
+          $scope.giveRandomWeapon();
+          $timeout(countUp, 1000);
+          player.setValue(data.boilerplate, 1);
+        }
+      };
+
+      var countUp = function() {
+        if($scope.timing){
+          $scope.timer++;
+        }
+        $scope.minutesString = ~~($scope.timer / 60);
+        $scope.secondsString = $scope.timer % 60;
+        if ($scope.secondsString < 10) { //format seconds
+          $scope.secondsString = "0" + $scope.secondsString;
+        }
+        if ($scope.minutesString < 10) {
+          $scope.minutesString = "0" + $scope.minutesString;
+        }
+        //give random weapon
+        if ($scope.timing && $scope.timer % 10 === 0) {
+          console.log('giving in countUp', $scope.timer);
+          $scope.giveRandomWeapon();
+        }
+        $timeout(countUp, 1000);
+      };
 
       $scope.game = "Battle.js Game";
 
@@ -114,6 +213,28 @@ angular.module('app')
 
       $scope.submitCode = function() {
         $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID, functionName: $scope.functionName });
+      };
+
+
+      /************ weapons **************/
+      $scope.attack = function(index) {
+        var weapon = $scope.weapons.splice(index, 1)[0];
+        console.log('weapon attack', weapon);
+        $rootScope.socket.emit('attack', {
+          weapon: weapon,
+          gameID: $scope.gameID
+        });
+      };
+
+      $scope.giveRandomWeapon = function() {
+        var generateRandomWeapon = function() {
+          if ($scope.availableWeapons.length === 0) { //repopulate when all weapons used
+            $scope.availableWeapons = $scope.possibleWeapons;
+          }
+          var index = ~~(Math.random() * $scope.availableWeapons.length);
+          return $scope.availableWeapons.splice(index, 1)[0];
+        };
+        $scope.weapons.push(generateRandomWeapon());  
       };
 
       $scope.increaseFont = function() {
@@ -167,6 +288,11 @@ angular.module('app')
        $rootScope.socket.emit('startNewGame', { data: player.getValue(), gameID: $scope.gameID });
        $scope.gameStarted = false;
        player.setValue('// Write your Code here!', 0);
+       if ($scope.loser){
+        $scope.showLoser();
+       } else {
+        $scope.showWinner();
+       }
      };
 
      $rootScope.socket.on('loser', function(){
@@ -188,6 +314,10 @@ angular.module('app')
         $scope.showWinner();
        }
      });
+
+     $scope.mainPage = function(){
+        $location.path('/');
+     };
 
 
   });

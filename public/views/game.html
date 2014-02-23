@@ -4,35 +4,44 @@
 <audio id="longBeep" src="/audio/long_beep.mp3" preload="auto" controls></audio>
 
 <div class='topBar clearfix'>
-  <div class='timer clearfix'>
-    <span ng-show="status===0">Waiting for Player 2</span>
-    <span ng-show="status===1">Press Ready</span>
-    <span ng-show="status===2" class="count-down">{{ countDown }}</span>
-    <span ng-show="status===3">{{minutesString}} : {{secondsString}}</span>
-  </div>
 
   <div class='game-buttons clearfix'>
-    <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
     <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
     <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
-
   <!--   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
     <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
     <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button> -->
     <button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
     <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
   </div>
+
+  <div class='weapons' >
+    <span>Weapons: </span>
+    <span class='weapon btn btn-danger' ng-repeat="weapon in weapons" ng-click="attack($index)">{{ weapon }}</span>
+    <span ng-show="weapons.length === 0">None</span>
+  </div>
+
+  <div class='timer clearfix'>
+    <span ng-show="status===0">Waiting for Player 2</span>
+    <span ng-show="status===1">Press Ready</span>
+    <span ng-show="status===3">{{minutesString}} : {{secondsString}}</span>
+  </div>
+
 </div>
 <!-- <input type="radio" name="group1" value="Normal" onclick="editor.setKeyboardHandler('')" checked>Normal
 <input type="radio" name="group1" value="Vim" onclick="editor.setKeyboardHandler('ace/keyboard/vim')">Vim
 <input type="radio" name="group1" value="Emacs" onclick="editor.setKeyboardHandler('ace/keyboard/emacs')">Emacs
  -->
+
+<div class='clearfix IDE'>
+  <div class='player2'></div>
+</div>
+
 <div class='clearfix IDE'>
   <div id="player" class="full-row">// Write your Code here!</div> 
-  <div id="test" class="clearfix">
-    <div id="opponent" class="full-row">// Write your Code here!</div>
-  </div>
+  <div id="opponent" class="full-row">// Write your Code here!</div>
 </div>
+
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
   <div class="foot">
@@ -49,14 +58,14 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Winner</h4>
+        <h4 class="modal-title" id="myModalLabel">You Won!</h4>
       </div>
       <div class="modal-body">
-        ...
+        You won! You should feel like a badass JavaScript ninja! Play again? Or find a tougher opponent?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" ng-click="mainPage()">Home</button>
+        <button type="button" class="btn btn-primary" ng-click="startNewGame()">Play Again!</button>
       </div>
     </div>
   </div>
@@ -67,15 +76,43 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Loser</h4>
+        <h4 class="modal-title" id="myModalLabel">You Lost... :(</h4>
       </div>
       <div class="modal-body">
-        ...
+        You just got your butt whipped by a JavaScript ninja! Want to try your luck again? Or just press Home to go back and find an easier challenge.
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-default" ng-click="mainPage()">Home</button>
+        <button type="button" class="btn btn-primary" ng-click="startNewGame()">Play Again!</button>
       </div>
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="vsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Epic Battle Between:</h4>
+      </div>
+      <div class="modal-body vsModalBody">
+        <div ng-show="status === 1">
+          <span>{{ playerName }}</span>
+          <span class="vs">VS</span>
+          <span>{{ opponentName }}</span>
+        </div>
+        <span ng-show="status===2" class="count-down">{{ countDown }}</span>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="attackedAlert VIMed">Attacked: You've been set to VIM mode!</div>
+<div class="attackedAlert EMACSed">Attacked: You've been set to EMACS mode!</div>
+<div class="attackedAlert HIDE_SELFed">Attacked: You can't see opponent!</div>
+<div class="attackedAlert FREEZEed">Attacked: You're frozen for 10 seconds!</div>
