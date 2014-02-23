@@ -195,6 +195,11 @@ angular.module('app')
        $rootScope.socket.emit('startNewGame', { data: player.getValue(), gameID: $scope.gameID });
        $scope.gameStarted = false;
        player.setValue('// Write your Code here!', 0);
+       if ($scope.loser){
+        $scope.showLoser();
+       } else {
+        $scope.showWinner();
+       }
      };
 
      $rootScope.socket.on('loser', function(){
