@@ -194,7 +194,6 @@ module.exports.listen = function(server){
     socket.on('startNewGame', function(data) {
       var thisGame = games[data.gameID];
       thisGame.started = false;
-      socket.emit('doOver');
     });
 
     socket.on('winner', function(data){
