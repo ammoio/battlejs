@@ -1,19 +1,58 @@
 <html>
 <head>
   <title>Battle.js</title>
-  <link rel="stylesheet" type="text/css" href="/styles/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link href="/styles/flat-ui.css" rel="stylesheet">
+  <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="/styles/main.css">
+
 </head>
 <body ng-app='app' ng-cloak>
-  <div ng-view></div>
 
+  <nav class="navbar navbar-inverse" role="navigation">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+      <a class="navbar-brand" href="/">BattleJS</a>
+      <span id='link'></span>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-collapse-01">
+      <ul class="nav navbar-nav">           
+<!--         <li class="active"><a href="#fakelink">Products</a></li>
+        <li><a href="#fakelink">Features</a></li> -->
+      </ul>           
+<!--       <form class="navbar-form navbar-right" action="#" role="search">
+        <div class="form-group">
+          <div class="input-group">
+            <input class="form-control" id="navbarInput-01" type="search" placeholder="Search">
+            <span class="input-group-btn">
+              <button type="submit" class="btn"><span class="fui-search"></span></button>
+            </span>            
+          </div>
+        </div>               
+      </form> -->
+    </div><!-- /.navbar-collapse -->
+  </nav><!-- /navbar -->
+
+  <div ng-view class="view"></div>
+
+  <script src="/scripts/ace/ace.js"></script>
   <script src="/bower_components/socket.io-client/dist/socket.io.js"></script>
   <script src="/bower_components/angular/angular.js"></script>
+  <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
   <script src="/bower_components/angular-route/angular-route.js"></script>
+  <script src="/bower_components/firebase/firebase.js"></script>
+  <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="/bower_components/angular-timer/dist/angular-timer.js"></script>
   <script src="/scripts/app.js"></script>
-  <script src="/scripts/ace/ace.js"></script>
   <script src="/scripts/controllers/main.js"></script>
   <script src="/scripts/controllers/game.js"></script>
+  <script src="/scripts/controllers/watch.js"></script>
+  <script src="/scripts/controllers/noGame.js"></script>
 
 </body>
 </html>

@@ -1,4 +1,5 @@
-angular.module('app', ['ngRoute'])
+angular.module('app', ['ngRoute', 'ngSanitize', 'timer'])
+
 
   .config(function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
@@ -13,8 +14,16 @@ angular.module('app', ['ngRoute'])
         controller: 'GameController'
       })
       .when('/watch/:id', {
-        templateUrl: '/views/game.html',
-        controller: 'GameController'
+        templateUrl: '/views/watch.html',
+        controller: 'WatchController'
+      })
+      .when('/gameDoesNotExist', {
+        templateUrl: '/views/noGame.html',
+        controller: 'NoGameController'
       });
-    window.socket = io.connect('http://localhost');
+  })
+
+  .run(function($location, $rootScope) {
+    $rootScope.socket = io.connect('http://' + $location.host());
   });
+

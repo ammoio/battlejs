@@ -1,0 +1,22 @@
+<div id="watch-container">
+
+  <h1>Welcome to the {{ welcome }}</h1>
+
+  <div class="container-fluid">
+  <div class="row"> 
+  <pre id="player1">// Write your Code here!</pre>
+      
+  <pre id="player2">// Write your Code here!</pre>
+  </div>
+  </div>
+
+</div>
+
+
+<div id='messagesDiv'>
+  <input type='text' ng-model='name' placeholder='Name'>
+  <form ng-submit='sendMessage()'>
+    <input type='text' ng-model='text' placeholder='Message'>
+  </form>
+  <ul><li ng-repeat="message in messages">{{message.name}}:  {{message.text}}</li></ul>
+</div>

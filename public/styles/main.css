@@ -1,26 +1,139 @@
+h1 {
+  text-align: center;
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 3.0em;
+  margin: 3%;
+  margin-top: 5%;
+}
 body {
+  height: 100%;
+  position: relative;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  overflow: hidden;
+/*  overflow: hidden;*/
+  background-color: #ECF0F1;
+/*  background-image: -webkit-gradient(
+  linear,
+  left top,
+  left bottom,
+  color-stop(0, #3B4AD4),
+  color-stop(1, #ABB6ED)
+);
+background-image: -o-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
+background-image: -moz-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
+background-image: -webkit-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
+background-image: -ms-linear-gradient(bottom, #3B4AD4 0%, #ABB6ED 100%);
+background-image: linear-gradient(to bottom, #3B4AD4 0%, #ABB6ED 100%);*/
 }
 
 a {
   color: #00B7FF;
 }
 
-#player { 
-  margin: 0;
-  position: absolute;
-  top: 15%;
-  bottom: 20px;
-  left: 20px;
-  right: 55%;
+audio {
+  display: none;
 }
 
-#opponent { 
-  margin: 0;
-  position: absolute;
-  top: 15%;
-  bottom: 20px;
-  left: 55%;
-  right: 20px;
+#player, #player1, #opponent, #player2{ 
+  margin: 2%;
+  float: left;
+  width: 43%;
+  height: 75%
+}
+
+#opponent, #player2 { 
+  float: right;
+}
+
+.new-game {
+  margin: auto;
+  text-align: center;
+}
+
+.new-game a {
+  font-size: 3em;
+  margin: 5% auto;
+  border-radius: 18px;
+  font-family: 'Press Start 2P', sans-serif;
+}
+
+.new-game a:hover {
+  background-color: #e74c3c;
+}
+
+.master, .novice {
+  margin-bottom: 5%;
+  margin-left: 5%;
+  margin-right: 5%;
+  color: white;
+  background-color: #34495E;
+  border-radius: 8px;
+  padding: 14px;
+  position: relative;
+  text-align: center;
+}
+
+
+.container-fluid{
+  height: 100%;
+  /*position: relative;*/
+  /*height: 73%;*/
+}
+
+.navbar{
+  border-radius: 0;
+}
+
+.timer {
+  text-align: center;
+  font-size: 3em;
+  margin-bottom: 0.5em;
+}
+
+#messagesDiv{
+  position:fixed;
+  left:0px;
+  bottom:0px;
+  width:300px;
+  height:93.4%;
+  background-color: white;
+  border-right:1px solid black;  
+}
+
+#watch-container{
+  left: 300px;
+  width: 75%;
+}
+
+.white{
+  color: #ECF0F1;
+}
+
+.foot{
+  height: 75px;
+  overflow-y: scroll;
+}
+
+.leftCover, .rightCover{
+  background-color: #ECF0F1;
+  z-index: 8;
+  margin: 15px;
+  opacity: .8;
+  border-radius: 3px;
+}
+
+.count-down {
+  color: red;
+}
+
+.IDE {
+  overflow: auto;
+}
+
+.game-buttons {
+  text-align: center;
+}
+
+#link{
+  text-align: center;
+  color:white;
 }

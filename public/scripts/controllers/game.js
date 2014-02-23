@@ -1,23 +1,92 @@
 angular.module('app')
   
   .controller('GameController',
-    function($scope, $rootScope, $location) {
+    function($scope, $rootScope, $location, $timeout) {
+      $scope.complete = false;
+      $scope.opponentComplete = false;
+      $scope.gameID = $location.path();
+      $scope.gameLocation = 'http://' + $location.host() + $location.path();
+      $('#link').text( 'Share this link:  ' + $scope.gameLocation );
+      $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
+      $scope.status = 0; //0 is waiting, 1 is countdown, 2 is game in progress
+      $scope.countDown = 5;
+
+      
+      if (!$rootScope.playerOne){
+        $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
+      }
+
+      $rootScope.socket.on('gameReady', function(data){
+        $rootScope.playerTwo = true;        
+      });
+      
+      $rootScope.socket.on('gameFull', function(data){
+        $timeout(function(){$location.path('/watch/' + $scope.gameID);},0);
+      });
+
+      $rootScope.socket.on('updated', function(data){
+        opponent.setValue(data.data, 1);
+      });
+
+      $rootScope.socket.on('testResults', function(obj) {
+        $('.console').text('Console:');
+        obj.console.forEach(function(result) {
+          $('.console').append('<div>' + result + '</div>');
+        });
+      });
+
+      $rootScope.socket.on('submitResults', function(obj) {
+        console.log(obj);
+        if(obj.success){
+          $scope.complete = true;
+        } 
+      });
+
+      $rootScope.socket.on('gameDoesNotExist', function(data){
+        $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
+      });
+
+      $rootScope.socket.on('startGame', function(data) {
+        console.log('starting: ', data);
+        $scope.status = 1; //countdown starts
+        $scope.countDown = 6;
+        var shortBeep = document.getElementById('shortBeep');
+        var longBeep = document.getElementById('longBeep');
+        var countDown = function() {
+          $scope.countDown--;
+          if ($scope.countDown > 0) {
+            $timeout(countDown, 1000);
+            shortBeep.play();
+          } else {
+            longBeep.play();
+            $scope.status = 2;
+            $scope.$broadcast('timer-start');
+            $scope.timerRunning = true; 
+            player.setValue(data.boilerplate, 1);
+          }
+        };
+        $timeout(countDown, 1000);
+
+        $scope.functionName = data.functionName;
+      });
 
       $scope.game = "Battle.js Game";
 
       $scope.startGame = function(){
-        // Initiate game
+        $rootScope.socket.emit('ready', {'gameID': $scope.gameID});
+        $scope.gameStarted = true;
       };
 
       $scope.setMode = function(mode){
-        if(mode === "normal") {
-          player.setKeyboardHandler("");
-        } else {          
           player.setKeyboardHandler('ace/keyboard/' + mode);
-        }
       };
 
       $scope.runCode = function() {
+        $rootScope.socket.emit('test', { data: player.getValue(), gameID: $scope.gameID });
+      };
+
+      $scope.submitCode = function() {
+        $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID, functionName: $scope.functionName });
       };
 
       $scope.increaseFont = function() {
@@ -41,8 +110,7 @@ angular.module('app')
       player.getSession().setTabSize(2);
       player.getSession().setUseSoftTabs(true);
       player.getSession().on('change', function(e) {
-        // opponent.setValue(player.getValue(), 1); 
-        socket.emit('update', { data: player.getValue(), gameID: gameID });
+        $rootScope.socket.emit('update', { data: player.getValue(), gameID: $scope.gameID });
       });
 
       var opponent = ace.edit("opponent");
@@ -55,25 +123,4 @@ angular.module('app')
 
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
-
-
-      if (!$rootScope.playerOne){
-        var gameID = $location.path();
-        gameID = gameID.slice(gameID.lastIndexOf('/') + 1);
-        socket.emit('joinGame', {'gameID': gameID});
-      }
-
-      socket.on('gameReady', function(data){
-        console.log('hello', data);
-      });
-      
-      socket.on('gameFull', function(data){
-        $location.path('/watch/' + gameID);
-      });
-
-      socket.on('updated', function(data){
-        console.log(data);
-        opponent.setValue(data.data, 1);
-      });
-
   });

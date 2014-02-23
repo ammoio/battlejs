@@ -11,6 +11,10 @@
     "mongoose": "~3.8.7",
     "socket.io": "~0.9.16",
     "bower": "~1.2.8",
-    "crypto": "0.0.3"
+    "crypto": "0.0.3",
+    "sandbox": "gf3/sandbox",
+    "mongoose-q": "0.0.9",
+    "q": "~1.0.0",
+    "firebase": "~1.0.5"
   }
 }

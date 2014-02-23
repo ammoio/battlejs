@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose-q')();
 
 
 var gameSchema = mongoose.Schema({
@@ -13,7 +13,9 @@ var challengeSchema = mongoose.Schema({
   name: String,
   inputs: [],
   outputs: [],
-  solution: String
+  solution: String,
+  functionName: {type: String, unique: true},
+  boilerplate: String
 });
 
 

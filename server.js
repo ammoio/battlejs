@@ -7,12 +7,13 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
-var mongoose = require('mongoose');
+var mongoose = require('mongoose-q')();
 var Models = require('./app/models');
 var Routes = require('./app/routes');
 var Sockets = require('./app/sockets');
 var io = require('socket.io');
 var crypto = require('crypto');
+
 
 
 

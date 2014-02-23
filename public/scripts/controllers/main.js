@@ -3,12 +3,14 @@ angular.module('app')
   .controller('MainController',
     function($scope, $location, $rootScope, $timeout) {
 
-      $scope.welcome = "Battle.js";
+
+      $scope.welcome = "BattleJS";
+
 
       $scope.newGame = function(){
-        socket.emit('newGame', {});
+        $rootScope.socket.emit('newGame', {});
       };
-      socket.on('gameID', function(data){
+      $rootScope.socket.on('gameID', function(data){
 
         var gameID = data.gameID;
 
