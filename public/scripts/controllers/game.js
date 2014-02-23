@@ -48,11 +48,11 @@ angular.module('app')
       });
 
       $rootScope.socket.on('submitResults', function(obj) {
-        console.log(obj);
+        // console.log(obj);
         if(obj.success && !$scope.loser){
           $scope.complete = true;
           player.setTheme("ace/theme/dreamweaver");
-          player.setValue(player.getValue() + "\n\n" + youWin, 1);
+          player.setValue(player.getValue() + "\n\n" + youWin + "\n\n// Performance: " + obj.timed + "ms", 1);
           player.setReadOnly(true); 
           $rootScope.socket.emit('winner', { data: player.getValue(), gameID: $scope.gameID });
         } else if (obj.success){
