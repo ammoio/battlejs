@@ -5,6 +5,8 @@ angular.module('app')
       $scope.complete = false;
       $scope.opponentComplete = false;
       $scope.gameID = $location.path();
+      $scope.gameLocation = 'http://' + $location.host() + $location.path();
+      $('#link').text( 'Share this link:  ' + $scope.gameLocation );
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
       $scope.status = 0; //0 is waiting, 1 is countdown, 2 is game in progress
       $scope.countDown = 5;

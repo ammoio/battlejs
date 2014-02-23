@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var Sandbox = require('sandbox');
 var Models = require('../app/models');
 var testHelpers = require('./testHelpers');
+var Firebase = require('firebase');
 
 //socket io logic
 
@@ -175,6 +176,11 @@ module.exports.listen = function(server){
       //removes from to active sockets
       if (games[activeSockets[socket.id]]){
         games[activeSockets[socket.id]]['activeSockets'] -= 1;
+        if (games[activeSockets[socket.id]]['activeSockets'] === 0){
+          var chatRef = new Firebase('https://battlejs.firebaseio.com/chat/');
+          chatRef.child('' + activeSockets[socket.id]).set(null);
+          delete games[activeSockets[socket.id]];
+        }
         delete activeSockets[socket.id];
       }
 
