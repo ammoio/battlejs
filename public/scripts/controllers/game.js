@@ -45,6 +45,9 @@ angular.module('app')
         console.log(obj);
         if(obj.success){
           $scope.complete = true;
+          player.setTheme("ace/theme/dreamweaver");
+          player.setValue(player.getValue() + "\n\n" + youWin, 1);
+          player.setReadOnly(true); 
         } 
       });
 
@@ -141,4 +144,11 @@ angular.module('app')
 
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
+
+      var youWin = "// __     ______  _    _  __          _______ _   _ \n" +
+      "// \\ \\   / / __ \\| |  | | \\ \\        / /_   _| \\ | |\n" +
+      "//  \\ \\_/ / |  | | |  | |  \\ \\  /\\  / /  | | |  \\| |\n" +
+      "//   \\   /| |  | | |  | |   \\ \\/  \\/ /   | | |     |\n" +
+      "//    | | | |__| | |__| |    \\  /\\  /   _| |_| |\\  |\n" +
+      "//    |_|  \\____/ \\____/      \\/  \\/   |_____|_| \\_|\n" ;
   });
