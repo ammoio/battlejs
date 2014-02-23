@@ -23,20 +23,22 @@ module.exports = {
 
   validate: function(functionName, js){
     var d = Q.defer();
-    console.log(functionName);
+    console.log("Running: ", js);
 
     Models.Challenge.findOneQ({functionName: functionName})
     .then(function(challenge){
       var count = 0;
       var start = +(new Date);
       var returnObject = {success: true};
-    
+      var s = new Sandbox();
+      var running = false; 
+
       challenge.inputs.forEach(function(input, index){
-        var s = new Sandbox();
-        
+        running = true;
         s.run(js + "\n" + functionName + "(" + JSON.stringify(input) + ");", function(output){
+          
           returnObject.console = output.console;
-          console.log(count, challenge.inputs.length)
+          // console.log(count, challenge.inputs.length)
           if(output.result.indexOf('Error') !== -1){
             console.log("error in output");
             returnObject.success = false;
@@ -45,8 +47,10 @@ module.exports = {
             count += 1;
             return;
           }
-
-          if(output.result.slice(1, output.result.length - 1) !== challenge.outputs[index]){
+          console.log("Comparing:", output.result);
+          console.log("output: ");
+          console.dir(challenge.outputs[index]);
+          if( output.result.slice(1, output.result.length - 1) !== challenge.outputs[index]){
             console.log('error in comparison', output.result, JSON.stringify(challenge.outputs[index]))
             returnObject.result = "Failed on input: " + input + ". " + "Expected " + output.result + " to equal " + challenge.outputs[index];
             returnObject.success = false;
@@ -67,8 +71,12 @@ module.exports = {
               d.resolve(returnObject);
             }
           }
-
+          running = false;
         });
+        
+        while(!running){ 
+          // running = false;
+        }
       });
 
     })
