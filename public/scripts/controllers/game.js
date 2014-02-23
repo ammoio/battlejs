@@ -3,6 +3,7 @@ angular.module('app')
   .controller('GameController',
     function($scope, $rootScope, $location, $timeout, SpinService) {
       $scope.complete = false;
+      $scope.loser = false;
       $scope.opponentComplete = false;
       $scope.gameID = $location.path();
       $scope.gameLocation = 'http://' + $location.host() + $location.path();
@@ -45,14 +46,15 @@ angular.module('app')
 
       $rootScope.socket.on('submitResults', function(obj) {
         console.log(obj);
-        if(obj.success){
+        if(obj.success && !$scope.loser){
           $scope.complete = true;
           player.setTheme("ace/theme/dreamweaver");
           player.setValue(player.getValue() + "\n\n" + youWin, 1);
           player.setReadOnly(true); 
-        } else {
-          $('.console').text('ERROR: ' + obj.result);
-        } 
+          $rootScope.socket.emit('winner', { data: player.getValue(), gameID: $scope.gameID });
+        } else if (obj.success){
+          $rootScope.socket.emit('gameOver', { data: player.getValue(), gameID: $scope.gameID });
+        }
       });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
@@ -155,6 +157,37 @@ angular.module('app')
       "//   \\   /| |  | | |  | |   \\ \\/  \\/ /   | | |     |\n" +
       "//    | | | |__| | |__| |    \\  /\\  /   _| |_| |\\  |\n" +
       "//    |_|  \\____/ \\____/      \\/  \\/   |_____|_| \\_|\n" ;
+
       $scope.increaseFont();
+
+
+
+
+     $scope.startNewGame = function(){
+       $rootScope.socket.emit('startNewGame', { data: player.getValue(), gameID: $scope.gameID });
+       $scope.gameStarted = false;
+       player.setValue('// Write your Code here!', 0);
+     };
+
+     $rootScope.socket.on('loser', function(){
+       $scope.loser = true;
+     });
+
+     $scope.showWinner = function(){
+       $('#winnerModal').modal('toggle')
+     }
+
+     $scope.showLoser = function(){
+       $('#loserModal').modal('toggle')
+     }
+
+     $rootScope.socket.on('show', function(){
+       if ($scope.loser){
+        $scope.showLoser();
+       } else {
+        $scope.showWinner();
+       }
+     });
+
 
   });
