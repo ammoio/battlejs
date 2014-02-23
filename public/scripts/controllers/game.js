@@ -1,7 +1,7 @@
 angular.module('app')
   
   .controller('GameController',
-    function($scope, $rootScope, $location, $timeout) {
+    function($scope, $rootScope, $location, $timeout, SpinService) {
       $scope.complete = false;
       $scope.opponentComplete = false;
       $scope.gameID = $location.path();
@@ -13,6 +13,7 @@ angular.module('app')
       $scope.timer = 0;
       $scope.minutesString = "00";
       $scope.secondsString = "00";
+      SpinService.spin();
 
       
       if (!$rootScope.playerOne){
@@ -24,6 +25,7 @@ angular.module('app')
         $timeout(function(){
           $scope.status = 1;
         }, 0);
+        SpinService.stop();
       });
       
       $rootScope.socket.on('gameFull', function(data){
