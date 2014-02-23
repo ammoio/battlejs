@@ -17,8 +17,16 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE'];
+      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF'];
       $scope.weapons = [];
+
+      var promptName = $timeout(function() {
+        $rootScope.playerName = window.prompt("State your name!");
+        $rootScope.socket.emit('playerName', {
+          playerName: $scope.playerName,
+          gameID: $scope.gameID
+        });
+      }, 1000);
 
       
       if (!$rootScope.playerOne){
@@ -29,11 +37,27 @@ angular.module('app')
         $rootScope.playerTwo = true;
         $timeout(function(){
           $scope.status = 1;
+          $rootScope.playerName = data.playerName;
+          $scope.opponentName = data.opponentName;
+          $('#vsModal').modal();
         }, 0);
         SpinService.stop();
       });
+
+      $rootScope.socket.on('playerName', function(data) {
+        $timeout(function(){
+          $scope.playerName = data.name;
+        }, 0);        
+      });
+
+      $rootScope.socket.on('opponentName', function(data){
+        $timeout(function(){
+          $scope.opponentName = data.name;
+        }, 0);
+      });
       
       $rootScope.socket.on('gameFull', function(data){
+        $timeout.cancel(promptName);
         $timeout(function(){$location.path('/watch/' + $scope.gameID);},0);
       });
 
@@ -52,10 +76,9 @@ angular.module('app')
       });
 
       $rootScope.socket.on('submitResults', function(obj) {
-        console.log(obj);
         if(obj.success && !$scope.loser){
           $scope.timing = false;
-          $scope.timer = 0;
+          // $scope.timer = 0;
           $scope.complete = true;
           player.setTheme("ace/theme/dreamweaver");
           player.setValue(player.getValue() + "\n\n" + youWin + "\n\n// Performance: " + obj.timed + "ms", 1);
@@ -69,6 +92,7 @@ angular.module('app')
       });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
+        $timeout.cancel(promptName);
         $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
 
@@ -100,6 +124,8 @@ angular.module('app')
         } else if (data.weapon === 'DELETE_LINE') {
           console.log('delete a line');
           //Daniel DELETE LINE
+        } else if ('something') {
+          
         } else {
           console.log('unknown weapon', data.weapon);
         }
@@ -114,10 +140,13 @@ angular.module('app')
         }), 1000);
           shortBeep.play();
         } else {
+          ////start of the game!//////
+          $('#vsModal').modal('hide');
+          $scope.timing = true;
           longBeep.play();
           $scope.status = 3;
+          $scope.giveRandomWeapon();
           $timeout(countUp, 1000);
-          $scope.timing = true;
           player.setValue(data.boilerplate, 1);
         }
       };
@@ -133,6 +162,11 @@ angular.module('app')
         }
         if ($scope.minutesString < 10) {
           $scope.minutesString = "0" + $scope.minutesString;
+        }
+        //give random weapon
+        if ($scope.timing && $scope.timer % 45 === 0) {
+          console.log('giving in countUp', $scope.timer);
+          $scope.giveRandomWeapon();
         }
         $timeout(countUp, 1000);
       };

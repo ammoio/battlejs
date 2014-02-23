@@ -37,7 +37,8 @@ module.exports.listen = function(server){
           'socket': socket,
           'playerNumber': 1,
           'latestContent': "",
-          'isReady': false
+          'isReady': false,
+          'playerName': 'JS Warrior'
         }],
         'watchers': [],
         'activeSockets': 1,
@@ -55,9 +56,17 @@ module.exports.listen = function(server){
         console.log(gameWaiting)
       }
 
-      socket.emit('gameID', {'gameID': gameID});
+      socket.emit('gameID', {'gameID': gameID, 'name': 'JS Warrior'});
     });
 
+    socket.on('playerName', function(data) {
+      var thisGame = games[data.gameID];
+      if (thisGame && thisGame.players[0].socketID === socket.id && data.playerName.length > 0) {
+        thisGame.players[0].playerName = data.playerName;
+      } else if (thisGame && thisGame.players[1] && thisGame.players[1].socketID === socket.id && data.playerName.length > 0) {
+        thisGame.players[1].playerName = data.playerName;
+      }
+    });
     //other players trying to join
     socket.on('joinGame', function(data) {
       var thisGame = games[data.gameID];
@@ -67,7 +76,8 @@ module.exports.listen = function(server){
         thisGame.players.push({
           'socketID': socket.id,
           'socket': socket,
-          'playerNumber': 2
+          'playerNumber': 2,
+          'playerName': 'JS Ninja'
         });
 
         //adds to active sockets
@@ -76,8 +86,16 @@ module.exports.listen = function(server){
 
 
         socket.emit('updated', thisGame.players[0].latestContent);
-        socket.emit('gameReady');
-        thisGame.players[0].socket.emit('gameReady');
+        setTimeout(function() {
+          socket.emit('gameReady', {
+            playerName: thisGame.players[1].playerName,
+            opponentName: thisGame.players[0].playerName
+          });
+          thisGame.players[0].socket.emit('gameReady', {
+            playerName: thisGame.players[0].playerName,
+            opponentName: thisGame.players[1].playerName
+          });
+        }, 5000);
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
