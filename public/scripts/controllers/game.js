@@ -119,7 +119,7 @@ angular.module('app')
         opponentElement.style.fontSize = fontSize + 'px';
       };
 
-      var fontSize = 12;
+      var fontSize = 15;
 
       var player = ace.edit("player");
       player.setTheme("ace/theme/twilight");
@@ -141,4 +141,6 @@ angular.module('app')
 
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
+      $scope.increaseFont();
+
   });
