@@ -33,7 +33,7 @@ audio {
   display: none;
 }
 
-#player, #player1, #opponent, #player2{ 
+#player, #player1, #opponent, #player2, .player1, .player2{ 
   margin: 1%;
   margin-top: 0;
   float: left;
@@ -41,7 +41,7 @@ audio {
   height: 75%
 }
 
-#opponent, #player2 { 
+#opponent, #player2, .player2 { 
   float: right;
 }
 
