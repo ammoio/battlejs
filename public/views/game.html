@@ -26,13 +26,16 @@
 <input type="radio" name="group1" value="Emacs" onclick="editor.setKeyboardHandler('ace/keyboard/emacs')">Emacs
  -->
 
-<pre id="player" class="full-row">// Write your Code here!</pre> 
-<pre id="opponent" class="full-row">// Write your Code here!</pre>
+  <pre id="player">// Write your Code here!</pre> 
+  <pre id="opponent">// Write your Code here!</pre>
+
+<div class="rightCover opponent clearfix" ng-show="complete"><p>Success! You have completed the challenge! Here are your results:</div>
+<div class="leftCover player clearfix" ng-show="opponentComplete"></div>
 
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
-    <div class="foot">
-      <span class="white">Console:</span>
-    </div>
+  <div class="foot">
+    <span class="white">Console:</span>
+  </div>
 </nav>
 

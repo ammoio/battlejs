@@ -2,6 +2,8 @@ angular.module('app')
   
   .controller('GameController',
     function($scope, $rootScope, $location, $timeout) {
+      $scope.complete = false;
+      $scope.opponentComplete = false;
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
       $scope.status = 0; //0 is waiting, 1 is countdown, 2 is game in progress
@@ -31,7 +33,9 @@ angular.module('app')
 
       $rootScope.socket.on('submitResults', function(obj) {
         console.log(obj);
-        // Results from the server running the code 
+        if(obj.success){
+          $scope.complete = true;
+        } 
       });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
