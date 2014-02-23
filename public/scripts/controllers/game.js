@@ -16,7 +16,6 @@ angular.module('app')
 
       $rootScope.socket.on('gameReady', function(data){
         $rootScope.playerTwo = true;        
-        // console.log('hello', data);
       });
       
       $rootScope.socket.on('gameFull', function(data){
@@ -28,7 +27,10 @@ angular.module('app')
       });
 
       $rootScope.socket.on('testResults', function(obj) {
-        console.log(obj);
+        $('.console').text('Console:');
+        obj.console.forEach(function(result) {
+          $('.console').append('<div>' + result + '</div>');
+        });
       });
 
       $rootScope.socket.on('submitResults', function(obj) {
