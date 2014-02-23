@@ -28,6 +28,30 @@ testHelpers.validate("reverseString", js)
 .fail(function(output){
   console.log("validate failure: " +  output.result);
 });
+testHelpers.validate("reverseString", js)
+.then(function(output){
+  console.log("validate success: " );
+  console.dir(output);
+})
+.fail(function(output){
+  console.log("validate failure: " +  output.result);
+});
+testHelpers.validate("reverseString", js)
+.then(function(output){
+  console.log("validate success: " );
+  console.dir(output);
+})
+.fail(function(output){
+  console.log("validate failure: " +  output.result);
+});
+testHelpers.validate("reverseString", js)
+.then(function(output){
+  console.log("validate success: " );
+  console.dir(output);
+})
+.fail(function(output){
+  console.log("validate failure: " +  output.result);
+});
 
 setTimeout(function(){
   testHelpers.validate("reverseString", js)

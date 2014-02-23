@@ -30,7 +30,7 @@ module.exports = {
       var count = 0;
       var start = +(new Date);
       var returnObject = {success: true};
-      var s = new Sandbox();
+      var s = new Sandbox({timeout: 5000});
       var running = false; 
 
       challenge.inputs.forEach(function(input, index){
