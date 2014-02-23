@@ -22,7 +22,7 @@ module.exports.listen = function(server){
     socket.on('newGame', function(data) {
 
       if (!data.newGame && gameWaiting){
-        socket.emit('gameID', {'gameID': gameWaiting});
+        socket.emit('gameID', {'gameID': gameWaiting, 'second': true});
         gameWaiting = null;
         return;
       }
