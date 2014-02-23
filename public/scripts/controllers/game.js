@@ -60,7 +60,7 @@ angular.module('app')
             $scope.status = 2;
             $scope.$broadcast('timer-start');
             $scope.timerRunning = true; 
-            player.setValue(data.boilerplate);
+            player.setValue(data.boilerplate, 1);
           }
         };
         $timeout(countDown, 1000);

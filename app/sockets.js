@@ -111,10 +111,11 @@ module.exports.listen = function(server){
       if (thisGame.started === false && thisGame.players.length === 2 && thisGame.players[0].isReady && thisGame.players[1].isReady) {
         Models.Challenge.findQ()
         .then( function(problem) {
+          var randomPick = Math.random() * problem.length | 0;
           var data = {
-            name: problem[0].name,
-            functionName: problem[0].functionName,
-            boilerplate: problem[0].boilerplate
+            name: problem[randomPick].name,
+            functionName: problem[randomPick].functionName,
+            boilerplate: problem[randomPick].boilerplate
           };
           thisGame.started = true;
           thisGame.players[0].socket.emit('startGame', data);
