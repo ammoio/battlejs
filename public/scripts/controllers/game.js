@@ -47,6 +47,7 @@ angular.module('app')
       $rootScope.socket.on('submitResults', function(obj) {
         console.log(obj);
         if(obj.success && !$scope.loser){
+          countUp();
           $scope.complete = true;
           player.setTheme("ace/theme/dreamweaver");
           player.setValue(player.getValue() + "\n\n" + youWin, 1);
@@ -67,35 +68,48 @@ angular.module('app')
         $scope.countDown = 6;
         var shortBeep = document.getElementById('shortBeep');
         var longBeep = document.getElementById('longBeep');
-        var countDown = function() {
-          $scope.countDown--;
-          if ($scope.countDown > 0) {
-            $timeout(countDown, 1000);
-            shortBeep.play();
-          } else {
-            longBeep.play();
-            $scope.status = 3;
-            $timeout(countUp, 1000);
-            player.setValue(data.boilerplate, 1);
-          }
-        };
 
-        var countUp = function() {
-          $scope.timer++;
-          $scope.minutesString = ~~($scope.timer / 60);
-          $scope.secondsString = $scope.timer % 60;
-          if ($scope.secondsString < 10) { //format seconds
-            $scope.secondsString = "0" + $scope.secondsString;
-          }
-          if ($scope.minutesString < 10) {
-            $scope.minutesString = "0" + $scope.minutesString;
-          }
-          $timeout(countUp, 1000);
-        };
 
-        $timeout(countDown, 1000);
+        $timeout((function(){
+            countDown(data);
+        }), 1000);
         $scope.functionName = data.functionName;
       });
+
+      var countDown = function(data) {
+        console.log("TIME: ", data)
+        $scope.countDown--;
+        if ($scope.countDown > 0) {
+          $timeout((function(){
+            countDown(data);
+        }), 1000);
+          shortBeep.play();
+        } else {
+          longBeep.play();
+          $scope.status = 3;
+          $timeout(countUp, 1000);
+          player.setValue(data.boilerplate, 1);
+        }
+      };
+
+      var countUp = function(stop) {
+        if(stop){
+          $scope.timer = 0;
+          $scope.minutesString = "00";
+          $scope.secondsString = "00";
+          return;
+        }
+        $scope.timer++;
+        $scope.minutesString = ~~($scope.timer / 60);
+        $scope.secondsString = $scope.timer % 60;
+        if ($scope.secondsString < 10) { //format seconds
+          $scope.secondsString = "0" + $scope.secondsString;
+        }
+        if ($scope.minutesString < 10) {
+          $scope.minutesString = "0" + $scope.minutesString;
+        }
+        $timeout(countUp, 1000);
+      };
 
       $scope.game = "Battle.js Game";
 
