@@ -3,6 +3,8 @@ angular.module('app')
   .controller('MainController',
     function($scope, $location, $rootScope, $timeout) {
 
+      $('input[type="radio"]:checked').parent('label').addClass('active');
+
       $scope.wantsNewGame = true;
 
       $scope.welcome = "BattleJS";

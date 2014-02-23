@@ -1,12 +1,14 @@
 <h1>Welcome to {{ welcome }}</h1>
 
-<div class="btn-group" data-toggle="buttons">
-  <label class="btn btn-primary" ng-click='new()'>
-    <input type="radio" name="options" > New Game
-  </label>
-  <label class="btn btn-primary" ng-click='join()'>
-    <input type="radio" name="options"> Join Game
-  </label>
+<div class='checker'>
+  <div class="btn-group" data-toggle="buttons">
+    <label class="btn btn-primary" ng-click='new()'>
+      <input type="radio" name="options" checked > New Game
+    </label>
+    <label class="btn btn-primary" ng-click='join()'>
+      <input type="radio" name="options"> Join Game
+    </label>
+  </div>
 </div>
 
 <div class="new-game">

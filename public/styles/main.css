@@ -61,6 +61,26 @@ audio {
   background-color: #e74c3c;
 }
 
+.checker {
+  margin: auto;
+  text-align: center;
+}
+
+.btn-group label {
+  font-size: 1em;
+  margin: 2% auto;
+  border-radius: 12px;
+  font-family: 'Press Start 2P', sans-serif;
+}
+
+.btn-group label:hover {
+  background-color: #e74c3c;
+}
+
+.btn.active, .btn:active {
+    background-color: #0A8069;
+}
+
 .master, .novice {
   margin-bottom: 5%;
   margin-left: 5%;
