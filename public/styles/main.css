@@ -29,7 +29,7 @@ a {
   color: #00B7FF;
 }
 
-#player, #player1{ 
+#player, #player1, .player{ 
   margin: 0;
   position: absolute;
   top: 150px;
@@ -39,7 +39,7 @@ a {
   height: 75%
 }
 
-#opponent, #player2 { 
+#opponent, #player2, .opponent{ 
   margin: 0;
   position: absolute;
   top: 150px;
@@ -117,3 +117,15 @@ a {
   height: 75px;
 }
 
+.leftCover, .rightCover{
+  background-color: #ECF0F1;
+  z-index: 8;
+  margin: 15px;
+  opacity: .8;
+  border-radius: 3px;
+}
+
+/*.rightCover{
+  background-color: #BDC3C7;
+  z-index: 8;
+}*/
