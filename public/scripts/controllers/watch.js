@@ -5,6 +5,7 @@ angular.module('app')
 
       $scope.welcome = "Battle.js Viewer";
       $scope.gameLocation = 'http://' + $location.host() + $location.path();
+      $('#link').text( 'Share this link:  ' + $scope.gameLocation );
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
 
