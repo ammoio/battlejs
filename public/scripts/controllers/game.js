@@ -2,6 +2,7 @@ angular.module('app')
   
   .controller('GameController',
     function($scope, $rootScope, $location, $timeout, SpinService) {
+      $scope.timing = false;
       $scope.complete = false;
       $scope.loser = false;
       $scope.opponentComplete = false;
@@ -47,7 +48,8 @@ angular.module('app')
       $rootScope.socket.on('submitResults', function(obj) {
         console.log(obj);
         if(obj.success && !$scope.loser){
-          countUp();
+          $scope.timing = false;
+          $scope.timer = 0;
           $scope.complete = true;
           player.setTheme("ace/theme/dreamweaver");
           player.setValue(player.getValue() + "\n\n" + youWin, 1);
@@ -88,18 +90,15 @@ angular.module('app')
           longBeep.play();
           $scope.status = 3;
           $timeout(countUp, 1000);
+          $scope.timing = true;
           player.setValue(data.boilerplate, 1);
         }
       };
 
-      var countUp = function(stop) {
-        if(stop){
-          $scope.timer = 0;
-          $scope.minutesString = "00";
-          $scope.secondsString = "00";
-          return;
+      var countUp = function() {
+        if($scope.timing){
+          $scope.timer++;
         }
-        $scope.timer++;
         $scope.minutesString = ~~($scope.timer / 60);
         $scope.secondsString = $scope.timer % 60;
         if ($scope.secondsString < 10) { //format seconds
