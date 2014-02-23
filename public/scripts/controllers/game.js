@@ -41,6 +41,9 @@ angular.module('app')
         obj.console.forEach(function(result) {
           $('.console').append('<div>' + result + '</div>');
         });
+        if(obj.result.indexOf("Error") !== -1) {
+          $('.console').append('<div>' + obj.result + '</div>');
+        }
       });
 
       $rootScope.socket.on('submitResults', function(obj) {
