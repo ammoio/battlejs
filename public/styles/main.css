@@ -85,8 +85,11 @@ audio {
 
 .timer {
   text-align: center;
-  font-size: 3em;
+  font-size: 2em;
   margin-bottom: 0.5em;
+  width: 20%;
+  float: right;
+  margin-right: 3%;
 }
 
 #messagesDiv{
@@ -130,10 +133,14 @@ audio {
 }
 
 .game-buttons {
+<<<<<<< HEAD
   text-align: center;
 }
 
 #link{
   text-align: center;
   color:white;
+  width: 40%;
+  float: left;
+  margin-left: 3%
 }
