@@ -2,6 +2,7 @@ angular.module('app')
   
   .controller('GameController',
     function($scope, $rootScope, $location, $timeout, SpinService) {
+      $scope.game = "Battle.js Game";
       $scope.complete = false;
       $scope.loser = false;
       $scope.opponentComplete = false;
@@ -15,7 +16,9 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-      $scope.weapons = ['VIM', 'EMACS'];
+      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE'];
+      $scope.weapons = [];
+
       
       if (!$rootScope.playerOne){
         $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
@@ -76,8 +79,10 @@ angular.module('app')
             $timeout(countDown, 1000);
             shortBeep.play();
           } else {
+            ////start of the game!//////
             longBeep.play();
             $scope.status = 3;
+            $scope.giveRandomWeapon();
             $timeout(countUp, 1000);
             player.setValue(data.boilerplate, 1);
           }
@@ -93,6 +98,11 @@ angular.module('app')
           if ($scope.minutesString < 10) {
             $scope.minutesString = "0" + $scope.minutesString;
           }
+          //give random weapon
+          if ($scope.timer % 45 === 0) {
+            $scope.giveRandomWeapon();
+          }
+
           $timeout(countUp, 1000);
         };
 
@@ -100,19 +110,25 @@ angular.module('app')
         $scope.functionName = data.functionName;
       });
 
-      $rootScope.socket.on('VIMed', function() {
-        $timeout(function() {
-           player.setKeyboardHandler(''); 
-        }, 30000);
+      $rootScope.socket.on('attacked', function(data) {
+        console.log('attacked', data);
+        if (data.weapon === 'VIM') {
+          player.setKeyboardHandler('ace/keyboard/vim'); 
+          $timeout(function() {
+             player.setKeyboardHandler(''); 
+          }, 30000);
+        } else if (data.weapon === 'EMACS') {
+          player.setKeyboardHandler('ace/keyboard/emacs'); 
+          $timeout(function() {
+             player.setKeyboardHandler(''); 
+          }, 30000);
+        } else if (data.weapon === 'DELETE_LINE') {
+          console.log('delete a line');
+          //Daniel DELETE LINE
+        } else {
+          console.log('unknown weapon', data.weapon);
+        }
       });
-
-      $rootScope.socket.on('EMACSed', function() {
-        player.setKeyboardHandler('ace/keyboard/emacs'); 
-        $timeout(function() {
-           player.setKeyboardHandler(''); 
-        }, 30000);
-      });
-      $scope.game = "Battle.js Game";
 
       $scope.startGame = function(){
         $rootScope.socket.emit('ready', {'gameID': $scope.gameID});
@@ -131,17 +147,20 @@ angular.module('app')
         $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID, functionName: $scope.functionName });
       };
 
+
+      /************ weapons **************/
       $scope.attack = function(index) {
-        var weapon = $scope.weapons.splice(index, 1);
-        $scope[weapon]();
+        var weapon = $scope.weapons.splice(index, 1)[0];
+        console.log('weapon attack', weapon);
+        $rootScope.socket.emit('attack', {
+          weapon: weapon,
+          gameID: $scope.gameID
+        });
       };
 
-      $scope.VIM = function() {
-        $rootScope.socket.emit('VIM', {gameID: $scope.gameID});
-      };
-
-      $scope.EMACS = function() {
-        $rootScope.socket.emit('EMACS', {gameID: $scope.gameID});
+      $scope.giveRandomWeapon = function() {
+        var weapon = $scope.availableWeapons[~~(Math.random() * $scope.availableWeapons.length)];
+        $scope.weapons.push(weapon);
       };
 
       $scope.increaseFont = function() {

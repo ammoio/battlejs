@@ -190,26 +190,17 @@ module.exports.listen = function(server){
     });
 
     /********** attacks ************/
-    socket.on('VIM', function(data){
+    socket.on('attack', function(data){
       var thisGame = games[data.gameID];
+      console.log(data.weapon);
       if (thisGame.players[0] && thisGame.players[0].socketID === socket.id) {
-        thisGame.players[1].socket.emit('VIMed');
+        thisGame.players[1].socket.emit('attacked', {weapon: data.weapon});
       } else if (thisGame.players[1] && thisGame.players[1].socketID === socket.id) {
-        thisGame.players[0].socket.emit('VIMed');
+        thisGame.players[0].socket.emit('attacked', {weapon: data.weapon});
       }
     });
 
-    socket.on('EMACS', function(data){
-      var thisGame = games[data.gameID];
-      if (thisGame.players[0] && thisGame.players[0].socketID === socket.id) {
-        thisGame.players[1].socket.emit('EMACSed');
-      } else if (thisGame.players[1] && thisGame.players[1].socketID === socket.id) {
-        thisGame.players[0].socket.emit('EMACSed');
-      }
-    });
-
-    socket.on('disconnect', function () {
-    
+    socket.on('disconnect', function () {    
       //removes from to active sockets
       if (games[activeSockets[socket.id]]){
         games[activeSockets[socket.id]]['activeSockets'] -= 1;
