@@ -64,7 +64,7 @@ angular.module('app')
         } else if (obj.success){
           $rootScope.socket.emit('gameOver', { data: player.getValue(), gameID: $scope.gameID });
         } else {
-          $('.console').text('<div>' + obj.result + '</div>');
+          $('.console').text(obj.result);
         }
       });
 
