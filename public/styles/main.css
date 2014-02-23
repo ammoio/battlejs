@@ -29,24 +29,19 @@ a {
   color: #00B7FF;
 }
 
-#player, #player1, .player{ 
-  margin: 0;
-  position: absolute;
-  top: 200px;
-  bottom: 20px;
-  left: 20px;
-  right: 55%;
+audio {
+  display: none;
+}
+
+#player, #player1, #opponent, #player2{ 
+  margin: 2%;
+  float: left;
+  width: 43%;
   height: 75%
 }
 
-#opponent, #player2, .opponent{ 
-  margin: 0;
-  position: absolute;
-  top: 150px;
-  bottom: 20px; 
-  left: 55%;
-  right: 20px;
-  height: 75%
+#opponent, #player2 { 
+  float: right;
 }
 
 .new-game {
@@ -128,4 +123,16 @@ a {
 
 .count-down {
   color: red;
+<<<<<<< HEAD
 }
+=======
+}
+
+.IDE {
+  overflow: auto;
+}
+
+.game-buttons {
+  text-align: center;
+}
+>>>>>>> Changed some css formats and added sound for countdown

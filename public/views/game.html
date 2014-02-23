@@ -1,23 +1,23 @@
 <!-- <h1>Welcome to the {{ game }}</h1>
  -->
-
-<div class="text-center">
+<audio id="shortBeep" src="/audio/short_beep.mp3" preload="auto" controls autoplay='true'></audio>
+<audio id="longBeep" src="/audio/long_beep.mp3" preload="auto" controls></audio>
 
 <div class='timer clearfix'>
 
   <timer interval="1000" autostart='false' ng-show="status===2">{{minutes}} : {{seconds}}</timer>
-  <p ng-show="status===1" class="count-down">{{ countDown }}</p>
-  <p ng-show="status===0">Waiting for Player 2</p>
+  <span ng-show="status===1" class="count-down">{{ countDown }}</span>
+  <span ng-show="status===0">Waiting for Player 2</span>
 </div>
 
-
+<div class='game-buttons clearfix'>
   <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
   <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
   <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
 
-  <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
+<!--   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
   <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
-  <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button>
+  <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button> -->
   <button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
   <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
 </div>
@@ -26,13 +26,10 @@
 <input type="radio" name="group1" value="Vim" onclick="editor.setKeyboardHandler('ace/keyboard/vim')">Vim
 <input type="radio" name="group1" value="Emacs" onclick="editor.setKeyboardHandler('ace/keyboard/emacs')">Emacs
  -->
-
-  <pre id="player">// Write your Code here!</pre> 
-  <pre id="opponent">// Write your Code here!</pre>
-
-<div class="rightCover opponent clearfix" ng-show="complete"><p>Success! You have completed the challenge! Here are your results:</div>
-<div class="leftCover player clearfix" ng-show="opponentComplete"></div>
-
+<div class='clearfix IDE'>
+  <div id="player" class="full-row">// Write your Code here!</div> 
+  <div id="opponent" class="full-row">// Write your Code here!</div>
+</div>
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
   <div class="foot">
