@@ -19,6 +19,14 @@ angular.module('app')
       $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE'];
       $scope.weapons = [];
 
+      var promptName = $timeout(function() {
+        $rootScope.playerName = window.prompt("State your name!");
+        $rootScope.socket.emit('playerName', {
+          playerName: $scope.playerName,
+          gameID: $scope.gameID
+        });
+      }, 1000);
+
       
       if (!$rootScope.playerOne){
         $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
@@ -28,11 +36,27 @@ angular.module('app')
         $rootScope.playerTwo = true;
         $timeout(function(){
           $scope.status = 1;
+          $rootScope.playerName = data.playerName;
+          $scope.opponentName = data.opponentName;
+          $('#vsModal').modal();
         }, 0);
         SpinService.stop();
       });
+
+      $rootScope.socket.on('playerName', function(data) {
+        $timeout(function(){
+          $scope.playerName = data.name;
+        }, 0);        
+      });
+
+      $rootScope.socket.on('opponentName', function(data){
+        $timeout(function(){
+          $scope.opponentName = data.name;
+        }, 0);
+      });
       
       $rootScope.socket.on('gameFull', function(data){
+        $timeout.cancel(promptName);
         $timeout(function(){$location.path('/watch/' + $scope.gameID);},0);
       });
 
@@ -51,7 +75,6 @@ angular.module('app')
       });
 
       $rootScope.socket.on('submitResults', function(obj) {
-        // console.log(obj);
         if(obj.success && !$scope.loser){
           $scope.complete = true;
           player.setTheme("ace/theme/dreamweaver");
@@ -64,6 +87,7 @@ angular.module('app')
       });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
+        $timeout.cancel(promptName);
         $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
 
@@ -80,6 +104,7 @@ angular.module('app')
             shortBeep.play();
           } else {
             ////start of the game!//////
+            $('#vsModal').modal('hide');
             longBeep.play();
             $scope.status = 3;
             $scope.giveRandomWeapon();
