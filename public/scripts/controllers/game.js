@@ -17,8 +17,8 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-      $scope.possibleWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF'];
-      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF']; //copy of possibleWeapons that changes
+      $scope.possibleWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF'];
+      $scope.availableWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF']; //copy of possibleWeapons that changes
       $scope.showOpponent = true;
 
       $scope.weapons = [];
@@ -115,13 +115,16 @@ angular.module('app')
       });
 
       $rootScope.socket.on('attacked', function(data) {
-        console.log('attacked', data);
         if (data.weapon === 'VIM') {
+          $('.VIMed').css('display', 'block');
+          $timeout(function(){$('.VIMed').css('display', 'none')}, 3000);
           player.setKeyboardHandler('ace/keyboard/vim'); 
           $timeout(function() {
              player.setKeyboardHandler(''); 
           }, 30000);
         } else if (data.weapon === 'EMACS') {
+          $('.EMACSed').css('display', 'block');
+          $timeout(function(){$('.EMACSed').css('display', 'none')}, 3000);
           player.setKeyboardHandler('ace/keyboard/emacs'); 
           $timeout(function() {
              player.setKeyboardHandler(''); 
@@ -130,6 +133,8 @@ angular.module('app')
           console.log('delete a line');
           //Daniel DELETE LINE
         } else if (data.weapon === 'FREEZE') {
+          $('.FREEZEed').css('display', 'block');
+          $timeout(function(){$('.FREEZEed').css('display', 'none')}, 3000);
           var stopClicks = function(e) {
             e.stopPropagation();
             e.preventDefault();
@@ -140,6 +145,8 @@ angular.module('app')
             player.setReadOnly(false);
           }, 10000);
         } else if (data.weapon === 'HIDE_SELF') {
+          $('.HIDE_SELFed').css('display', 'block');
+          $timeout(function(){$('.HIDE_SELFed').css('display', 'none')}, 3000);
           $scope.showOpponent = false;
           $timeout(function(){
             $scope.showOpponent = true;
