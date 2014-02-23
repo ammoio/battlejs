@@ -32,7 +32,7 @@ a {
 #player, #player1{ 
   margin: 0;
   position: absolute;
-  top: 150px;
+  top: 200px;
   bottom: 20px;
   left: 20px;
   right: 55%;
@@ -115,5 +115,6 @@ a {
 
 .foot{
   height: 75px;
+  overflow-y: scroll;
 }
 
