@@ -12,13 +12,20 @@ module.exports.listen = function(server){
   var clients = [];
   var games = {};
   var activeSockets = {};
+  var gameWaiting = null;
 
   io.sockets.on('connection', function (socket) {
     //save the session id
     clients.push(socket.id, socket);
 
     //when newGame is clicked
-    socket.on('newGame', function() {
+    socket.on('newGame', function(data) {
+
+      if (!data.newGame && gameWaiting){
+        socket.emit('gameID', {'gameID': gameWaiting});
+        gameWaiting = null;
+        return;
+      }
       
       //generate new game id
       var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
@@ -41,6 +48,12 @@ module.exports.listen = function(server){
 
       //add to active sockets
       activeSockets[socket.id] = gameID;
+
+
+      if (!data.newGame){
+        gameWaiting = gameID;
+        console.log(gameWaiting)
+      }
 
       socket.emit('gameID', {'gameID': gameID});
     });
