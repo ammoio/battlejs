@@ -16,7 +16,7 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE'];
+      $scope.availableWeapons = ['VIM', 'EMACS', 'DELETE_LINE', 'FREEZE', 'HIDE_SELF'];
       $scope.weapons = [];
 
       var promptName = $timeout(function() {
@@ -150,6 +150,9 @@ angular.module('app')
         } else if (data.weapon === 'DELETE_LINE') {
           console.log('delete a line');
           //Daniel DELETE LINE
+        } else if () {
+          
+
         } else {
           console.log('unknown weapon', data.weapon);
         }
