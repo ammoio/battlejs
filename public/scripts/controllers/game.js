@@ -6,29 +6,10 @@ angular.module('app')
       $scope.opponentComplete = false;
       $scope.gameID = $location.path();
       $scope.gameLocation = 'http://' + $location.host() + $location.path();
+      $('.navbar-header').append('<span style="color:white">Share this link: ' + $scope.gameLocation +'</span>')
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
       $scope.status = 0; //0 is waiting, 1 is countdown, 2 is game in progress
       $scope.countDown = 5;
-
-
-      $scope.copy = function() {
-        // ie
-        if (window.clipboardData && clipboardData.setData) {
-            clipboardData.setData('text', $scope.gameLocation);
-        }
-        // others
-        else {
-            var flashcopier = 'flashcopier';
-            if(!document.getElementById(flashcopier)) {
-                var divholder = document.createElement('div');
-                divholder.id = flashcopier;
-                document.body.appendChild(divholder);
-            }
-            document.getElementById(flashcopier).innerHTML = '';
-            var divinfo = '<embed src="_clipboard.swf" FlashVars="clipboard='+encodeURIComponent("tis")+'" width="0" height="0" type="application/x-shockwave-flash"></embed>';
-            document.getElementById(flashcopier).innerHTML = divinfo;
-        }
-      }
 
       
       if (!$rootScope.playerOne){
