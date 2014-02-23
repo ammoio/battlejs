@@ -61,6 +61,7 @@ module.exports.listen = function(server){
     //other players trying to join
     socket.on('joinGame', function(data) {
       var thisGame = games[data.gameID];
+      console.log(thisGame)
       if (thisGame && thisGame.players.length === 1) { //second play joining
         console.log("Second Player Joined, gameready");
         thisGame.players.push({
@@ -83,6 +84,7 @@ module.exports.listen = function(server){
       } else {
         socket.emit('gameDoesNotExist'); //if game does not exist
       }
+      console.log(thisGame)
     });
 
     socket.on('addMeAsWatcher', function(data) {
