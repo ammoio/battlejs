@@ -34,7 +34,8 @@ module.exports.listen = function(server){
         }],
         'watchers': [],
         'activeSockets': 1,
-        'started': false
+        'started': false,
+        'winner': null
       };
       console.log("First Player Joined");
 
@@ -195,6 +196,17 @@ module.exports.listen = function(server){
       thisGame.started = false;
       socket.emit('doOver');
     });
+
+    socket.on('win', function(data){
+      var thisGame = games[data.gameID];
+      if (thisGame.players[0].socketID === socket.id){
+        thisGame.winner = 0;
+        thisGame.players[1].socket.emit('loser');
+      } else {
+        thisGame.winner = 1;
+        thisGame.players[0].socket.emit('loser');
+      }
+    })
 
   });
 };
