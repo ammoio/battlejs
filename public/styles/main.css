@@ -34,9 +34,10 @@ audio {
 }
 
 #player, #player1, #opponent, #player2{ 
-  margin: 2%;
+  margin: 1%;
+  margin-top: 0;
   float: left;
-  width: 43%;
+  width: 48%;
   height: 75%
 }
 
@@ -82,26 +83,17 @@ audio {
 .navbar{
   border-radius: 0;
 }
+.navbar.top{
+  margin-bottom: 10px;
+}
 
 .timer {
   text-align: center;
-  font-size: 3em;
-  margin-bottom: 0.5em;
-}
-
-#messagesDiv{
-  position:fixed;
-  left:0px;
-  bottom:0px;
-  width:300px;
-  height:93.4%;
-  background-color: white;
-  border-right:1px solid black;  
-}
-
-#watch-container{
-  left: 300px;
-  width: 75%;
+  font-size: 1.5em;
+  margin-bottom: 0em;
+  width: 20%;
+  float: right;
+  margin-right: 3%;
 }
 
 .white{
@@ -130,10 +122,58 @@ audio {
 }
 
 .game-buttons {
-  text-align: center;
 }
 
 #link{
   text-align: center;
   color:white;
+}
+
+
+
+/******* watch view ********/
+.topBar {
+  margin: 2%;
+}
+
+.watchMessage {
+  text-align: center;
+  font-size: 2em;
+}
+
+.no-padding{
+  padding: 6px;
+}
+
+#chat {
+  width:23%;
+  height: 80%;
+  margin-top: 0;
+  border:1px solid black;
+  margin-left: 2%;
+  border-radius: 10px;
+  font-size:1.5em;
+}
+
+.messageInput {
+  width: 100%;
+  height: 2em;
+  border: none;
+  background-color: inherit;
+  text-align: center;
+  border-bottom:1px dotted black;
+}
+
+#watch-container{
+  float: right;
+  width: 75%;
+  margin: auto;
+}
+
+#chat li {
+  margin: 7px;
+}
+
+.messagesDisplay ul {
+  overflow: hidden;
 }

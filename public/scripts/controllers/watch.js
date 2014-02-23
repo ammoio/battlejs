@@ -17,7 +17,8 @@ angular.module('app')
       $rootScope.socket.on('gameDoesNotExist', function(data){
         $timeout(function(){ $location.path('/gameDoesNotExist'); },0);
       });
-      
+      $scope.name = window.prompt("Hi spectator, what's your name?");
+
       $scope.setMode = function(mode){
         if(mode === "normal") {
           player.setKeyboardHandler("");
@@ -61,7 +62,7 @@ angular.module('app')
       $scope.chatRef = new Firebase('https://battlejs.firebaseio.com/chat/' + $scope.gameID);
 
       $scope.sendMessage = function(){
-        if ($scope.name && $scope.text){
+        if ($scope.text){
           $scope.chatRef.push({name: $sanitize($scope.name), text: $sanitize($scope.text)});
           $scope.text = '';
         };

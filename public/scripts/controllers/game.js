@@ -1,15 +1,20 @@
 angular.module('app')
   
   .controller('GameController',
-    function($scope, $rootScope, $location, $timeout) {
+    function($scope, $rootScope, $location, $timeout, SpinService) {
       $scope.complete = false;
+      $scope.loser = false;
       $scope.opponentComplete = false;
       $scope.gameID = $location.path();
       $scope.gameLocation = 'http://' + $location.host() + $location.path();
-      $('#link').text( 'Share this link:  ' + $scope.gameLocation );
+      $('#link').html( '<p class="navbar-text no-padding">Share this link:  </p>' + '<input type="text" value="' +  $scope.gameLocation + '" class="form-control">');
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
-      $scope.status = 0; //0 is waiting, 1 is countdown, 2 is game in progress
+      $scope.status = 0; //0 is waiting for player 2, 1 is waiting for ready, 2 is countdown, 3 is game in progress
       $scope.countDown = 5;
+      $scope.timer = 0;
+      $scope.minutesString = "00";
+      $scope.secondsString = "00";
+      SpinService.spin();
 
       
       if (!$rootScope.playerOne){
@@ -17,7 +22,11 @@ angular.module('app')
       }
 
       $rootScope.socket.on('gameReady', function(data){
-        $rootScope.playerTwo = true;        
+        $rootScope.playerTwo = true;
+        $timeout(function(){
+          $scope.status = 1;
+        }, 0);
+        SpinService.stop();
       });
       
       $rootScope.socket.on('gameFull', function(data){
@@ -37,9 +46,15 @@ angular.module('app')
 
       $rootScope.socket.on('submitResults', function(obj) {
         console.log(obj);
-        if(obj.success){
+        if(obj.success && !$scope.loser){
           $scope.complete = true;
-        } 
+          player.setTheme("ace/theme/dreamweaver");
+          player.setValue(player.getValue() + "\n\n" + youWin, 1);
+          player.setReadOnly(true); 
+          $rootScope.socket.emit('winner', { data: player.getValue(), gameID: $scope.gameID });
+        } else if (obj.success){
+          $rootScope.socket.emit('gameOver', { data: player.getValue(), gameID: $scope.gameID });
+        }
       });
 
       $rootScope.socket.on('gameDoesNotExist', function(data){
@@ -48,7 +63,7 @@ angular.module('app')
 
       $rootScope.socket.on('startGame', function(data) {
         console.log('starting: ', data);
-        $scope.status = 1; //countdown starts
+        $scope.status = 2; //countdown starts
         $scope.countDown = 6;
         var shortBeep = document.getElementById('shortBeep');
         var longBeep = document.getElementById('longBeep');
@@ -59,14 +74,26 @@ angular.module('app')
             shortBeep.play();
           } else {
             longBeep.play();
-            $scope.status = 2;
-            $scope.$broadcast('timer-start');
-            $scope.timerRunning = true; 
+            $scope.status = 3;
+            $timeout(countUp, 1000);
             player.setValue(data.boilerplate, 1);
           }
         };
-        $timeout(countDown, 1000);
 
+        var countUp = function() {
+          $scope.timer++;
+          $scope.minutesString = ~~($scope.timer / 60);
+          $scope.secondsString = $scope.timer % 60;
+          if ($scope.secondsString < 10) { //format seconds
+            $scope.secondsString = "0" + $scope.secondsString;
+          }
+          if ($scope.minutesString < 10) {
+            $scope.minutesString = "0" + $scope.minutesString;
+          }
+          $timeout(countUp, 1000);
+        };
+
+        $timeout(countDown, 1000);
         $scope.functionName = data.functionName;
       });
 
@@ -101,7 +128,7 @@ angular.module('app')
         opponentElement.style.fontSize = fontSize + 'px';
       };
 
-      var fontSize = 12;
+      var fontSize = 15;
 
       var player = ace.edit("player");
       player.setTheme("ace/theme/twilight");
@@ -123,4 +150,44 @@ angular.module('app')
 
       var playerElement = document.getElementById('player');
       var opponentElement = document.getElementById('opponent');
+
+      var youWin = "// __     ______  _    _  __          _______ _   _ \n" +
+      "// \\ \\   / / __ \\| |  | | \\ \\        / /_   _| \\ | |\n" +
+      "//  \\ \\_/ / |  | | |  | |  \\ \\  /\\  / /  | | |  \\| |\n" +
+      "//   \\   /| |  | | |  | |   \\ \\/  \\/ /   | | |     |\n" +
+      "//    | | | |__| | |__| |    \\  /\\  /   _| |_| |\\  |\n" +
+      "//    |_|  \\____/ \\____/      \\/  \\/   |_____|_| \\_|\n" ;
+
+      $scope.increaseFont();
+
+
+
+
+     $scope.startNewGame = function(){
+       $rootScope.socket.emit('startNewGame', { data: player.getValue(), gameID: $scope.gameID });
+       $scope.gameStarted = false;
+       player.setValue('// Write your Code here!', 0);
+     };
+
+     $rootScope.socket.on('loser', function(){
+       $scope.loser = true;
+     });
+
+     $scope.showWinner = function(){
+       $('#winnerModal').modal('toggle')
+     }
+
+     $scope.showLoser = function(){
+       $('#loserModal').modal('toggle')
+     }
+
+     $rootScope.socket.on('show', function(){
+       if ($scope.loser){
+        $scope.showLoser();
+       } else {
+        $scope.showWinner();
+       }
+     });
+
+
   });

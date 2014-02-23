@@ -37,34 +37,35 @@ var evenOccurence = new Models.Challenge({
   name: "Even Occurances",
   inputs: ['[1,2,3,4,5,6,7,8,9,1]', '[1,1,2,3,4,3,2,1]', '[5,5,5,4,4,5]', '[]', '[1,1,3,4,1]'],
   outputs: [1,2,5,null,null],
-  solution: 'var evenOccurence = function(arr) {
-  var resultArray = [];
-  var intArray = [];
-  var objCounter = {};
-  for (var i = 0; i < arr.length; i++){
-    if (objCounter[arr[i]]){
-      objCounter[arr[i]] += 1
-    } else {
-      intArray.push(arr[i]);
-      objCounter[arr[i]] = 1;
-    }
-  }
-  for (var i = 0; i < intArray.length; i++){
-    if (objCounter[intArray[i]] % 2 === 0){
-      resultArray.push(intArray[i])
-    }
-  }
-  if (resultArray.length > 0){
-    return resultArray[0];
-  }
-  return null;
-};',
-  functionName: "evenOccurance",
+  solution: 'var evenOccurence = function(arr) { \
+  var resultArray = []; \
+  var intArray = []; \
+  var objCounter = {}; \
+  for (var i = 0; i < arr.length; i++){ \
+    if (objCounter[arr[i]]){ \
+      objCounter[arr[i]] += 1 \
+    } else { \
+      intArray.push(arr[i]); \
+      objCounter[arr[i]] = 1; \
+    } \
+  } \
+  for (var i = 0; i < intArray.length; i++){ \
+    if (objCounter[intArray[i]] % 2 === 0){ \
+      resultArray.push(intArray[i]) \
+    } \
+  } \
+  if (resultArray.length > 0){ \
+    return resultArray[0]; \
+  } \
+  return null; \
+};', 
+  functionName: "evenOccurence",
   boilerplate: "// Find the first item that occurs an even number of times in an array.\n" +
-  "// Remember to handle multiple even-occurance items and return the first one.\n\n" +
-  "Return null if there are no even-occurance items. {\n\n};"
+  "// Remember to handle multiple even-occurance items and return the first one.\n" +
+  "//Return null if there are no even-occurance items.\n\n" +
+  "var evenOccurence = function (array) {\n  return number;\n};"
 });
-evenOccurance.saveQ()
+evenOccurence.saveQ()
 .then(function(){
   console.log("saved Successfully");
 });
@@ -75,7 +76,8 @@ var sumArray = new Models.Challenge({
   outputs: [6, 5, 7, -1],
   solution: '',
   functionName: "sumArray",
-  boilerplate: "// Given an array of numbers, calculate the greatest contiguous sum of numbers in it.\n"
+  boilerplate: "// Given an array of numbers, calculate the greatest contiguous sum of numbers in it.\n" +
+  "var sumArray = function (array) {\n  return sum;\n};"
 });
 sumArray.saveQ()
 .then(function(){

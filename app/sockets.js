@@ -34,7 +34,8 @@ module.exports.listen = function(server){
         }],
         'watchers': [],
         'activeSockets': 1,
-        'started': false
+        'started': false,
+        'winner': null
       };
       console.log("First Player Joined");
 
@@ -62,6 +63,7 @@ module.exports.listen = function(server){
 
         socket.emit('updated', thisGame.players[0].latestContent);
         socket.emit('gameReady');
+        thisGame.players[0].socket.emit('gameReady');
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
@@ -121,6 +123,8 @@ module.exports.listen = function(server){
           thisGame.started = true;
           thisGame.players[0].socket.emit('startGame', data);
           thisGame.players[1].socket.emit('startGame', data);
+          thisGame.players[0].isReady = false;
+          thisGame.players[1].isReady = false;
         });
       }
     });
@@ -185,6 +189,29 @@ module.exports.listen = function(server){
         delete activeSockets[socket.id];
       }
 
+    });
+
+    socket.on('startNewGame', function(data) {
+      var thisGame = games[data.gameID];
+      thisGame.started = false;
+      socket.emit('doOver');
+    });
+
+    socket.on('winner', function(data){
+      var thisGame = games[data.gameID];
+      if (thisGame.players[0].socketID === socket.id){
+        thisGame.winner = 0;
+        thisGame.players[1].socket.emit('loser');
+      } else {
+        thisGame.winner = 1;
+        thisGame.players[0].socket.emit('loser');
+      }
+    });
+
+    socket.on('gameOver', function(data){
+      var thisGame = games[data.gameID];
+      thisGame.players[1].socket.emit('show');
+      thisGame.players[0].socket.emit('show');
     });
 
   });

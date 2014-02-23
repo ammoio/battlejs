@@ -12,14 +12,20 @@
 </head>
 <body ng-app='app' ng-cloak>
 
-  <nav class="navbar navbar-inverse" role="navigation">
+  <nav class="navbar navbar-inverse top" role="navigation">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-01">
         <span class="sr-only">Toggle navigation</span>
       </button>
       <a class="navbar-brand" href="/">BattleJS</a>
-      <span id='link'></span>
+     
     </div>
+   <form role="search" class="navbar-form navbar-right">
+  <div class="form-group" id="link">
+    
+  </div>
+  
+</form>
     <div class="collapse navbar-collapse" id="navbar-collapse-01">
       <ul class="nav navbar-nav">           
 <!--         <li class="active"><a href="#fakelink">Products</a></li>
@@ -47,12 +53,15 @@
   <script src="/bower_components/angular-route/angular-route.js"></script>
   <script src="/bower_components/firebase/firebase.js"></script>
   <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="/bower_components/angular-timer/dist/angular-timer.js"></script>
   <script src="/scripts/app.js"></script>
+  <script src="/scripts/spin.js"></script>
   <script src="/scripts/controllers/main.js"></script>
   <script src="/scripts/controllers/game.js"></script>
   <script src="/scripts/controllers/watch.js"></script>
   <script src="/scripts/controllers/noGame.js"></script>
+  <script src="/scripts/services/services.js"></script>
 
 </body>
 </html>

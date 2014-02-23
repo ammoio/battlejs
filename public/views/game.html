@@ -3,35 +3,35 @@
 <audio id="shortBeep" src="/audio/short_beep.mp3" preload="auto" controls></audio>
 <audio id="longBeep" src="/audio/long_beep.mp3" preload="auto" controls></audio>
 
+<div class='topBar clearfix'>
+  <div class='timer clearfix'>
+    <span ng-show="status===0">Waiting for Player 2</span>
+    <span ng-show="status===1">Press Ready</span>
+    <span ng-show="status===2" class="count-down">{{ countDown }}</span>
+    <span ng-show="status===3">{{minutesString}} : {{secondsString}}</span>
+  </div>
 
-  
+  <div class='game-buttons clearfix'>
+    <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
+    <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
+    <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
 
-<div class='timer clearfix'>
-
-  <timer interval="1000" autostart='false' ng-show="status===2">{{minutes}} : {{seconds}}</timer>
-  <span ng-show="status===1" class="count-down">{{ countDown }}</span>
-  <span ng-show="status===0">Waiting for Player 2</span>
+  <!--   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
+    <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
+    <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button> -->
+    <button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
+    <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
+  </div>
 </div>
-
-<div class='game-buttons clearfix'>
-  <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
-  <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
-  <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
-
-<!--   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
-  <button class="btn btn-primary" ng-click='setMode("vim")'>Vim Mode</button>
-  <button class="btn btn-primary" ng-click='setMode("emacs")'>Emacs Mode</button> -->
-  <button class="btn btn-primary" ng-click='increaseFont()'>+ Font Size</button>
-  <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
-</div>
-
 <!-- <input type="radio" name="group1" value="Normal" onclick="editor.setKeyboardHandler('')" checked>Normal
 <input type="radio" name="group1" value="Vim" onclick="editor.setKeyboardHandler('ace/keyboard/vim')">Vim
 <input type="radio" name="group1" value="Emacs" onclick="editor.setKeyboardHandler('ace/keyboard/emacs')">Emacs
  -->
 <div class='clearfix IDE'>
   <div id="player" class="full-row">// Write your Code here!</div> 
-  <div id="opponent" class="full-row">// Write your Code here!</div>
+  <div id="test" class="clearfix">
+    <div id="opponent" class="full-row">// Write your Code here!</div>
+  </div>
 </div>
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
@@ -40,3 +40,42 @@
   </div>
 </nav>
 
+
+
+
+
+<div class="modal fade" id="winnerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Winner</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="loserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Loser</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
