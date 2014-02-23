@@ -4,6 +4,7 @@
 <div class="text-center">
 
 <div class='timer clearfix'>
+
   <timer interval="1000" autostart='false' ng-show="status===2">{{minutes}} : {{seconds}}</timer>
   <p ng-show="status===1">{{ countDown }}</p>
   <p ng-show="status===0">Waiting for Player 2</p>
@@ -35,7 +36,7 @@
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
   <div class="foot">
-    <span class="white">Console:</span>
+    <span class="white console">Console:</span>
   </div>
 </nav>
 
