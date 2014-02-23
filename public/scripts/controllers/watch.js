@@ -61,7 +61,7 @@ angular.module('app')
       $scope.chatRef = new Firebase('https://battlejs.firebaseio.com/chat/' + $scope.gameID);
 
       $scope.sendMessage = function(){
-        if ($scope.name && $scope.text){
+        if ($scope.text){
           $scope.chatRef.push({name: $sanitize($scope.name), text: $sanitize($scope.text)});
           $scope.text = '';
         };
