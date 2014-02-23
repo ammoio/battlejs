@@ -6,7 +6,6 @@
 <div class='topBar clearfix'>
 
   <div class='game-buttons clearfix'>
-    <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
     <button class="btn btn-primary" ng-click='runCode()' ng-disabled='!gameStarted'>Test your Code</button>
     <button class="btn btn-primary" ng-click='submitCode()' ng-disabled='!gameStarted'>Submit Code</button>
   <!--   <button class="btn btn-primary" ng-click='setMode("windows")'>Normal Mode</button>
@@ -25,7 +24,6 @@
   <div class='timer clearfix'>
     <span ng-show="status===0">Waiting for Player 2</span>
     <span ng-show="status===1">Press Ready</span>
-    <span ng-show="status===2" class="count-down">{{ countDown }}</span>
     <span ng-show="status===3">{{minutesString}} : {{secondsString}}</span>
   </div>
 
@@ -88,3 +86,26 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="vsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Epic Battle Between:</h4>
+      </div>
+      <div class="modal-body vsModalBody">
+        <div ng-show="status === 1">
+          <span>{{ playerName }}</span>
+          <span class="vs">VS</span>
+          <span>{{ opponentName }}</span>
+        </div>
+        <span ng-show="status===2" class="count-down">{{ countDown }}</span>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
