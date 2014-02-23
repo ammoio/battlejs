@@ -4,7 +4,7 @@ angular.module('app')
     function($scope, $location, $rootScope, $timeout, $sanitize) {
 
       $scope.welcome = "Battle.js Viewer";
-      
+      $scope.gameLocation = 'http://' + $location.host() + $location.path();
       $scope.gameID = $location.path();
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
 
