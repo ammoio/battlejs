@@ -15,7 +15,9 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-      $scope.weapons = ['VIM', 'EMACS'];
+      $scope.availableWeapons = ['VIM', 'EMACS'];
+      $scope.weapons = [];
+
       
       if (!$rootScope.playerOne){
         $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
@@ -73,6 +75,7 @@ angular.module('app')
             $timeout(countDown, 1000);
             shortBeep.play();
           } else {
+            ////start of the game!//////
             longBeep.play();
             $scope.status = 3;
             $timeout(countUp, 1000);
@@ -90,6 +93,11 @@ angular.module('app')
           if ($scope.minutesString < 10) {
             $scope.minutesString = "0" + $scope.minutesString;
           }
+          //give random weapon
+          if ($scope.timer % 45 === 0) {
+            $scope.giveRandomWeapon();
+          }
+
           $timeout(countUp, 1000);
         };
 
@@ -128,9 +136,16 @@ angular.module('app')
         $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID, functionName: $scope.functionName });
       };
 
+
+      /************ weapons **************/
       $scope.attack = function(index) {
         var weapon = $scope.weapons.splice(index, 1);
         $scope[weapon]();
+      };
+
+      $scope.giveRandomWeapon = function() {
+        var weapon = $scope.availableWeapons[~~(Math.random() * $scope.availableWeapons.length)];
+        $scope.weapons.push(weapon);
       };
 
       $scope.VIM = function() {
