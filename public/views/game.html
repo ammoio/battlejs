@@ -8,7 +8,7 @@
     <span ng-show="status===0">Waiting for Player 2</span>
     <span ng-show="status===1">Press Ready</span>
     <span ng-show="status===2" class="count-down">{{ countDown }}</span>
-    <timer interval="1000" autostart='false' ng-show="status===3">{{minutes}} : {{seconds}}</timer>
+    <span ng-show="status===3">{{minutesString}} : {{secondsString}}</span>
   </div>
 
   <div class='game-buttons clearfix'>

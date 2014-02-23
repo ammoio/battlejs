@@ -10,6 +10,9 @@ angular.module('app')
       $scope.gameID = $scope.gameID.slice($scope.gameID.lastIndexOf('/') + 1);
       $scope.status = 0; //0 is waiting for player 2, 1 is waiting for ready, 2 is countdown, 3 is game in progress
       $scope.countDown = 5;
+      $scope.timer = 0;
+      $scope.minutesString = "00";
+      $scope.secondsString = "00";
 
       
       if (!$rootScope.playerOne){
@@ -63,13 +66,25 @@ angular.module('app')
           } else {
             longBeep.play();
             $scope.status = 3;
-            $scope.$broadcast('timer-start');
-            $scope.timerRunning = true; 
-            player.setValue(data.boilerplate, 1);
+            $timeout(countUp, 1000);
+            player.setValue(data.boilerplate);
           }
         };
-        $timeout(countDown, 1000);
 
+        var countUp = function() {
+          $scope.timer++;
+          $scope.minutesString = ~~($scope.timer / 60);
+          $scope.secondsString = $scope.timer % 60;
+          if ($scope.secondsString < 10) { //format seconds
+            $scope.secondsString = "0" + $scope.secondsString;
+          }
+          if ($scope.minutesString < 10) {
+            $scope.minutesString = "0" + $scope.minutesString;
+          }
+          $timeout(countUp, 1000);
+        };
+
+        $timeout(countDown, 1000);
         $scope.functionName = data.functionName;
       });
 
