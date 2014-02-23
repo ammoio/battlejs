@@ -15,7 +15,7 @@ angular.module('app')
       $scope.minutesString = "00";
       $scope.secondsString = "00";
       SpinService.spin();
-
+      $scope.weapons = ['VIM', 'EMACS'];
       
       if (!$rootScope.playerOne){
         $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
@@ -97,6 +97,18 @@ angular.module('app')
         $scope.functionName = data.functionName;
       });
 
+      $rootScope.socket.on('VIMed', function() {
+        $timeout(function() {
+           player.setKeyboardHandler(''); 
+        }, 30000);
+      });
+
+      $rootScope.socket.on('EMACSed', function() {
+        player.setKeyboardHandler('ace/keyboard/emacs'); 
+        $timeout(function() {
+           player.setKeyboardHandler(''); 
+        }, 30000);
+      });
       $scope.game = "Battle.js Game";
 
       $scope.startGame = function(){
@@ -114,6 +126,19 @@ angular.module('app')
 
       $scope.submitCode = function() {
         $rootScope.socket.emit('submit', { data: player.getValue(), gameID: $scope.gameID, functionName: $scope.functionName });
+      };
+
+      $scope.attack = function(index) {
+        var weapon = $scope.weapons.splice(index, 1);
+        $scope[weapon]();
+      };
+
+      $scope.VIM = function() {
+        $rootScope.socket.emit('VIM', {gameID: $scope.gameID});
+      };
+
+      $scope.EMACS = function() {
+        $rootScope.socket.emit('EMACS', {gameID: $scope.gameID});
       };
 
       $scope.increaseFont = function() {
