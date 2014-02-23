@@ -173,12 +173,22 @@ module.exports.listen = function(server){
       });
     });
 
+    /********** attacks ************/
     socket.on('VIM', function(data){
       var thisGame = games[data.gameID];
       if (thisGame.players[0] && thisGame.players[0].socketID === socket.id) {
         thisGame.players[1].socket.emit('VIMed');
       } else if (thisGame.players[1] && thisGame.players[1].socketID === socket.id) {
         thisGame.players[0].socket.emit('VIMed');
+      }
+    });
+
+    socket.on('EMACS', function(data){
+      var thisGame = games[data.gameID];
+      if (thisGame.players[0] && thisGame.players[0].socketID === socket.id) {
+        thisGame.players[1].socket.emit('EMACSed');
+      } else if (thisGame.players[1] && thisGame.players[1].socketID === socket.id) {
+        thisGame.players[0].socket.emit('EMACSed');
       }
     });
 

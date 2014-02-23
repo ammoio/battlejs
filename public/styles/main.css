@@ -136,6 +136,10 @@ audio {
   margin-left: 2%;
 }
 
+.weapon {
+  margin-left: 2px;
+}
+
 /******* watch view ********/
 .topBar {
   margin: 2%;

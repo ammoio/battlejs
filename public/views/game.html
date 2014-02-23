@@ -16,7 +16,7 @@
     <button class="btn btn-primary" ng-click='decreaseFont()'>- Font Size</button>
   </div>
 
-  <div class='weapons'>
+  <div class='weapons' ng-show='status===3'>
     <span>Weapons: </span>
     <span class='weapon btn btn-danger' ng-repeat="weapon in weapons" ng-click="attack($index)">{{ weapon }}</span>
     <span ng-show="weapons.length === 0">None</span>
