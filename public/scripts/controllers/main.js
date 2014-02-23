@@ -3,6 +3,8 @@ angular.module('app')
   .controller('MainController',
     function($scope, $location, $rootScope, $timeout) {
 
+      $scope.wantsNewGame = true;
+
       $scope.welcome = "BattleJS";
 
 
