@@ -25,13 +25,13 @@ angular.module('app')
 
     this.spin = function(){
       console.log("Spinning");
-      var target = document.getElementById('test');
-      spinner.spin(target);
+      var target = document.getElementsByClassName('player2');
+      spinner.spin(target[0]);
     };
 
     this.stop = function(){
       console.log("Stopped Spinning");
-      var target = document.getElementById('test');
-      spinner.stop(target);
+      var target = document.getElementsByClassName('player2');
+      spinner.stop(target[0]);
     };
   });
