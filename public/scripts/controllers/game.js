@@ -48,14 +48,19 @@ angular.module('app')
         console.log('starting: ', data);
         $scope.status = 1; //countdown starts
         $scope.countDown = 6;
+        var shortBeep = document.getElementById('shortBeep');
+        var longBeep = document.getElementById('longBeep');
         var countDown = function() {
           $scope.countDown--;
           if ($scope.countDown > 0) {
             $timeout(countDown, 1000);
+            shortBeep.play();
           } else {
+            longBeep.play();
             $scope.status = 2;
             $scope.$broadcast('timer-start');
             $scope.timerRunning = true; 
+            player.setValue(data.boilerplate);
           }
         };
         $timeout(countDown, 1000);
