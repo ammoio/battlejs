@@ -137,3 +137,7 @@ audio {
   text-align: center;
   color:white;
 }
+
+.no-padding{
+  padding: 6px;
+}
