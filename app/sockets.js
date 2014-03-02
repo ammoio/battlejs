@@ -59,6 +59,12 @@ module.exports.listen = function(server){
       socket.emit('gameID', {'gameID': gameID, 'name': 'JS Warrior'});
     });
 
+
+    /*get available games*/
+    socket.on('getAvailableGames', function() {
+      socket.emit('receivedAvailableGames', ['game1', 'game2', 'game3']);
+    });
+
     socket.on('playerName', function(data) {
       var thisGame = games[data.gameID];
       if (thisGame && thisGame.players[0].socketID === socket.id && data.playerName && data.playerName.length > 0) {

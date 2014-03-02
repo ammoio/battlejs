@@ -11,13 +11,19 @@
   </div>
 </div> -->
 
+<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+  <div class="container">
+<div class="row">
+
 <div class='new-game-div'>
   <a class="btn btn-primary" ng-click="new(); newGame();">New Game</a>
 </div>
 
-<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-  <div class="container">
-<div class="row">
+<div ng-controller="AvailableGamesController" class="available-games-div">
+  <div ng-repeat="game in availableGames">
+    {{ game }};
+  </div>
+</div>
 
 
   <div class='col-md-6'>

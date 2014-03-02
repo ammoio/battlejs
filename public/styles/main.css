@@ -241,8 +241,19 @@ audio {
 }
 
 .new-game-div a {
-  font-size: 3em;
-  margin: 5% auto;
+  font-size: 2em;
+  margin: 2% auto;
   border-radius: 18px;
   font-family: 'Press Start 2P', sans-serif;
+}
+
+/*availableGamesController*/
+.available-games-div {
+  height: 200px;
+  text-align: center;
+  border: 2px black solid;
+}
+
+.available-game {
+
 }
