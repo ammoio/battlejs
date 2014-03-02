@@ -235,3 +235,14 @@ audio {
   -moz-transition: all .5s ease-in-out;
   -webkit-transition: all .5s ease-in-out;
 }
+
+.new-game-div{
+  text-align: center;
+}
+
+.new-game-div a {
+  font-size: 3em;
+  margin: 5% auto;
+  border-radius: 18px;
+  font-family: 'Press Start 2P', sans-serif;
+}

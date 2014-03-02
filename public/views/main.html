@@ -1,6 +1,6 @@
 <h1>Welcome to {{ welcome }}</h1>
 
-<div class='checker'>
+<!-- <div class='checker'>
   <div class="btn-group" data-toggle="buttons">
     <label class="btn btn-primary" ng-click='new()'>
       <input type="radio" name="options" checked > New Game
@@ -9,12 +9,11 @@
       <input type="radio" name="options"> Join Game
     </label>
   </div>
-</div>
+</div> -->
 
-<div class="new-game">
-  <a class="btn btn-hg btn-primary" ng-click='newGame()'>Start!</a>
+<div class='new-game-div'>
+  <a class="btn btn-primary" ng-click="new(); newGame();">New Game</a>
 </div>
-
 
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
   <div class="container">
