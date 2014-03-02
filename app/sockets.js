@@ -95,7 +95,7 @@ module.exports.listen = function(server){
             playerName: thisGame.players[0].playerName,
             opponentName: thisGame.players[1].playerName
           });
-        }, 5000);
+        }, 3000);
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
