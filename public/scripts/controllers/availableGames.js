@@ -18,5 +18,5 @@ angular.module('app')
     /* code to run immediately*/
     $interval(function() {
       $scope.getNewGames();
-    }, 5000);
+    }, 3000);
   });

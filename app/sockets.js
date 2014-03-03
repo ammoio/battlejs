@@ -77,6 +77,9 @@ module.exports.listen = function(server){
           'playerName': 'JS Ninja'
         });
 
+        clients[socket.id].gameID = data.gameID;
+        clients[socket.id].isPlaying = true;
+
         //adds to active sockets
         activeSockets[socket.id] = data.gameID;
         thisGame['activeSockets'] += 1;
@@ -92,7 +95,7 @@ module.exports.listen = function(server){
             playerName: thisGame.players[0].playerName,
             opponentName: thisGame.players[1].playerName
           });
-        }, 3000);
+        }, 0);
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
@@ -229,20 +232,24 @@ module.exports.listen = function(server){
         }
 
         if (game.watchers.length + game.players.length === 0) {
-          games.splice(client.gameID, 1); //delete game
+          delete games[client.gameID]; //delete game
+          //remove chat data of this game
+          var chatRef = new Firebase('https://battlejs.firebaseio.com/chat/' + client.gameID);
+          chatRef.remove();
         }
       }
+      delete clients[socket.id];
 
-      //removes from to active sockets
-      if (games[activeSockets[socket.id]]){
-        games[activeSockets[socket.id]]['activeSockets'] -= 1;
-        if (games[activeSockets[socket.id]]['activeSockets'] === 0){
-          var chatRef = new Firebase('https://battlejs.firebaseio.com/chat/');
-          chatRef.child('' + activeSockets[socket.id]).set(null);
-          delete games[activeSockets[socket.id]];
-        }
-        delete activeSockets[socket.id];
-      }
+      // //removes from to active sockets
+      // if (games[activeSockets[socket.id]]){
+      //   games[activeSockets[socket.id]]['activeSockets'] -= 1;
+      //   if (games[activeSockets[socket.id]]['activeSockets'] === 0){
+      //     var chatRef = new Firebase('https://battlejs.firebaseio.com/chat/');
+      //     chatRef.child('' + activeSockets[socket.id]).set(null);
+      //     delete games[activeSockets[socket.id]];
+      //   }
+      //   delete activeSockets[socket.id];
+      // }
 
     });
 

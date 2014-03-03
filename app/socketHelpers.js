@@ -30,6 +30,7 @@ module.exports = {
   }, 
 
   deletePlayerFromGame: function(socketID, players) {
+    console.log('deleting player', players);
     if (players[0] && players[0].socketID === socketID) { //was player 1
       players.shift();
     } else if (players[1] && players[1].socketID === socketID) { //was player 2
