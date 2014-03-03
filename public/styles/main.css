@@ -57,10 +57,6 @@ audio {
   font-family: 'Press Start 2P', sans-serif;
 }
 
-.new-game a:hover {
-  background-color: #e74c3c;
-}
-
 .checker {
   margin: auto;
   text-align: center;
@@ -240,6 +236,10 @@ audio {
   text-align: center;
 }
 
+.new-game-div a:hover {
+  background-color: #e74c3c;
+}
+
 .new-game-div a {
   font-size: 2em;
   margin: 2% auto;
@@ -252,8 +252,40 @@ audio {
   height: 200px;
   text-align: center;
   border: 2px black solid;
+  margin:auto;
+  width:50%;
+  border-radius: 20px;
+  margin-bottom: 50px;
 }
 
-.available-game {
+.available-game-div {
+  text-align: left;
+  margin: auto 1%;
+  padding: auto 2%;
+  padding-bottom: 3%;
+  border-bottom: 1px black dotted;
+}
 
+.available-game-div {
+  padding-top: 10px;
+}
+
+.players-count-span, .watchers-count-span {
+  margin: 3%;
+}
+
+.available-game-div a, .full-span {
+  text-align: center;
+  margin:auto 1%;
+  float: right;
+  padding: 3px 5px;
+  border: 1px green dotted;
+  border-radius: 5px;
+  width: 10%;
+  background-color: #1abc9c;
+  color: white;
+}
+
+.full-span {
+  background-color: #e74c3c;
 }
