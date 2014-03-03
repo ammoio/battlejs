@@ -27,5 +27,24 @@ module.exports = {
       'winner': null
     }; 
     return gameID;
+  }, 
+
+  deletePlayerFromGame: function(socketID, players) {
+    if (players[0] && players[0].socketID === socketID) { //was player 1
+      players.shift();
+    } else if (players[1] && players[1].socketID === socketID) { //was player 2
+      players.pop();
+    }
+  },
+
+  deleteWatcherFromGame: function(socketID, watchers) {
+    console.log('in delete watcher', watchers);
+    for (var i = 0; i < watchers.length; i++) {
+      if (watchers[i].socketID === socketID) {
+        watchers.splice(i, 1);
+        return;
+      }
+    }
   }
+
 };

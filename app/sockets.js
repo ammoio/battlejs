@@ -18,8 +18,8 @@ module.exports.listen = function(server){
     //save the session id
     clients[socket.id] = {
       socket: socket,
-      inGame: null,
-      playing: false
+      gameID: null,
+      isPlaying: false
     };
 
     //when newGame is clicked
@@ -35,8 +35,8 @@ module.exports.listen = function(server){
       var gameID = SocketHelpers.makeNewGame(games, socket);
 
       //add player to game
-      clients[socket.id].inGame = gameID;
-      clients[socket.id].playing = true;
+      clients[socket.id].gameID = gameID;
+      clients[socket.id].isPlaying = true;
 
       //add to active sockets
       activeSockets[socket.id] = gameID;
@@ -104,6 +104,7 @@ module.exports.listen = function(server){
 
     socket.on('addMeAsWatcher', function(data) {
       var thisGame = games[data.gameID];
+      clients[socket.id].gameID = data.gameID; // set this player as a watcher
       if (thisGame && thisGame.players[0]) {
         thisGame.watchers.push({
           'socketID': socket.id,
@@ -217,7 +218,21 @@ module.exports.listen = function(server){
       }
     });
 
-    socket.on('disconnect', function () {    
+    socket.on('disconnect', function () {
+      var client = clients[socket.id];
+      if (client && client.gameID) { //was in a game when disconnected
+        var game = games[client.gameID];
+        if (game && client.isPlaying) {
+          SocketHelpers.deletePlayerFromGame(socket.id, game.players); //delete player from game
+        } else if (game) {
+          SocketHelpers.deleteWatcherFromGame(socket.id, game.watchers); //delete watcher from game
+        }
+
+        if (game.watchers.length + game.players.length === 0) {
+          games.splice(client.gameID, 1); //delete game
+        }
+      }
+
       //removes from to active sockets
       if (games[activeSockets[socket.id]]){
         games[activeSockets[socket.id]]['activeSockets'] -= 1;
