@@ -52,8 +52,7 @@ module.exports.listen = function(server){
 
     /*get available games*/
     socket.on('getAvailableGames', function() {
-      var availableGames = Object.keys(games); //get the available games
-
+      var availableGames = SocketHelpers.getAvailableGames(games); //get the available games
       socket.emit('receivedAvailableGames', availableGames); //send back the available games
     });
 

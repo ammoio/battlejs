@@ -20,11 +20,14 @@
 </div>
 
 <div ng-controller="AvailableGamesController" class="available-games-div">
-  <div ng-repeat="gameID in availableGames track by $index">
+  <div ng-repeat="game in availableGames track by $index">
     <span>Game #{{ $index }}</span>
-    <span class="gameID">Game ID: {{ gameID }}</span>
-    <a href="http://localhost:3000/game/{{gameID}}">Join</a>
-    <a href="http://localhost:3000/watch/{{gameID}}">Watch</a>
+    <span class="gameID">Game ID: {{ game[0] }}</span>
+    <span>{{game[1]}} number of players</span>
+    <span>{{game[2]}} number of watchers</span>
+    <a href="http://localhost:3000/game/{{game[0]}}" ng-show="game[1] < 2">Join</a>
+    <span ng-hide="game[1] < 2">Full</span>
+    <a href="http://localhost:3000/watch/{{game[0]}}">Watch</a>
   </div>
 </div>
 

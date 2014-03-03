@@ -1,6 +1,11 @@
 var crypto = require('crypto');
-
+var _ = require('underscore');
 module.exports = {
+  getAvailableGames: function(games) {
+    return _.map(games, function(game, key) {
+      return [key, game.players.length, game.watchers.length];
+    });
+  },
   
   makeNewGame: function(games, socket) {     
     //generate new game ID
