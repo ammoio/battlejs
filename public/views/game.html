@@ -65,7 +65,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="mainPage()">Home</button>
-        <button type="button" class="btn btn-primary" ng-click="startNewGame()">Play Again!</button>
+        <button type="button" class="btn btn-primary" ng-click="startNewGame()" data-dismiss="modal">Play Again!</button>
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="mainPage()">Home</button>
-        <button type="button" class="btn btn-primary" ng-click="startNewGame()">Play Again!</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="startNewGame()">Play Again!</button>
       </div>
     </div>
   </div>
@@ -105,7 +105,7 @@
 
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
+        <button class="btn btn-primary" ng-click='ready()' ng-disabled='gameStarted'>Ready!</button>
       </div>
     </div>
   </div>

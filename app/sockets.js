@@ -32,7 +32,7 @@ module.exports.listen = function(server){
       // }
       
       //make new game
-      var gameID = SocketHelpers.makeNewGame(games, socket);
+      var gameID = SocketHelpers.makeNewGame(games, socket, data.gameName);
 
       //add player to game
       clients[socket.id].gameID = gameID;
@@ -85,17 +85,15 @@ module.exports.listen = function(server){
         thisGame['activeSockets'] += 1;
 
 
-        socket.emit('updated', thisGame.players[0].latestContent);
-        setTimeout(function() {
-          socket.emit('gameReady', {
-            playerName: thisGame.players[1].playerName,
-            opponentName: thisGame.players[0].playerName
-          });
-          thisGame.players[0].socket.emit('gameReady', {
-            playerName: thisGame.players[0].playerName,
-            opponentName: thisGame.players[1].playerName
-          });
-        }, 0);
+        // socket.emit('updated', thisGame.players[0].latestContent);
+        socket.emit('gameReady', {
+          playerName: thisGame.players[1].playerName,
+          opponentName: thisGame.players[0].playerName
+        });
+        thisGame.players[0].socket.emit('gameReady', {
+          playerName: thisGame.players[0].playerName,
+          opponentName: thisGame.players[1].playerName
+        });
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
@@ -256,6 +254,11 @@ module.exports.listen = function(server){
     socket.on('startNewGame', function(data) {
       var thisGame = games[data.gameID];
       thisGame.started = false;
+      if (thisGame.players[0].socketID === socket.id) {
+        thisGame.players[0].isReady = false;
+      } else {
+        thisGame.players[1].isReady = false;
+      }
     });
 
     socket.on('winner', function(data){

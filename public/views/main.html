@@ -16,13 +16,13 @@
 <div class="row">
 
 <div class='new-game-div'>
-  <a class="btn btn-primary" ng-click="new(); newGame();">New Game</a>
+  <a class="btn btn-primary" ng-click="newGame();">New Game</a>
 </div>
 
 <div ng-controller="AvailableGamesController" class="available-games-div">
   <div ng-repeat="game in availableGames track by $index">
     <span>Game #{{ $index }}</span>
-    <span class="gameID">Game ID: {{ game[0] }}</span>
+    <span class="gameID">Game Name: {{ game[3] }}</span>
     <span>{{game[1]}} number of players</span>
     <span>{{game[2]}} number of watchers</span>
     <a href="http://localhost:3000/game/{{game[0]}}" ng-show="game[1] < 2">Join</a>

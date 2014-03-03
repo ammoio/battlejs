@@ -25,6 +25,7 @@ angular.module('app')
 
       var promptName = $timeout(function() {
         $rootScope.playerName = window.prompt("State your name!");
+        $('#vsModal').modal();
         $rootScope.socket.emit('playerName', {
           playerName: $scope.playerName,
           gameID: $scope.gameID
@@ -36,8 +37,9 @@ angular.module('app')
         $rootScope.socket.emit('joinGame', {'gameID': $scope.gameID});
       }
 
+
       $rootScope.socket.on('gameReady', function(data){
-        $rootScope.playerTwo = true;
+        // $rootScope.playerTwo = true;
         $timeout(function(){
           $scope.status = 1;
           $rootScope.playerName = data.playerName;
@@ -198,7 +200,7 @@ angular.module('app')
 
       $scope.game = "Battle.js Game";
 
-      $scope.startGame = function(){
+      $scope.ready = function() {
         $rootScope.socket.emit('ready', {'gameID': $scope.gameID});
         $scope.gameStarted = true;
       };
@@ -285,14 +287,18 @@ angular.module('app')
 
 
      $scope.startNewGame = function(){
+       player.setTheme("ace/theme/twilight");
+       opponent.setTheme("ace/theme/twilight");
+       $scope.timer = 0;
        $rootScope.socket.emit('startNewGame', { data: player.getValue(), gameID: $scope.gameID });
        $scope.gameStarted = false;
+       $('#vsModal').modal();
        player.setValue('// Write your Code here!', 0);
-       if ($scope.loser){
-        $scope.showLoser();
-       } else {
-        $scope.showWinner();
-       }
+       // if ($scope.loser){
+       //  $scope.showLoser();
+       // } else {
+       //  $scope.showWinner();
+       // }
      };
 
      $rootScope.socket.on('loser', function(){

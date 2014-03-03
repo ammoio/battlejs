@@ -3,16 +3,17 @@ var _ = require('underscore');
 module.exports = {
   getAvailableGames: function(games) {
     return _.map(games, function(game, key) {
-      return [key, game.players.length, game.watchers.length];
+      return [key, game.players.length, game.watchers.length, game.gameName];
     });
   },
   
-  makeNewGame: function(games, socket) {     
+  makeNewGame: function(games, socket, gameName) {     
     //generate new game ID
     var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
 
     //store it into games
     games[gameID] = {
+      'gameName': gameName,
       'players': [{
         'socketID': socket.id,
         'socket': socket,
