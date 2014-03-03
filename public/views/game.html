@@ -17,7 +17,7 @@
 
   <div class='weapons' >
     <span>Weapons: </span>
-    <span class='weapon btn btn-danger' ng-repeat="weapon in weapons" ng-click="attack($index)">{{ weapon }}</span>
+    <span class='weapon btn btn-danger' ng-repeat="weapon in weapons track by $index" ng-click="attack($index)">{{ weapon }}</span>
     <span ng-show="weapons.length === 0">None</span>
   </div>
 
