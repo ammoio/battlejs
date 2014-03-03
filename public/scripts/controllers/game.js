@@ -24,6 +24,7 @@ angular.module('app')
       $scope.gameInProgress = false;
 
       $scope.reset = function() {
+        $scope.status = 1;
         player.setReadOnly(false); 
         opponent.setReadOnly(false); 
         $scope.gameInProgress = false;
@@ -41,7 +42,7 @@ angular.module('app')
       };
 
       var promptName = $timeout(function() {
-        $rootScope.playerName = window.prompt("State your name!");
+        $rootScope.playerName = "code warrior";//= window.prompt("State your name!");
         $('#vsModal').modal();
         $rootScope.socket.emit('playerName', {
           playerName: $scope.playerName,
@@ -208,7 +209,7 @@ angular.module('app')
           $scope.minutesString = "0" + $scope.minutesString;
         }
         //give random weapon
-        if ($scope.timing && $scope.timer % 10 === 0) {
+        if ($scope.timing && $scope.timer % 30 === 0) {
           $scope.giveRandomWeapon();
         }
         if ($scope.gameInProgress) {

@@ -19,4 +19,5 @@ angular.module('app')
     $interval(function() {
       $scope.getNewGames();
     }, 3000);
+    $scope.getNewGames();
   });
