@@ -1,55 +1,45 @@
-var crypto = require('crypto');
 var Sandbox = require('sandbox');
 var Models = require('../app/models');
 var testHelpers = require('./testHelpers');
 var Firebase = require('firebase');
+var SocketHelpers = require('./socketHelpers');
 
 //socket io logic
 
 
 module.exports.listen = function(server){
   var io = require('socket.io').listen(server);
-  var clients = [];
+  var clients = {};
   var games = {};
   var activeSockets = {};
   var gameWaiting = null;
 
   io.sockets.on('connection', function (socket) {
     //save the session id
-    clients.push(socket.id, socket);
+    clients[socket.id] = {
+      socket: socket,
+      inGame: null,
+      playing: false
+    };
 
     //when newGame is clicked
     socket.on('newGame', function(data) {
 
-      if (!data.newGame && gameWaiting){
-        socket.emit('gameID', {'gameID': gameWaiting, 'second': true});
-        gameWaiting = null;
-        return;
-      }
+      // if (!data.newGame && gameWaiting){
+      //   socket.emit('gameID', {'gameID': gameWaiting, 'second': true});
+      //   gameWaiting = null;
+      //   return;
+      // }
       
-      //generate new game id
-      var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
+      //make new game
+      var gameID = SocketHelpers.makeNewGame(games, socket);
 
-      //store it into games
-      games[gameID] = {
-        'players': [{
-          'socketID': socket.id,
-          'socket': socket,
-          'playerNumber': 1,
-          'latestContent': "",
-          'isReady': false,
-          'playerName': 'JS Warrior'
-        }],
-        'watchers': [],
-        'activeSockets': 1,
-        'started': false,
-        'winner': null
-      };
-      console.log("First Player Joined");
+      //add player to game
+      clients[socket.id].inGame = gameID;
+      clients[socket.id].playing = true;
 
       //add to active sockets
       activeSockets[socket.id] = gameID;
-
 
       if (!data.newGame){
         gameWaiting = gameID;
@@ -62,7 +52,9 @@ module.exports.listen = function(server){
 
     /*get available games*/
     socket.on('getAvailableGames', function() {
-      socket.emit('receivedAvailableGames', ['game1', 'game2', 'game3']);
+      var availableGames = Object.keys(games); //get the available games
+
+      socket.emit('receivedAvailableGames', availableGames); //send back the available games
     });
 
     socket.on('playerName', function(data) {
