@@ -24,9 +24,9 @@
     <span class="game-name-span">Game Name: {{ game[3] }}</span>
     <span class="players-count-span">{{game[1]}} warriors</span>
     <span class="watchers-count-span">{{game[2]}} spectators</span>
-    <a class="join-a" href="http://localhost:3000/game/{{game[0]}}" ng-show="game[1] < 2">Join</a>
+    <a class="join-a" href="http://battlejs.org/game/{{game[0]}}" ng-show="game[1] < 2">Join</a>
     <span class="full-span" ng-hide="game[1] < 2">Full</span>
-    <a class="watch-a" href="http://localhost:3000/watch/{{game[0]}}">Watch</a>
+    <a class="watch-a" href="http://battlejs.org/watch/{{game[0]}}">Watch</a>
   </div>
 </div>
 
