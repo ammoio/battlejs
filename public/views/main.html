@@ -1,6 +1,6 @@
 <h1>Welcome to {{ welcome }}</h1>
 
-<div class='checker'>
+<!-- <div class='checker'>
   <div class="btn-group" data-toggle="buttons">
     <label class="btn btn-primary" ng-click='new()'>
       <input type="radio" name="options" checked > New Game
@@ -9,16 +9,26 @@
       <input type="radio" name="options"> Join Game
     </label>
   </div>
-</div>
-
-<div class="new-game">
-  <a class="btn btn-hg btn-primary" ng-click='newGame()'>Start!</a>
-</div>
-
+</div> -->
 
 <nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
   <div class="container">
 <div class="row">
+
+<div class='new-game-div'>
+  <a class="btn btn-primary" ng-click="newGame();">New Game</a>
+</div>
+
+<div ng-controller="AvailableGamesController" class="available-games-div">
+  <div class="available-game-div" ng-repeat="game in availableGames track by $index">
+    <span class="game-name-span">Game Name: {{ game[3] }}</span>
+    <span class="players-count-span">{{game[1]}} warriors</span>
+    <span class="watchers-count-span">{{game[2]}} spectators</span>
+    <a class="join-a" href="http://localhost:3000/game/{{game[0]}}" ng-show="game[1] < 2">Join</a>
+    <span class="full-span" ng-hide="game[1] < 2">Full</span>
+    <a class="watch-a" href="http://localhost:3000/watch/{{game[0]}}">Watch</a>
+  </div>
+</div>
 
 
   <div class='col-md-6'>

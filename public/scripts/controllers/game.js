@@ -20,11 +20,30 @@ angular.module('app')
       $scope.possibleWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF'];
       $scope.availableWeapons = ['VIM', 'EMACS', 'FREEZE', 'HIDE_SELF']; //copy of possibleWeapons that changes
       $scope.showOpponent = true;
-
       $scope.weapons = [];
+      $scope.gameInProgress = false;
+
+      $scope.reset = function() {
+        $scope.status = 1;
+        player.setReadOnly(false); 
+        opponent.setReadOnly(false); 
+        $scope.gameInProgress = false;
+        $scope.timing = false;
+        $scope.complete = false;
+        $scope.loser = false;
+        $scope.opponentComplete = false; 
+        $scope.countDown = 5;
+        $scope.timer = 0;
+        $scope.weapons = [];
+        $scope.gameStarted = false;
+        player.setTheme("ace/theme/twilight");
+        opponent.setTheme("ace/theme/twilight");
+        $timeout.cancel($scope.countUpTimer); //cancel original timer
+      };
 
       var promptName = $timeout(function() {
-        $rootScope.playerName = window.prompt("State your name!");
+        $rootScope.playerName = "code warrior";//= window.prompt("State your name!");
+        $('#vsModal').modal();
         $rootScope.socket.emit('playerName', {
           playerName: $scope.playerName,
           gameID: $scope.gameID
@@ -37,7 +56,7 @@ angular.module('app')
       }
 
       $rootScope.socket.on('gameReady', function(data){
-        $rootScope.playerTwo = true;
+        // $rootScope.playerTwo = true;
         $timeout(function(){
           $scope.status = 1;
           $rootScope.playerName = data.playerName;
@@ -104,7 +123,7 @@ angular.module('app')
       $rootScope.socket.on('startGame', function(data) {
         console.log('starting: ', data);
         $scope.status = 2; //countdown starts
-        $scope.countDown = 6;
+        $scope.countDown = 5;
         var shortBeep = document.getElementById('shortBeep');
         var longBeep = document.getElementById('longBeep');
 
@@ -171,6 +190,7 @@ angular.module('app')
           longBeep.play();
           $scope.status = 3;
           $scope.giveRandomWeapon();
+          $scope.gameInProgress = true;
           $timeout(countUp, 1000);
           player.setValue(data.boilerplate, 1);
         }
@@ -189,16 +209,17 @@ angular.module('app')
           $scope.minutesString = "0" + $scope.minutesString;
         }
         //give random weapon
-        if ($scope.timing && $scope.timer % 10 === 0) {
-          console.log('giving in countUp', $scope.timer);
+        if ($scope.timing && $scope.timer % 30 === 0) {
           $scope.giveRandomWeapon();
         }
-        $timeout(countUp, 1000);
+        if ($scope.gameInProgress) {
+          $timeout(countUp, 1000);
+        }
       };
 
       $scope.game = "Battle.js Game";
 
-      $scope.startGame = function(){
+      $scope.ready = function() {
         $rootScope.socket.emit('ready', {'gameID': $scope.gameID});
         $scope.gameStarted = true;
       };
@@ -285,14 +306,15 @@ angular.module('app')
 
 
      $scope.startNewGame = function(){
+       $scope.reset();
        $rootScope.socket.emit('startNewGame', { data: player.getValue(), gameID: $scope.gameID });
-       $scope.gameStarted = false;
+       $('#vsModal').modal();
        player.setValue('// Write your Code here!', 0);
-       if ($scope.loser){
-        $scope.showLoser();
-       } else {
-        $scope.showWinner();
-       }
+       // if ($scope.loser){
+       //  $scope.showLoser();
+       // } else {
+       //  $scope.showWinner();
+       // }
      };
 
      $rootScope.socket.on('loser', function(){

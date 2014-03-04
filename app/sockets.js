@@ -1,55 +1,45 @@
-var crypto = require('crypto');
 var Sandbox = require('sandbox');
 var Models = require('../app/models');
 var testHelpers = require('./testHelpers');
 var Firebase = require('firebase');
+var SocketHelpers = require('./socketHelpers');
 
 //socket io logic
 
 
 module.exports.listen = function(server){
   var io = require('socket.io').listen(server);
-  var clients = [];
+  var clients = {};
   var games = {};
   var activeSockets = {};
   var gameWaiting = null;
 
   io.sockets.on('connection', function (socket) {
     //save the session id
-    clients.push(socket.id, socket);
+    clients[socket.id] = {
+      socket: socket,
+      gameID: null,
+      isPlaying: false
+    };
 
     //when newGame is clicked
     socket.on('newGame', function(data) {
 
-      if (!data.newGame && gameWaiting){
-        socket.emit('gameID', {'gameID': gameWaiting, 'second': true});
-        gameWaiting = null;
-        return;
-      }
+      // if (!data.newGame && gameWaiting){
+      //   socket.emit('gameID', {'gameID': gameWaiting, 'second': true});
+      //   gameWaiting = null;
+      //   return;
+      // }
       
-      //generate new game id
-      var gameID = crypto.randomBytes(4).toString('base64').slice(0, 4).replace('/', 'a').replace('+', 'z');
+      //make new game
+      var gameID = SocketHelpers.makeNewGame(games, socket, data.gameName);
 
-      //store it into games
-      games[gameID] = {
-        'players': [{
-          'socketID': socket.id,
-          'socket': socket,
-          'playerNumber': 1,
-          'latestContent': "",
-          'isReady': false,
-          'playerName': 'JS Warrior'
-        }],
-        'watchers': [],
-        'activeSockets': 1,
-        'started': false,
-        'winner': null
-      };
-      console.log("First Player Joined");
+      //add player to game
+      clients[socket.id].gameID = gameID;
+      clients[socket.id].isPlaying = true;
 
       //add to active sockets
       activeSockets[socket.id] = gameID;
-
 
       if (!data.newGame){
         gameWaiting = gameID;
@@ -57,6 +47,13 @@ module.exports.listen = function(server){
       }
 
       socket.emit('gameID', {'gameID': gameID, 'name': 'JS Warrior'});
+    });
+
+
+    /*get available games*/
+    socket.on('getAvailableGames', function() {
+      var availableGames = SocketHelpers.getAvailableGames(games); //get the available games
+      socket.emit('receivedAvailableGames', availableGames); //send back the available games
     });
 
     socket.on('playerName', function(data) {
@@ -80,22 +77,23 @@ module.exports.listen = function(server){
           'playerName': 'JS Ninja'
         });
 
+        clients[socket.id].gameID = data.gameID;
+        clients[socket.id].isPlaying = true;
+
         //adds to active sockets
         activeSockets[socket.id] = data.gameID;
         thisGame['activeSockets'] += 1;
 
 
-        socket.emit('updated', thisGame.players[0].latestContent);
-        setTimeout(function() {
-          socket.emit('gameReady', {
-            playerName: thisGame.players[1].playerName,
-            opponentName: thisGame.players[0].playerName
-          });
-          thisGame.players[0].socket.emit('gameReady', {
-            playerName: thisGame.players[0].playerName,
-            opponentName: thisGame.players[1].playerName
-          });
-        }, 5000);
+        // socket.emit('updated', thisGame.players[0].latestContent);
+        socket.emit('gameReady', {
+          playerName: thisGame.players[1].playerName,
+          opponentName: thisGame.players[0].playerName
+        });
+        thisGame.players[0].socket.emit('gameReady', {
+          playerName: thisGame.players[0].playerName,
+          opponentName: thisGame.players[1].playerName
+        });
 
       } else if (thisGame && thisGame.players.length > 1) { //watchers
         socket.emit('gameFull');
@@ -107,6 +105,7 @@ module.exports.listen = function(server){
 
     socket.on('addMeAsWatcher', function(data) {
       var thisGame = games[data.gameID];
+      clients[socket.id].gameID = data.gameID; // set this player as a watcher
       if (thisGame && thisGame.players[0]) {
         thisGame.watchers.push({
           'socketID': socket.id,
@@ -220,23 +219,46 @@ module.exports.listen = function(server){
       }
     });
 
-    socket.on('disconnect', function () {    
-      //removes from to active sockets
-      if (games[activeSockets[socket.id]]){
-        games[activeSockets[socket.id]]['activeSockets'] -= 1;
-        if (games[activeSockets[socket.id]]['activeSockets'] === 0){
-          var chatRef = new Firebase('https://battlejs.firebaseio.com/chat/');
-          chatRef.child('' + activeSockets[socket.id]).set(null);
-          delete games[activeSockets[socket.id]];
+    socket.on('disconnect', function () {
+      var client = clients[socket.id];
+      if (client && client.gameID) { //was in a game when disconnected
+        var game = games[client.gameID];
+        if (game && client.isPlaying) {
+          SocketHelpers.deletePlayerFromGame(socket.id, game.players); //delete player from game
+        } else if (game) {
+          SocketHelpers.deleteWatcherFromGame(socket.id, game.watchers); //delete watcher from game
         }
-        delete activeSockets[socket.id];
+
+        if (game.watchers.length + game.players.length === 0) {
+          delete games[client.gameID]; //delete game
+          //remove chat data of this game
+          var chatRef = new Firebase('https://battlejs.firebaseio.com/chat/' + client.gameID);
+          chatRef.remove();
+        }
       }
+      delete clients[socket.id];
+
+      // //removes from to active sockets
+      // if (games[activeSockets[socket.id]]){
+      //   games[activeSockets[socket.id]]['activeSockets'] -= 1;
+      //   if (games[activeSockets[socket.id]]['activeSockets'] === 0){
+      //     var chatRef = new Firebase('https://battlejs.firebaseio.com/chat/');
+      //     chatRef.child('' + activeSockets[socket.id]).set(null);
+      //     delete games[activeSockets[socket.id]];
+      //   }
+      //   delete activeSockets[socket.id];
+      // }
 
     });
 
     socket.on('startNewGame', function(data) {
       var thisGame = games[data.gameID];
       thisGame.started = false;
+      if (thisGame.players[0].socketID === socket.id) {
+        thisGame.players[0].isReady = false;
+      } else {
+        thisGame.players[1].isReady = false;
+      }
     });
 
     socket.on('winner', function(data){

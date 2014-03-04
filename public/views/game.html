@@ -17,7 +17,7 @@
 
   <div class='weapons' >
     <span>Weapons: </span>
-    <span class='weapon btn btn-danger' ng-repeat="weapon in weapons" ng-click="attack($index)">{{ weapon }}</span>
+    <span class='weapon btn btn-danger' ng-repeat="weapon in weapons track by $index" ng-click="attack($index)">{{ weapon }}</span>
     <span ng-show="weapons.length === 0">None</span>
   </div>
 
@@ -64,8 +64,8 @@
         You won! You should feel like a badass JavaScript ninja! Play again? Or find a tougher opponent?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" ng-click="mainPage()">Home</button>
-        <button type="button" class="btn btn-primary" ng-click="startNewGame()">Play Again!</button>
+        <!-- <button type="button" class="btn btn-default" ng-click="mainPage()">Home</button> -->
+        <button type="button" class="btn btn-primary" ng-click="startNewGame()" data-dismiss="modal">Play Again!</button>
       </div>
     </div>
   </div>
@@ -83,7 +83,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" ng-click="mainPage()">Home</button>
-        <button type="button" class="btn btn-primary" ng-click="startNewGame()">Play Again!</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="startNewGame()">Play Again!</button>
       </div>
     </div>
   </div>
@@ -93,19 +93,20 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Epic Battle Between:</h4>
+        <h4 class="modal-title" id="myModalLabel">Ready for this Epic Battle?</h4>
       </div>
       <div class="modal-body vsModalBody">
-        <div ng-show="status === 1">
+        <div ng-show="status < 2">Are you ready to test your skillz against another JS warrior?</div>
+<!--         <div ng-show="status === 1">
           <span>{{ playerName }}</span>
           <span class="vs">VS</span>
           <span>{{ opponentName }}</span>
-        </div>
+        </div> -->
         <span ng-show="status===2" class="count-down">{{ countDown }}</span>
 
       </div>
       <div class="modal-footer">
-        <button class="btn btn-primary" ng-click='startGame()' ng-disabled='gameStarted'>Ready!</button>
+        <button class="btn btn-primary" ng-click='ready()' ng-disabled='gameStarted'>Ready!</button>
       </div>
     </div>
   </div>

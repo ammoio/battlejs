@@ -5,13 +5,12 @@ angular.module('app')
 
       $('input[type="radio"]:checked').parent('label').addClass('active');
 
-      $scope.wantsNewGame = true;
-
       $scope.welcome = "BattleJS";
 
 
       $scope.newGame = function(){
-        $rootScope.socket.emit('newGame', {newGame: $scope.wantsNewGame});
+        var gameName = window.prompt("Give this game a name!");
+        $rootScope.socket.emit('newGame', {gameName: gameName});
       };
 
       $rootScope.socket.on('gameID', function(data){
@@ -27,13 +26,5 @@ angular.module('app')
         } else {
           $timeout(function(){window.location.href('' + $location.path('/game/' + gameID));}, 0);
         }
-
       });
-
-      $scope.new = function(){
-        $scope.wantsNewGame = true;
-      };
-      $scope.join = function(){
-        $scope.wantsNewGame = false;
-      };
   });
