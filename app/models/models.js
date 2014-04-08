@@ -1,6 +1,5 @@
 var mongoose = require('mongoose-q')();
 
-
 var gameSchema = mongoose.Schema({
   gameId: String,
   player1Socket: String,
@@ -14,10 +13,12 @@ var challengeSchema = mongoose.Schema({
   inputs: [],
   outputs: [],
   solution: String,
-  functionName: {type: String, unique: true},
+  functionName: {
+    type: String,
+    unique: true
+  },
   boilerplate: String
 });
-
 
 module.exports = {
   Game: mongoose.model('Game', gameSchema),

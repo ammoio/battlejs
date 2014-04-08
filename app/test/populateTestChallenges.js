@@ -1,5 +1,5 @@
 var mongoose = require('mongoose-q')();
-var Models = require('../app/models');
+var Models = require('../models/models');
 
 // connect to MongoDB
 mongoose.connect('mongodb://localhost/battlejs');
@@ -14,9 +14,9 @@ var reverseString = new Models.Challenge({
   boilerplate: "var reverseString = function (string) {\n  return string;\n};"
 });
 reverseString.saveQ()
-.then(function(){
-  console.log("saved Successfully");
-});
+  .then(function () {
+    console.log("saved Successfully");
+  });
 
 
 var balancedParens = new Models.Challenge({
@@ -27,13 +27,13 @@ var balancedParens = new Models.Challenge({
   solution: '',
   functionName: "balancedParens",
   boilerplate: "// write a function that takes a string of text and returns true if\n" +
-  "// the parentheses ( () {} [] ) are balanced and false otherwise.\n\n" +
-  "var balancedParens = function(input) {\n\n};"
+    "// the parentheses ( () {} [] ) are balanced and false otherwise.\n\n" +
+    "var balancedParens = function(input) {\n\n};"
 });
 balancedParens.saveQ()
-.then(function(){
-  console.log("saved Successfully");
-});
+  .then(function () {
+    console.log("saved Successfully");
+  });
 
 var evenOccurence = new Models.Challenge({
   name: "Even Occurances",
@@ -61,17 +61,17 @@ var evenOccurence = new Models.Challenge({
     return resultArray[0]; \
   } \
   return null; \
-};', 
+};',
   functionName: "evenOccurence",
   boilerplate: "// Find the first item that occurs an even number of times in an array.\n" +
-  "// Remember to handle multiple even-occurance items and return the first one.\n" +
-  "//Return null if there are no even-occurance items.\n\n" +
-  "var evenOccurence = function (array) {\n  return number;\n};"
+    "// Remember to handle multiple even-occurance items and return the first one.\n" +
+    "//Return null if there are no even-occurance items.\n\n" +
+    "var evenOccurence = function (array) {\n  return number;\n};"
 });
 evenOccurence.saveQ()
-.then(function(){
-  console.log("saved Successfully");
-});
+  .then(function () {
+    console.log("saved Successfully");
+  });
 
 var sumArray = new Models.Challenge({
   name: "Sum Array",
@@ -82,11 +82,9 @@ var sumArray = new Models.Challenge({
   solution: '',
   functionName: "sumArray",
   boilerplate: "// Given an array of numbers, calculate the greatest contiguous sum of numbers in it.\n" +
-  "var sumArray = function (array) {\n  return sum;\n};"
+    "var sumArray = function (array) {\n  return sum;\n};"
 });
 sumArray.saveQ()
-.then(function(){
-  console.log("saved Successfully");
-});
-
-
+  .then(function () {
+    console.log("saved Successfully");
+  });
